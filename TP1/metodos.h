@@ -7,5 +7,7 @@ typedef double num;
 
 //método de Newton para f(x) = x^2 - alpha
 num sqrtNewton(num alpha);
+num invSqrtENewton(num alpha);
+
 
 #endif
