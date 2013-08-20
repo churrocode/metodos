@@ -1,0 +1,37 @@
+\section{Desarrollo}
+	\subsection{Métodos propuestos}
+	Según lo consignado en el enunciado, exponemos a continuación los distintos métodos propuestos para computar $\frac{1}{\sqrt{\alpha}}$
+	%Métodos generales -> Demostrar Newton, convergencia.
+		\subsubsection{Cero de $f(x) = x^2 -\alpha$}
+		Una alternativa propuesta en el enunciado consiste en calcular primero $\sqrt{\alpha}$ como un cero de la función $f(x) = x^2 -\alpha$, y luego calcular su inverso multiplicativo. Para esto utilizaremos el método de Newton, que comentamos anteriormente. Con lo cual, para encontrar un cero de $f$ debemos buscar un punto fijo de 
+		\begin{equation}
+			g(x) = x - \frac{f(x)}{f'(x)} = x - \frac{x^2 - \alpha}{2x} = \frac{x + \frac{\alpha}{x}}{2}
+		\label{g}	
+		\end{equation}
+lo cual realizaremos construyendo la sucesión
+	\begin{eqnarray}
+		&& x_0 \in [a,b], \sqrt{\alpha} \in [a,b] \nonumber \\
+		&& x_{n+1} = g(x_n) \nonumber
+	\end{eqnarray}
+cuya convergencia dependerá de los valores de $a,b$. Sabemos que siempre existen éstos alrededor del cero buscado tales que la sucesión converga. Sin embargo, no tenemos un método general para determinar este intervalo, con lo cual aplicaremos el siguiente lema:
+\begin{lema}[Condición suficiente de convergencia]
+Sea $g: [a,b] \subset \R \rightarrow \R$, continua en $[a,b]$, derivable en $(a,b)$. Si se verifica que $g([a,b]) \inc [a,b]$ y $\exists k \in\R : |g(x)| \leq k < 1$, para cualquier $x\in [a,b]$, luego la sucesión definida como 
+	\begin{eqnarray}
+		&& x_0 \in [a,b], \nonumber \\
+		&& x_{n+1} = g(x_n) \nonumber
+	\end{eqnarray}
+	converge al único punto fijo de $g$ en $[a,b]$, para cualquier elección de $x_0$.
+\end{lema}
+Luego, buscaremos satisfacer las hipótesis del lema para (\ref{g}). Para comenzar, podemos asegurar la continuidad y derivabilidad de la función como lo pide el lema en $(0, +\infty)$ ya que es composición de funciones derivables en ese intervalo. (Dado que $\frac{1}{\sqrt{\alpha}}$ no está definida en 0, con esto es suficiente para asegurar continuidad y dervabilidad en cualquier intervalo a considerar). Miremos ahora $ g'(x) = \frac{1}{2} - \frac{\alpha/2}{x^2}$.\\
+$\begin{array}{rl}
+	 |g'(x)| = |\frac{1}{2} - \frac{\alpha/2}{x^2}|  < 1 & \Leftrightarrow  -1 < \frac{1}{2} - \frac{\alpha/2}{x^2} < 1\nonumber \\
+	\Leftrightarrow  -\frac{3}{2} <  - \frac{\alpha/2}{x^2}  < \frac{1}{2} & \Leftrightarrow 
+		3 >  \frac{\alpha}{x^2}  \text{(la desigualdad derecha se cumple siempre por signos)} \nonumber \\
+	\Leftrightarrow  \frac{\sqrt{\alpha}}{\sqrt{3}} < x \nonumber
+\end{array}$\\
+Sabemos $1/\sqrt{3} > 0.58 + \eps$, con lo cual tomando $x > 0.58\sqrt{\alpha} > \sqrt{\alpha}/\sqrt{3} + \eps$ se verfica lo que necesitamos. Además, nuestro intervalo debe contener a $\sqrt{\alpha}$, con lo cual siempre vale $a \leq \sqrt{\alpha} \leq b$, por lo que si tomamos $a = 0.58b$ tenemos lo siguiente:
+$$x \geq a \Leftrightarrow x \geq 0.58b \geq 0.58\sqrt{\alpha} \Rightarrow x > \sqrt{\alpha}/\sqrt{3} + \eps$$ 
+como necesitábamos. La otra restricción se cumple siempre por el signo de las expresiones.
+
+Veamos ahora $g([a,b]) \inc [a,b]$. Observemos que $g$ tiene un único extremo en $\sqrt{a}$ y éste es un mínimo, pues $g'(\sqrt{\alpha}) = \frac{1}{2} - \frac{1}{2}\frac{\alpha}{(\sqrt{\alpha})^2} = \frac{1}{2} - \frac{1}{2}\frac{\alpha}{\alpha} = 0$ y además $g''(x) = \frac{\alpha}{x^3} >0$ para cualquier $x>0$. Luego, como se trata de unafunción continua, $g([a,b]) = [\sqrt{\alpha}, \max(g(a), g(b))]$. Siempre suponemos que $\sqrt{\alpha}\in[a,b]$, con lo cual basta asegurar $\max(g(a), g(b))\leq b$ para conseguir lo deseado.
+
