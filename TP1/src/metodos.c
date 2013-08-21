@@ -18,7 +18,7 @@ num sqrtNewton(num alpha){
 	num a = 0;
 	num b = alpha > 1 ? alpha : 1;
 	// printf("Empecé a achicar el intervalo\n");
-	while(! (a >= 0.82*b && g(a)<= b && g(b) <= b)) {
+	while(! (a >= 0.58*b && g(a)<= b && g(b) <= b)) {
 		// printf("[%.9f, %.9f]     ", a,b);
 		num medio = (a + b)/2;
 		num fDeMedio = f(medio);
