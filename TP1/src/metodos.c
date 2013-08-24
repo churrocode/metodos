@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "metodos.h"
-#define abs(x) x >= 0 ? x : - x
-#define max(x,y) x > y ? x : y
+#define abs(x) (x >= 0 ? x : - x)
+#define max(x,y) (x > y ? x : y)
+#define sg(x) (x >= 0 ? 1 : -1)
 
 int parar(num alpha, num raiz, num raizAnterior, short iters) {
 	if (iters > 100)
@@ -18,6 +19,7 @@ num sqrtNewton(num alpha){
 	num a = 0;
 	num b = alpha > 1 ? alpha : 1;
 	// printf("Empecé a achicar el intervalo\n");
+	unsigned char bisecciones = 0;
 	while(! (a >= 0.58*b && g(a)<= b && g(b) <= b)) {
 		// printf("[%.9f, %.9f]     ", a,b);
 		num medio = (a + b)/2;
@@ -29,14 +31,16 @@ num sqrtNewton(num alpha){
 		} else {
 			b = medio;
 		}
+		++bisecciones;
 	}
-	// printf("Terminé de achicar el intervalo: [%.9f, %.9f]\n", a,b);
+	printf("\nTerminé de achicar el intervalo: [%.9f, %.9f] en %d pasos\n", a,b, bisecciones);
 	num raiz = (a + b) /2;
 	num raizAnterior = 0; //si raiz está cerca de 0, esto nos está arruinando la vida!
 	unsigned short iters = 0;
 	while (!parar(alpha, raiz, raizAnterior, iters)){
 		raizAnterior = raiz;
 		raiz = g(raiz);
+		// printf("%.15f \n", raiz);
 		++iters;
 	}
 	return raiz;
@@ -45,15 +49,17 @@ num sqrtNewton(num alpha){
 num invSqrtENewton(num alpha){
 	//e(x) = 1/x^2 - alpha
 	#undef g
-	#define g(x) -alpha/2.0 * x*x*x + 1.5*x
-	#define gPrima(x) 1.5 * (1 - alpha * x*x)
+	#define g(x) (-alpha/2.0 * x*x*x + 1.5*x)
+	#define gPrima(x) (1.5 * (1 - alpha * x*x))
 
 	num a = 0;
-	num b = alpha > 1 ? alpha : 1;
+	num b = alpha > 1 ? alpha : 1/alpha;
+	//terminar si alpha = 1 o alpha = 0
 
 	//bisección cabeza para asegurar la convergencia de newton
-	while (!( (abs(gPrima(a)) < 1) && (abs(gPrima(b)) < 1))){
-		// printf("[%.9f, %.9f]     ", a,b);
+	unsigned char bisecciones = 0;
+
+	while (!( (abs(gPrima(a)) < 1) && (abs(gPrima(b)) < 1 && a <= g(a) && g(b) <= b))){
 		num medio = (a+b)/2;
 		num gPrimaDeMedio = gPrima(medio);
 		if (iguales(gPrimaDeMedio, 0))
@@ -63,8 +69,9 @@ num invSqrtENewton(num alpha){
 		} else {
 			a = medio;
 		}
+		++bisecciones;
 	}
-	// printf("\nTerminé de achicar el intervalo: [%.9f, %.9f]\n", a,b);
+	printf("\nTerminé de achicar el intervalo: [%.9f, %.9f] en %d pasos\n", a,b, bisecciones);
 	num raiz = (a+b)/2;
 	num raizAnterior = 0;
 	unsigned short iters = 0;
@@ -75,6 +82,7 @@ num invSqrtENewton(num alpha){
 		// printf("%.15f \n", raiz);
 	}
 	return raiz;
+}
 
 num invSqrtEFlash(num alpha) {
 	#undef g
