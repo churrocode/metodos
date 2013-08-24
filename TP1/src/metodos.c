@@ -5,8 +5,12 @@
 #define sg(x) (x >= 0 ? 1 : -1)
 
 int parar(num alpha, num raiz, num raizAnterior, short iters) {
-	if (iters > 100)
+	if (iters > 10)
 		return 1;
+	if (abs((raiz - raizAnterior)/raizAnterior) < epsilon) {
+		// printf("%.25f\n", (raiz - raizAnterior)/raizAnterior);
+		return 1;
+	}
 	return 0;
 }
 
