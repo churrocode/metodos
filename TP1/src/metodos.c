@@ -76,4 +76,42 @@ num invSqrtENewton(num alpha){
 	}
 	return raiz;
 
+num invSqrtEFlash(num alpha) {
+	#undef g
+	#define g(x) (1/alpha * 1/x - (x - alpha * x*x*x)/2)
+	//g'' no se anula nunca, o sea, g' es siempre crec o decrec.
+	//g' tiene un 0 en 1/sqrt(a), podemos bisectarla para buscar un buen intervalo para aplicar g
+	#undef gPrima
+	#define gPrima(x) (-1/alpha * 1/(x*x) - (1 - 3*alpha * x*x)/2)
+
+	num a = 1/alpha;
+	num b = 1;
+	char sgA = sg(gPrima(a));
+	unsigned char bisecciones = 0;
+	while (!( (abs(gPrima(a)) < 1) && (abs(gPrima(b)) < 1))){
+		// printf("g\'(%.15f) = %.15f, g\'(%.15f) = %.15f\n", a, gPrima(a), b, gPrima(b));
+		num medio = (a+b)/2;
+		num gPrimaDeMedio = gPrima(medio);
+		if(iguales(gPrimaDeMedio, 0))
+			return medio;
+		if (sg(gPrimaDeMedio) == sgA){
+			a = medio;
+		} else {
+			b = medio;
+		}
+		++bisecciones;
+		// printf("g\'(%.15f) = %.15f, [%.15f, %.15f] \n", medio, gPrimaDeMedio, a, b);
+	}
+	printf("\nTerminé de achicar el intervalo: [%.9f, %.9f] en %d pasos\n", a,b, bisecciones);
+
+	num raiz = (a+b)/2;
+	num raizAnterior = 1.0/0.0;
+	unsigned short iters = 0;
+	while (!parar(alpha, raiz, raizAnterior, iters)){
+		raizAnterior = raiz;
+		raiz = g(raiz);
+		++iters;
+		// printf("%.15f \n", raiz);
+	}
+	return raiz;
 }
