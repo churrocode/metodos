@@ -131,3 +131,25 @@ num invSqrtEFlash(num alpha) {
 	}
 	return raiz;
 }
+num biseccion(num alpha){
+	num a = 0;
+	num b = alpha > 1 ? alpha : 1;
+	// printf("Empecé a achicar el intervalo\n");
+	unsigned char iters = 0;
+	num raiz = (a + b)/2;
+	num raizAnterior = 1/0.0;
+	while(!parar(alpha, raiz, raizAnterior, iters)) {
+		// printf("[%.9f, %.9f]     ", a,b);
+		num raiz = (a + b)/2;
+		num fDeMedio = f(raiz);
+		if (iguales(fDeMedio, 0))
+			return raiz;
+		if (fDeMedio < 0) {
+			a = raiz;
+		} else {
+			b = raiz;
+		}
+		++iters;
+	}
+	return raiz;
+}

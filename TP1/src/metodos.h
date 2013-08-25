@@ -7,6 +7,8 @@ typedef double num;
 
 //método de Newton para f(x) = x^2 - alpha
 num sqrtNewton(num alpha);
+//bisección de f(x) = x^2
+num biseccion(num alpha);
 //método de Newton para 1/(f(x) = x^2 - alpha)
 num invSqrtNewton(num alpha);
 //método de Newton para e(x) = 1/x^2 - alpha
