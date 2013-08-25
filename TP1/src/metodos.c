@@ -50,6 +50,10 @@ num sqrtNewton(num alpha){
 	return raiz;
 }
 
+num invSqrtNewton(num alpha){
+	return 1/sqrtNewton(alpha);
+}
+
 num invSqrtENewton(num alpha){
 	//e(x) = 1/x^2 - alpha
 	#undef g
