@@ -60,28 +60,30 @@ num invSqrtENewton(num alpha){
 	#define g(x) (-alpha/2.0 * x*x*x + 1.5*x)
 	#define gPrima(x) (1.5 * (1 - alpha * x*x))
 
-	num a = 0;
-	num b = alpha > 1 ? alpha : 1/alpha;
+	// num a = 0;
+	// num b = alpha > 1 ? alpha : 1/alpha;
 	//terminar si alpha = 1 o alpha = 0
 
 	//bisección cabeza para asegurar la convergencia de newton
-	unsigned char bisecciones = 0;
+	// unsigned char bisecciones = 0;
 
-	while (!( (abs(gPrima(a)) < 1) && (abs(gPrima(b)) < 1 && a <= g(a) && g(b) <= b))){
-		num medio = (a+b)/2;
-		num gPrimaDeMedio = gPrima(medio);
-		if (iguales(gPrimaDeMedio, 0))
-			return medio;
-		if (gPrimaDeMedio < 0) {
-			b = medio;
-		} else {
-			a = medio;
-		}
-		++bisecciones;
-	}
-	printf("\nTerminé de achicar el intervalo: [%.9f, %.9f] en %d pasos\n", a,b, bisecciones);
-	num raiz = (a+b)/2;
-	num raizAnterior = 0;
+	// while (!( (abs(gPrima(a)) < 1) && (abs(gPrima(b)) < 1 && a <= g(a) && g(b) <= b))){
+	// 	num medio = (a+b)/2;
+	// 	num gPrimaDeMedio = gPrima(medio);
+	// 	if (iguales(gPrimaDeMedio, 0))
+	// 		return medio;
+	// 	if (gPrimaDeMedio < 0) {
+	// 		b = medio;
+	// 	} else {
+	// 		a = medio;
+	// 	}
+	// 	++bisecciones;
+	// }
+	// printf("\nTerminé de achicar el intervalo: [%.9f, %.9f] en %d pasos\n", a,b, bisecciones);
+	// num raiz = (a+b)/2;
+	// num raiz = alpha > 1 ? 1/alpha : alpha;
+	num raiz = alpha > 1 ? (1/(1.733 * alpha)) : alpha/1.733;
+	num raizAnterior = 1/0.0;
 	unsigned short iters = 0;
 	while (!parar(alpha, raiz, raizAnterior, iters)){
 		raizAnterior = raiz;
