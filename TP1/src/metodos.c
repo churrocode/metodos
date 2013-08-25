@@ -153,3 +153,11 @@ num biseccion(num alpha){
 	}
 	return raiz;
 }
+double invSqrtHW(double alpha){
+	double res, uno = 1.0;
+	__asm__("movd %1, %%xmm0; sqrtsd %%xmm0, %%xmm0; movd %%xmm1, %2 ; divsd %%xmm0, %%xmm1; movd %%xmm1, %0"
+			: "=r" (res) /* output */
+			: "r" (alpha), "r" (uno) /*input*/
+	);
+	return res;
+}

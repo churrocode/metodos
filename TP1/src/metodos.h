@@ -15,6 +15,7 @@ num invSqrtNewton(num alpha);
 num invSqrtENewton(num alpha);
 //otra función de punto fijo para e(x) = 1/x^2 - alpha
 num invSqrtEFlash(num alpha);
-
+//directamente por hardware, para comparar.
+double invSqrtHW(double alpha);
 
 #endif
