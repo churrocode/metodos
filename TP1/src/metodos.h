@@ -2,7 +2,7 @@
 #define metodos_h
 
 typedef double num;
-#define epsilon 0.0000000001
+#define epsilon 0.000000000000001
 #define iguales(x,y)  (-epsilon < (x - y) && (x - y) < epsilon)
 
 //método de Newton para f(x) = x^2 - alpha
@@ -17,5 +17,11 @@ num invSqrtENewton(num alpha);
 num invSqrtEFlash(num alpha);
 //directamente por hardware, para comparar.
 double invSqrtHW(double alpha);
+
+#ifdef MEDIR
+	void resetearContadores();
+	int getItersBiseccion();
+	int getItersNewton();
+#endif
 
 #endif
