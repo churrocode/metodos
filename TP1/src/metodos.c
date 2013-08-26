@@ -3,6 +3,7 @@
 #define abs(x) (x >= 0 ? x : - x)
 #define max(x,y) (x > y ? x : y)
 #define sg(x) (x >= 0 ? 1 : -1)
+#define inf 1.0/0.0
 
 int parar(num alpha, num raiz, num raizAnterior, short iters) {
 	if (iters > 10)
@@ -83,7 +84,7 @@ num invSqrtENewton(num alpha){
 	// num raiz = (a+b)/2;
 	// num raiz = alpha > 1 ? 1/alpha : alpha;
 	num raiz = alpha > 1 ? (1/(1.733 * alpha)) : alpha/1.733;
-	num raizAnterior = 1/0.0;
+	num raizAnterior = inf;
 	unsigned short iters = 0;
 	while (!parar(alpha, raiz, raizAnterior, iters)){
 		raizAnterior = raiz;
@@ -123,7 +124,7 @@ num invSqrtEFlash(num alpha) {
 	printf("\nTerminé de achicar el intervalo: [%.9f, %.9f] en %d pasos\n", a,b, bisecciones);
 
 	num raiz = (a+b)/2;
-	num raizAnterior = 1.0/0.0;
+	num raizAnterior = inf;
 	unsigned short iters = 0;
 	while (!parar(alpha, raiz, raizAnterior, iters)){
 		raizAnterior = raiz;
@@ -134,18 +135,21 @@ num invSqrtEFlash(num alpha) {
 	return raiz;
 }
 num biseccion(num alpha){
+	#undef f
+	#define f(x) (x*x - alpha)
 	num a = 0;
 	num b = alpha > 1 ? alpha : 1;
 	// printf("Empecé a achicar el intervalo\n");
-	unsigned char iters = 0;
 	num raiz = (a + b)/2;
-	num raizAnterior = 1/0.0;
-	while(!parar(alpha, raiz, raizAnterior, iters)) {
-		// printf("[%.9f, %.9f]     ", a,b);
-		num raiz = (a + b)/2;
+	short iters = 0;
+	//por cómo es la bisección, nos conviene mirar el tamaño del intervalo
+	//el error absoluto es <= (b-a)/2, entonces el relativo es <= (b-a/2) /((a+b)/2) = (b-a)/(a+b)
+	while((1/a - 1/b)/(2/(a+b)) > errorTolerable && iters < 100) {
+	// while(iters < 1000) {
+		raiz = (a + b)/2;
 		num fDeMedio = f(raiz);
 		if (iguales(fDeMedio, 0))
-			return raiz;
+			break;
 		if (fDeMedio < 0) {
 			a = raiz;
 		} else {
@@ -153,7 +157,7 @@ num biseccion(num alpha){
 		}
 		++iters;
 	}
-	return raiz;
+	return 1/raiz;
 }
 double invSqrtHW(double alpha){
 	double res, uno = 1.0;
