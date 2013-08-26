@@ -14,6 +14,18 @@ int main(int argc, char* argv[]){
 	printf("************ La raíz de 0.01 es %.15f\n",raizDe01);
 	num raizDe0001 = sqrtNewton(0.0001);
 	printf("************ La raíz de 0.0001 es %.15f\n",raizDe0001);
+	num raizBisDe2 = biseccion(2);
+	printf("************ La raíz por biseccion de 2 es %.15f\n", raizBisDe2);
+	num raizBisDe20000 = biseccion(20000);
+	printf("************ La raíz por bisección de 20000 es %.15f\n", raizBisDe20000);
+	num raizBisDe4 = biseccion(4);
+	printf("************ La raíz por bisección de 4 es %.15f\n", raizBisDe4);
+	num raizBisDe100 = biseccion(100);
+	printf("************ La raíz por bisección de 100 es %.15f\n", raizBisDe100);
+ 	num raizBisDe01 = biseccion(0.01);
+	printf("************ La raíz por bisección de 0.01 es %.15f\n",raizBisDe01);
+	num raizBisDe0001 = biseccion(0.0001);
+	printf("************ La raíz por bisección de 0.0001 es %.15f\n",raizBisDe0001);
 
 	num invRaizDe4 = invSqrtENewton(4);
 	//esta sale en la bisección
