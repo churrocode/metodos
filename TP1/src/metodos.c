@@ -10,6 +10,9 @@ num errorTolerable = epsilon;
 int itersBiseccion = 0;
 int itersNewton = 0;
 
+void setearErrorTolerable(num error){
+	errorTolerable = error;
+}
 
 void resetearContadores() {
 	itersBiseccion = 0;

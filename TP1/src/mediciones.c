@@ -43,12 +43,12 @@ void buscarErrorTolerable(){
 		char archivo[150];
 		snprintf(archivo, 150, "../data/buscarParadaMetodo%d.dat", j);
 		FILE* fileDesc = fopen(archivo, "w");
-		fprintf(fileDesc, "# Errores de medición para este método según cota para el error relativo en el criterio de parada.\n# Se miden 6 valores para el rango de siempre, se indica el comienzo de la medición correspondiente para cada valor de error con una línea '* tolerancia: 10^-i'\n");
+		fprintf(fileDesc, "# Errores de medición para este método según cota para el error relativo en el criterio de parada.\n# Se miden 6 valores para el rango de siempre, se indica el final de la medición correspondiente para cada valor de error con una línea '* tolerancia: 10^-i'\n");
 		for (i = 0; i < 6; ++i) {
 			fprintf(fileDesc, "# alpha : invSqrt(alpha) : invSqrt(alpha) HWare : error : errorRelativo\n");
+			setearErrorTolerable(errores[i]);
+			aplicarAlRango(&medirError, metodos[j], fileDesc);
 			fprintf(fileDesc, "* tolerancia: 10^-%d\n", (i+1)*3 );
-				errorTolerable = errores[i];
-				aplicarAlRango(&medirError, metodos[j], fileDesc);
 		}
 		fclose(fileDesc);
 	}
