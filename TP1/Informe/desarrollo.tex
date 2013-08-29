@@ -1,5 +1,7 @@
 \section{Desarrollo}
 	\subsection{Métodos propuestos}
+%decir que son métodos mixtos. Que nos gusta la bisección porque nos asegura convergencia en caso de que lo necesitemos y porque no mete errores de propagación	
+	
 	Según lo consignado en el enunciado, exponemos a continuación los distintos métodos propuestos para computar $\frac{1}{\sqrt{\alpha}}$
 	%Métodos generales -> Demostrar Newton, convergencia.
 		\subsubsection{Cero de $f(x) = x^2 -\alpha$}
@@ -21,6 +23,7 @@ Sea $g: [a,b] \subset \R \rightarrow \R$, continua en $[a,b]$, derivable en $(a,
 		&& x_{n+1} = g(x_n) \nonumber
 	\end{eqnarray}
 	converge al único punto fijo de $g$ en $[a,b]$, para cualquier elección de $x_0$.
+\label{lemaConv}	
 \end{lema}
 Luego, buscaremos satisfacer las hipótesis del lema para (\ref{g}). Para comenzar, podemos asegurar la continuidad y derivabilidad de la función como lo pide el lema en $(0, +\infty)$ ya que es composición de funciones derivables en ese intervalo. (Dado que $\frac{1}{\sqrt{\alpha}}$ no está definida en 0, con esto es suficiente para asegurar continuidad y dervabilidad en cualquier intervalo a considerar). Miremos ahora $ g'(x) = \frac{1}{2} - \frac{\alpha/2}{x^2}$.\\
 $\begin{array}{rl}
@@ -34,4 +37,23 @@ $$x \geq a \Leftrightarrow x \geq 0.58b \geq 0.58\sqrt{\alpha} \Rightarrow x > \
 como necesitábamos. La otra restricción se cumple siempre por el signo de las expresiones.
 
 Veamos ahora $g([a,b]) \inc [a,b]$. Observemos que $g$ tiene un único extremo en $\sqrt{a}$ y éste es un mínimo, pues $g'(\sqrt{\alpha}) = \frac{1}{2} - \frac{1}{2}\frac{\alpha}{(\sqrt{\alpha})^2} = \frac{1}{2} - \frac{1}{2}\frac{\alpha}{\alpha} = 0$ y además $g''(x) = \frac{\alpha}{x^3} >0$ para cualquier $x>0$. Luego, como se trata de unafunción continua, $g([a,b]) = [\sqrt{\alpha}, \max(g(a), g(b))]$. Siempre suponemos que $\sqrt{\alpha}\in[a,b]$, con lo cual basta asegurar $\max(g(a), g(b))\leq b$ para conseguir lo deseado.
+
+	\subsection{//UN TÍTULO PARA ESTO}
+	
+Como expusimos anteriormente (OBVIO), en todos los casos en que aplicamos el método de Newton tenemos argumentos teóricos para asegurar su convergencia en orden cuadrático, a costo de reducir iterativamente por bisección un intervalo dentro del cual que podamos asegurar que la raíz buscada existe hasta que satisfaga las hipótesis del lema. Aprovecharemos esta garantía para fijar el criterio de parada de los métodos, una vez definido el cual y conociendo el desempeño del algoritmo en un caso teóricamente óptimo nos dedicaremos a relajar los parámetros que aseguran convergencia para determinar, experimentalmente, cotas para éste que representen mejor un compromiso entre calidad de la solución y tiempo de ejecución.
+
+	\subsubsection{Función de control}
+Para medir la calidad de la solución, implementamos la función $f(x) = \frac{1}{\sqrt{x}}$ directamente sobre el hardware, mediante una pequeña rutina de lenguaje ensamblador. Ésta utiliza únicamente las funciones cociente y raíz cuadrada del procesador, con lo cual confiamos en que, si bien también es una aproximación, es una de las mejores aproximaciones que podemos esperar dada la máquina.
+
+	\subsubsection{Criterio de parada}
+Establecimos como principal criterio de parada un umbral para el error relativo entre iteraciones sucesivas. Además, agregamos una condición de corte por cantidad de iteraciones para evitar problemas en eventuales casos patológicos que no hayamos contemplado en este análisis. Para determinar el umbral, realizaremos nuestras aproximaciones para las raíces pedidas tomando varios valores de $\alpha$ dentro de distintos órdenes de magnitud, repitiendo esto para distintos órdenes de magnitud de tolerancia. Luego, promediaremos los errores relativos de las soluciones dentro de cada orden de magnitud, a partir de lo cual compararemos los resultados obtenidos para las distintas tolerancias <redactame>, buscando, por un lado, descartar sobreexigencias, es decir, tolerancias <redactame> muy pequeñas que no aporten significativamente a la calidad de la solución, a la vez que otras que, aunque tal vez lo hagan, impliquen excesivo tiempo de cómputo. Este último caso será el más difícil de determinar, y de darse nos obligará a realizar nuevos experimentos para establecer el compromiso entre calidad y eficiencia.
+
+	\subsubsection{Performance}
+Como comentamos en la sección anterior (OBVIO), nuestros métodos cuentan con dos etapas: una en la cual ajustan un intervalo alrededor de la raíz mediante sucesivas bisecciones y otra donde efectivamente aplican un método iterativo de orden de convergencia mayor. Sabemos que la condición expresada en el lema \ref{lemaConv} es suficiente pero no necesaria, con lo cual probablemente sea excesivamente exigente en la práctica. De todas maneras, un intervalo pequeño hace que los métodos cuadráticos converjan en muy pocas iteraciones, con lo cual no nos parece una mala idea invertir iteraciones tratando de ajustar las cotas iniciales si esto se verá reflejado en la cantidad de iteraciones que necesitará el método cuadrático para converger.
+
+Para determinar este balance comenzaremos observando cuántas iteraciones realiza cada parte del algoritmo para valores que produzcan intervalos iniciales particularmente grandes, y cómo varía esta proporción a medida que se restringen las primeras. Una vez conocido esto (en principio, a grandes razgos), mediremos el tiempo que efectivamente tardan en computarse, ya que no podemos suponer que los dos tipos de iteraciones sean igual de costosos computacionalmente. Teniendo esta variable en mente, realizaremos el mismo tipo de ajustes que planteamos antes <redactame>.
+
+	\subsubsection{Comparación final}
+Una vez ajustados los mejores parámetros de cada método en base a los valores obtenidos experimentalmente, compararemos los métodos entre sí. Además de los aspectos que ya comentamos para cada método por separado, compararemos las aproximaciones obtenidas por cada uno sobre una batería de casos (EEEEPA), donde pretendemos diferenciar su desempeño (tanto en calidad de la solución como en velocidad de cómputo) para diferentes valores de entrada, eligiendo éstos especialmente para poner a prueba diferentes debilidades posibles (intervalo inicial muy grande, inestabilidad numérica (EEEEPA), etc), así como también sobre valores aleatorios dentro de un rango suficientemente grande para considerarlo representativo de uso. Con estos datos intentaremos establecer cuál es el método más conveniente para utilizar, y si esto depende y cómo de los valores de entrada.
+
 
