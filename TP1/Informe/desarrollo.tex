@@ -21,8 +21,9 @@ Sea $g: [a,b] \subset \R \rightarrow \R$, continua en $[a,b]$, derivable en $(a,
 		&& x_{n+1} = g(x_n) \nonumber
 	\end{eqnarray}
 	converge al único punto fijo de $g$ en $[a,b]$, para cualquier elección de $x_0$.
+\label{lema_f}
 \end{lema}
-Luego, buscaremos satisfacer las hipótesis del lema para (\ref{g}). Para comenzar, podemos asegurar la continuidad y derivabilidad de la función como lo pide el lema en $(0, +\infty)$ ya que es composición de funciones derivables en ese intervalo. (Dado que $\frac{1}{\sqrt{\alpha}}$ no está definida en 0, con esto es suficiente para asegurar continuidad y dervabilidad en cualquier intervalo a considerar). Miremos ahora $ g'(x) = \frac{1}{2} - \frac{\alpha/2}{x^2}$.\\
+Luego, buscaremos satisfacer las hipótesis del lema para (\ref{g}). Para comenzar, podemos asegurar la continuidad y derivabilidad de la función como lo pide el lema en $(0, +\infty)$ ya que es composición de funciones derivables en ese intervalo. (Dado que $\frac{1}{\sqrt{\alpha}}$ no está definida en 0, con esto es suficiente para asegurar continuidad y derivabilidad en cualquier intervalo a considerar). Miremos ahora $ g'(x) = \frac{1}{2} - \frac{\alpha/2}{x^2}$.\\
 $\begin{array}{rl}
 	 |g'(x)| = |\frac{1}{2} - \frac{\alpha/2}{x^2}|  < 1 & \Leftrightarrow  -1 < \frac{1}{2} - \frac{\alpha/2}{x^2} < 1\nonumber \\
 	\Leftrightarrow  -\frac{3}{2} <  - \frac{\alpha/2}{x^2}  < \frac{1}{2} & \Leftrightarrow 
@@ -35,3 +36,35 @@ como necesitábamos. La otra restricción se cumple siempre por el signo de las 
 
 Veamos ahora $g([a,b]) \inc [a,b]$. Observemos que $g$ tiene un único extremo en $\sqrt{a}$ y éste es un mínimo, pues $g'(\sqrt{\alpha}) = \frac{1}{2} - \frac{1}{2}\frac{\alpha}{(\sqrt{\alpha})^2} = \frac{1}{2} - \frac{1}{2}\frac{\alpha}{\alpha} = 0$ y además $g''(x) = \frac{\alpha}{x^3} >0$ para cualquier $x>0$. Luego, como se trata de unafunción continua, $g([a,b]) = [\sqrt{\alpha}, \max(g(a), g(b))]$. Siempre suponemos que $\sqrt{\alpha}\in[a,b]$, con lo cual basta asegurar $\max(g(a), g(b))\leq b$ para conseguir lo deseado.
 
+		\subsubsection{Cero de $e(x) = \frac{1}{x^2} - \alpha$}
+		La segunda alternativa es considerar a la función $e(x) = \frac{1}{x^2} - \alpha$ y buscar una aproximación a una de sus raíces que viene a ser $\frac{1}{\sqrt{\alpha}}$, el valor que precisamente queríamos calcular en primera instancia. Para aproximar dicha raíz, planteamos dos métodos. El primero es aplicar el método de Newton para la función $e(x)$. Entonces, como vinimos explicando, buscamos hallar un punto fijo para la función
+		\begin{equation}
+			g(x) = x - \frac{e(x)}{e'(x)} = x - \frac{\frac{1}{x^2} - \alpha}{\frac{-2}{x^3}} = x + \frac{x - \alpha x^3}{2} = \frac{3x - \alpha x^3}{2}
+		\label{g_e}
+		\end{equation}
+analizando la convergencia de la sucesión
+		\begin{eqnarray}
+		  && x_0 \in [a,b], \frac{1}{\sqrt{\alpha}} \in [a,b] \nonumber \\
+		  && x_{n+1} = g(x_n) \nonumber
+		\end{eqnarray}
+		
+Nuevamente, para asegurar la convergencia, buscamos un intervalo $[a,b]$ que satisfaga las hipótesis del Lema \ref{lema_f}.
+  En primer lugar, $g(x)$ está bien definida, es continua y derivable en el intervalo $(0, +\infty)$ por ser composición de funciones continuas y derivables en ese intervalo ($3x$ es una función lineal, $\alpha x^3$ un polinomio y $2$ una constante, todas funciones continuas y dervibables en el intervalo mencionado). Como mencionamos anteriormente, $\frac{1}{\sqrt{\alpha}}$ no está definida para $\alpha \leq 0$, con lo cual asegurar continuidad y derivabilidad en $(0,+\infty)$ es suficiente.\\
+  
+  Analicemos $|g(x)| = |\frac{3x - \alpha x^3}{2}|$:\\\\
+  $\begin{array}{l}
+	 |g'(x)| < 1 \Leftrightarrow |\frac{3x - \alpha x^3}{2}| < 1 \Leftrightarrow -1 < \frac{3x - \alpha x^3}{2} < 1
+	 \Leftrightarrow \frac{-5}{2} < \frac{-3}{2}\alpha x^2 < \frac{-1}{2} \Leftrightarrow
+	 \frac{1}{3} < \alpha x^2 < \frac{5}{3} \\
+	 \Leftrightarrow \frac{1}{3\alpha} < x^2 < \frac{5}{3\alpha} \Leftrightarrow
+	 \frac{1}{\sqrt{3}\sqrt{\alpha}} < |x| < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} \Leftrightarrow \frac{1}{\sqrt{3}\sqrt{\alpha}} < x < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} (x > 0)
+  \end{array}$\\\\
+  Ahora consideremos $0 < \alpha < 1$, esto implica que $\alpha < \sqrt{\alpha}$ y $\sqrt{\alpha} < \frac{1}{\alpha} \Leftrightarrow \alpha < \frac{1}{\sqrt{\alpha}}$.\\
+  Luego, \\\\
+	  $\begin{array}{l}
+	      \frac{1}{\sqrt{3}\sqrt{\alpha}} < x < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} \Leftrightarrow \frac{\alpha}{\sqrt{3}} < x < \sqrt{\frac{5}{3}}\frac{1}{\alpha} \\
+	  \end{array}$ \\\\
+  Por otro lado, si $\alpha >= 1$, $\alpha \geq \sqrt{\alpha} \Leftrightarrow \alpha \geq \frac{1}{\sqrt{\alpha}}$. Para este caso podemos afirmar entonces que, \\\\
+	  $\begin{array}{l}
+	      \frac{1}{\sqrt{3}\sqrt{\alpha}} < x < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} \Leftrightarrow \frac{1}{\sqrt{3}\alpha} < x < \sqrt{\frac{5}{3}}\alpha \\
+	  \end{array}$ \\\\
