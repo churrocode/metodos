@@ -11,7 +11,7 @@ double alphas[3]  = {1, 4, 7};
 
 void aplicarAlRango(void (*medir)(), num (*metodo)(), FILE* out){
 	int i = 0;
-	for (; i < 8; ++i){
+	for (; i < 9; ++i){
 		double orden = ordenes[i];
 		double paso = orden/10;
 		int j = 0;
@@ -21,19 +21,20 @@ void aplicarAlRango(void (*medir)(), num (*metodo)(), FILE* out){
 			for (; k <= 10; ++k){
 				double alpha = centro + paso*k;
 				if (alpha > 0) {
-					medir(alpha, metodo, out);
+					// fprintf(out, "%d :", i);
+					medir(alpha, metodo, out, i);
 				}
 			}
 		}
 	}
 }
 
-void medirError(num alpha, num (*metodo)(), FILE* out){
+void medirError(num alpha, num (*metodo)(), FILE* out, int orden){
 	double laRaiz = metodo(alpha);
 	double laRaizPosta = invSqrtHW(alpha);
 	double elError = laRaiz - laRaizPosta;
 	double elErrorRelativo = elError/laRaiz;
-	fprintf(out, "%.20f : %.20f : %.20f : %.20f : %.20f\n", alpha, laRaiz, laRaizPosta, elError, elErrorRelativo);
+	fprintf(out, " %d : %.20f : %.20f : %.20f : %.20f : %.20f\n", orden, alpha, laRaiz, laRaizPosta, elError, elErrorRelativo);
 }
 
 void buscarErrorTolerable(){
@@ -42,10 +43,11 @@ void buscarErrorTolerable(){
 	for (j = 0; j < 4; j++) {
 		char archivo[150];
 		snprintf(archivo, 150, "../data/buscarParadaMetodo%d.dat", j);
+		// snprintf(archivo, 150, "HOLA%d.dat", j);
 		FILE* fileDesc = fopen(archivo, "w");
 		fprintf(fileDesc, "# Errores de medición para este método según cota para el error relativo en el criterio de parada.\n# Se miden 6 valores para el rango de siempre, se indica el final de la medición correspondiente para cada valor de error con una línea '* tolerancia: 10^-i'\n");
 		for (i = 0; i < 6; ++i) {
-			fprintf(fileDesc, "# alpha : invSqrt(alpha) : invSqrt(alpha) HWare : error : errorRelativo\n");
+			fprintf(fileDesc, "# orden[i] : alpha : invSqrt(alpha) : invSqrt(alpha) HWare : error : errorRelativo\n");
 			setearErrorTolerable(errores[i]);
 			aplicarAlRango(&medirError, metodos[j], fileDesc);
 			fprintf(fileDesc, "* tolerancia: 10^-%d\n", (i+1)*3 );

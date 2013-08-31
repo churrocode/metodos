@@ -4,7 +4,8 @@ import re
 mpl.use('cocoaagg')		#hack para mac
 import matplotlib.pyplot as pplot
 
-ordenes = [0.000000001, 0.000001, 0.001, 0.1, 1, 10, 1000, 1000000, 1000000000]
+# ordenes = [0.000000001, 0.000001, 0.001, 0.1, 1, 10, 1000, 1000000, 1000000000]
+ordenes = {0 : 0.000000001, 1: 0.000001, 2: 0.001, 3: 0.1, 4: 1, 5: 10, 6 : 1000, 7 :1000000, 8: 1000000000};
 def definirIntervalo(x):
 	for o in ordenes:
 		if x <= 5*o:
@@ -23,7 +24,7 @@ def parsearYProbar():
 	return data
 
 def parsearYPromediar(fileDesc):
-	orden = 0
+	tolerancia = 0
 	data = []
 	dataFinal = {}
 	for l in fileDesc:
@@ -31,20 +32,23 @@ def parsearYPromediar(fileDesc):
 			if l[0] == '*':
 				m = re.search('10..(\d+)', l)
 				if m:
-					orden = m.group(0)
-					print orden
-					dataFinal[orden] = cerrarPromedio(data)
+					tolerancia = m.group(0)
+					print tolerancia
+					dataFinal[tolerancia] = cerrarPromedio(data)
 					data=[]
 			else:
 				valores = map(lambda s: float(s), l.split(':'))
-				data.append((valores[0], abs(valores[4])))
+				data.append((int(valores[0]), valores[1], abs(valores[4])))
+	#dataFinal[tolerancia] = {orden : errorPromedio}
 	return dataFinal
 
+prom = lambda l : sum(l)/len(l) if len(l) else 0
+
 def cerrarPromedio(data):
-	dataSeparada = {str(o) : [] for o in ordenes}
-	for (alpha, error) in data:
-		dataSeparada[str(definirIntervalo(alpha))].append(error)
-	return {k : (sum(l)/len(l) if len(l) else 0) for k,l in dataSeparada.items()}
+	dataSeparada = {o : [] for o in ordenes.keys()}
+	for (orden, alpha, error) in data:
+		dataSeparada[orden].append(error)
+	return {k : (prom(l)) for k,l in dataSeparada.items()}
 
 def separarData(dataYLabels):
 	data = []
@@ -53,6 +57,8 @@ def separarData(dataYLabels):
 		data.append(datum)
 		labels.append(label)
 	return data, labels
+
+
 
 def plotBars(data, labels, title = None, horizontalLine = None, widthLevel = 1, verticalLine = None, offset = 0.5, color = 'g'):
 	import numpy.numarray as na
