@@ -1,11 +1,10 @@
 \section{Desarrollo}
 	\subsection{Métodos propuestos}
 %decir que son métodos mixtos. Que nos gusta la bisección porque nos asegura convergencia en caso de que lo necesitemos y porque no mete errores de propagación	
-	
 	Según lo consignado en el enunciado, exponemos a continuación los distintos métodos propuestos para computar $\frac{1}{\sqrt{\alpha}}$
 	%Métodos generales -> Demostrar Newton, convergencia.
 		\subsubsection{Cero de $f(x) = x^2 -\alpha$}
-		Una alternativa propuesta en el enunciado consiste en calcular primero $\sqrt{\alpha}$ como un cero de la función $f(x) = x^2 -\alpha$, y luego calcular su inverso multiplicativo. Para esto utilizaremos el método de Newton, que comentamos anteriormente. Con lo cual, para encontrar un cero de $f$ debemos buscar un punto fijo de 
+		Una alternativa propuesta en el enunciado consiste en calcular primero $\sqrt{\alpha}$ como un cero de la función $f(x) = x^2 -\alpha$, y luego calcular su inverso multiplicativo. Para esto utilizaremos el método de Newton (\ref{prop_newton}). Con lo cual, para encontrar un cero de $f$ debemos buscar un punto fijo de 
 		\begin{equation}
 			g(x) = x - \frac{f(x)}{f'(x)} = x - \frac{x^2 - \alpha}{2x} = \frac{x + \frac{\alpha}{x}}{2}
 		\label{g}	
@@ -15,17 +14,7 @@ lo cual realizaremos construyendo la sucesión
 		&& x_0 \in [a,b], \sqrt{\alpha} \in [a,b] \nonumber \\
 		&& x_{n+1} = g(x_n) \nonumber
 	\end{eqnarray}
-cuya convergencia dependerá de los valores de $a,b$. Sabemos que siempre existen éstos alrededor del cero buscado tales que la sucesión converga. Sin embargo, no tenemos un método general para determinar este intervalo, con lo cual aplicaremos el siguiente lema:
-\begin{lema}[Condición suficiente de convergencia]
-Sea $g: [a,b] \subset \R \rightarrow \R$, continua en $[a,b]$, derivable en $(a,b)$. Si se verifica que $g([a,b]) \inc [a,b]$ y $\exists k \in\R : |g(x)| \leq k < 1$, para cualquier $x\in [a,b]$, luego la sucesión definida como 
-	\begin{eqnarray}
-		&& x_0 \in [a,b], \nonumber \\
-		&& x_{n+1} = g(x_n) \nonumber
-	\end{eqnarray}
-	converge al único punto fijo de $g$ en $[a,b]$, para cualquier elección de $x_0$.
-\label{lema_f}
-\end{lema}
-Luego, buscaremos satisfacer las hipótesis del lema para (\ref{g}). Para comenzar, podemos asegurar la continuidad y derivabilidad de la función como lo pide el lema en $(0, +\infty)$ ya que es composición de funciones derivables en ese intervalo. (Dado que $\frac{1}{\sqrt{\alpha}}$ no está definida en 0, con esto es suficiente para asegurar continuidad y derivabilidad en cualquier intervalo a considerar). Miremos ahora $ g'(x) = \frac{1}{2} - \frac{\alpha/2}{x^2}$.\\
+cuya convergencia dependerá de los valores de $a,b$. Para poder asegurar la convergencia del método buscaremos satisfacer las hipótesis del lema para (\ref{g}). Para comenzar, podemos asegurar la continuidad y derivabilidad de la función como lo pide el lema en $(0, +\infty)$ ya que es composición de funciones derivables en ese intervalo. (Dado que $\frac{1}{\sqrt{\alpha}}$ no está definida en 0, con esto es suficiente para asegurar continuidad y derivabilidad en cualquier intervalo a considerar). Miremos ahora $ g'(x) = \frac{1}{2} - \frac{\alpha/2}{x^2}$.\\
 $\begin{array}{rl}
 	 |g'(x)| = |\frac{1}{2} - \frac{\alpha/2}{x^2}|  < 1 & \Leftrightarrow  -1 < \frac{1}{2} - \frac{\alpha/2}{x^2} < 1\nonumber \\
 	\Leftrightarrow  -\frac{3}{2} <  - \frac{\alpha/2}{x^2}  < \frac{1}{2} & \Leftrightarrow 
@@ -38,8 +27,8 @@ como necesitábamos. La otra restricción se cumple siempre por el signo de las 
 
 Veamos ahora $g([a,b]) \inc [a,b]$. Observemos que $g$ tiene un único extremo en $\sqrt{a}$ y éste es un mínimo, pues $g'(\sqrt{\alpha}) = \frac{1}{2} - \frac{1}{2}\frac{\alpha}{(\sqrt{\alpha})^2} = \frac{1}{2} - \frac{1}{2}\frac{\alpha}{\alpha} = 0$ y además $g''(x) = \frac{\alpha}{x^3} >0$ para cualquier $x>0$. Luego, como se trata de unafunción continua, $g([a,b]) = [\sqrt{\alpha}, \max(g(a), g(b))]$. Siempre suponemos que $\sqrt{\alpha}\in[a,b]$, con lo cual basta asegurar $\max(g(a), g(b))\leq b$ para conseguir lo deseado.
 
-		\subsubsection{Cero de $e(x) = \frac{1}{x^2} - \alpha$}
-		La segunda alternativa es considerar a la función $e(x) = \frac{1}{x^2} - \alpha$ y buscar una aproximación a una de sus raíces que viene a ser $\frac{1}{\sqrt{\alpha}}$, el valor que precisamente queríamos calcular en primera instancia. Para aproximar dicha raíz, planteamos dos métodos. El primero es aplicar el método de Newton para la función $e(x)$. Entonces, como vinimos explicando, buscamos hallar un punto fijo para la función
+		\subsubsection{Cero de $e(x) = \frac{1}{x^2} - \alpha$ - M\'etodo de Newton}
+		La segunda alternativa es considerar a la función $e(x) = \frac{1}{x^2} - \alpha$ y buscar una aproximación a una de sus raíces: $\frac{1}{\sqrt{\alpha}}$, el valor que precisamente queríamos calcular en primera instancia. Para aproximar dicha raíz, planteamos dos métodos. El primero es aplicar el método de Newton para la función $e(x)$. Entonces, como vinimos explicando, buscamos hallar un punto fijo para la función
 		\begin{equation}
 			g(x) = x - \frac{e(x)}{e'(x)} = x - \frac{\frac{1}{x^2} - \alpha}{\frac{-2}{x^3}} = x + \frac{x - \alpha x^3}{2} = \frac{3x - \alpha x^3}{2}
 		\label{g_e}
@@ -70,6 +59,16 @@ Nuevamente, para asegurar la convergencia, buscamos un intervalo $[a,b]$ que sat
 	  $\begin{array}{l}
 	      \frac{1}{\sqrt{3}\sqrt{\alpha}} < x < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} \Leftrightarrow \frac{1}{\sqrt{3}\alpha} < x < \sqrt{\frac{5}{3}}\alpha \\
 	  \end{array}$ \\\\
+
+
+\subsubsection{Cero de $e(x) = \frac{1}{x^2} - \alpha$ - Punto fijo}
+Además de buscar esta raíz con el método de Newton, propusimos otra función cuyo punto fijo sea el cero buscado. Comenzamos tomando $g(x) = \frac{1}{\alpha} \frac{1}{x}$, que tiene un punto fijo en  $p = \frac{1}{\sqrt{\alpha}}$ y $e(p)= 0$. Sin embargo, $g'(x) = -\frac{1}{\alpha} \frac{1}{x^2}$ no se anula en $p$, con lo cual su orden de convergencia es lineal. Dado que ya contábamos con un método cuadrático, decidimos transformar $g$ para obtener convergencia cuadrática anulando su derivada primera. Planetamos lo siguiente: sea $h = g + t \cdot s$, siendo $t(p) = 0$. Por un lado, esto garantiza que $p$ sea punto fijo de $h$, ya que $h(p) = g(p) + t(p)s(p) = g(p) + 0\cdot s(p) = g(p) = p$, y por otro nos resultaría fácil de encontrar, ya que habíamos considerado múltiples funciones que se anulan en el punto buscado. Mejor aún es cómo hace que se comporte $h$ al derivarla: $h' = g' + t'\cdot s + t \cdot s'$, que evaluado en $p$ resulta: $h'(p) = g'(p) + t'(p)s(p) + 0\cdot s'(p) = g'(p) + t'(p)s(p)$, lo cual elimina cualquier restricción posible sobre la derivada de $s$. Propusimos $t(x) = e(x)$, con lo cual, resulta $h'(p) = g'(p) + e'(p)s(p) = 1 + e'(p)s(p)$. Si queremos $h'(p) = 0$ basta pedir $e'(p)s(p) = -1$, que se satisface fácilmente tomando $s = \frac{-1}{e'}$. Siendo $e'(x) = \frac{-2}{x^3}$, tenemos $s(x) = \frac{x^3}{2}$.
+
+Finalmente, tenemos 
+\begin{equation}
+	h(x) = \frac{1}{\alpha} \frac{1}{x} + (\frac{1}{x^2} - \alpha)\frac{x^3}{2} =  \frac{1}{\alpha x} + \frac{x - \alpha x^3}{2}
+\end{equation}
+que, por cómo la construimos, convergerá cuadráticamente cuando le apliquemos el método de punto fijo.
 
 \subsection{//UN TÍTULO PARA ESTO}
 	

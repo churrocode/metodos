@@ -1,0 +1,62 @@
+\section{Introducción}
+El problema del presente TP consiste en computar $\frac{1}{\alpha}$ utilizando operaciones aritméticas elementales. Para esto buscamos implementar distintos métodos que conocíamos teóricamente, y que ajustamos en la práctica mediante observaciones de diferentes resultados experimentales. Finalmente, los comparamos enter sí //// Y ACÁ DECIR LO QUE AVERIGUAMOS.
+
+\subsection{Métodos generales}
+Para el desarrollo de los métodos, utilizamos dos enfoques básicos: bisección para búsqueda de raíces y búsqueda de puntos fijos.
+\subsubsection{Bisección}
+El método de bisección consiste en reducir sucesivamente la longitud de un intervalo que sabemos que contiene al valor buscado, de manera que lo siga conteniendo. Para asegurar esto, se pide una función continua sobre un intervalo inicial, en cuyos extremos la función tenga signos alternados, de manera que por el Teorema de Bolzano, podamos afirmar que en su interior existe al menos una de las raíces buscadas. Para acortar el intervalo se procede a calcular el valor de la función en el punto medio, y considerar como intervalo para la próxima iteración uno de los subintervalos que resultan de dividir al original por este punto y que verifique nuevamente la alternancia de signos en los extremos. En general, dada $f(x): I\inc \R \rightarrow \R $ continua, podemos decir que buscamos construir la siguiente sucesión de intervalos:
+	\begin{eqnarray}
+		&& [a_0, b_0], \text{ tal que } sg(f(a)) \neq sg(f(b)) \nonumber \\
+		&& [a_{n+1}, b_{n+}] = \left\{
+			\begin{array}{c l l }
+  				[c_n, b_n] & x\mbox{ si } sg(f(a_n)) = sg(f(c_n)) & \mbox{donde } c_n = \frac{a_n+b_n}{2} \nonumber \\
+  				 \left[a_{n}, c_{n}\right] & x\mbox{ si } sg(f(b_n)) = sg(f(c_n)) &  \nonumber \\ %no le gustan los corchetes al principio
+			\end{array} \nonumber
+		\right.		\nonumber \\
+	\end{eqnarray}
+Vale aclarar que si en algún momento se obtiene $f(c) = 0$, $c$ es la raíz buscada con lo cual el algoritmo se detiene. Si éste no es el caso, se deberá elegir algún criterio de parada pertinente; con respecto a esto, se puede aprovechar que dado que la solución está contenida en el intervalo, el error absoluto que se comete al finalizar está acotado por la mitad de la longitud del intervalo en la última iteración. Más aún, luego de $n$ iteraciones podemos afirmar $\Delta_n \leq \frac{1}{2^n} (b_0-a_0)$. Es claro que el invariante de la pertenencia de la raíz buscada al intervalo se mantiene (pues el argumento de los signos alternados es válida a lo largo de todas las iteraciones), como también que la longitud del intervalo decrece. Luego, el método converge. Sin embargo, se puede ver que lo hace con orden lineal.
+
+\subsubsection{Punto fijo}
+Dada $f: A\inc\R \rightarrow \R$ decimos que $p$ es un punto fijo de $f$ si se verifica $f(p) = p$.  Un método general para encontrar éstos consiste en, a partir de un punto dado, aplicar sucesivamente la función a los valores obtenidos, es decir, construir la sucesión:
+	\begin{eqnarray}
+		&& x_0 \in A\nonumber \\
+		&& x_{n+1} = f(x_n) \nonumber
+	\end{eqnarray}
+
+Evidentemente el comportamiento de la sucesión dependerá de la función en cuestión, con lo cual no contamos con un criterio fijo para determinar el valor inicial para asegurar convergencia, por lo que utilizaremos el siguiente lema:
+\begin{lema}[Condición suficiente de convergencia]
+Sea $f: [a,b] \subset \R \rightarrow \R$, continua en $[a,b]$, derivable en $(a,b)$. Si se verifica que $f([a,b]) \inc [a,b]$ y $\exists k \in\R : |f'(x)| \leq k < 1$, para cualquier $x\in [a,b]$, $f$ tiene un único punto fijo en $[a,b]$ y la sucesión definida como 
+	\begin{eqnarray}
+		&& x_0 \in [a,b], \nonumber \\
+		&& x_{n+1} = f(x_n) \nonumber
+	\end{eqnarray}
+	converge a éste, para cualquier elección de $x_0$.
+\label{lema_f}
+\end{lema}
+Observemos que es condición suficiente pero no necesaria, con lo cual si bien se trata de una garantía teórica puede implicar excesivas restricciones en la práctica. En general, intentaremos, experimentalmente, relajar estas restricciones.
+
+Así como no existe una condición general para asegurar la convergencia del método, tampoco podemos asegurar el orden con que ésta sucede. Para este análisis utilizarmos el siguiente lema:
+\begin{lema}[Orden de  convergencia]
+Sea $f: [a,b] \subset \R \rightarrow \R$, $f \in C^{r}([a,b])$. Si $f'(p) = f''(p) = \dots = f^{(r-1)}(p) = 0$ y $f^{(r)}(p) \neq 0$, luego la sucesión $\{x_n\}_{n\in\N}$, definida como en \ref{lema_f}, converge a $p$ con orden $r$.
+\label{lema_conv}
+\end{lema}
+
+\subsubsection{Método de Newton}
+El método de Newton permite encontrar ceros de funciones, utilizando un caso particular de punto fijo. Para esto propone, a partir de la función original, una nueva cuyo punto fijo resulta la raíz buscada. Este método permite obtener convergencia cuadrática, aunque no establece una condición fácilmente verificable para que esto suceda. Formalmente:
+\begin{prop}[Método de Newton] 
+Sea $f: [a,b] \subset \R \rightarrow \R$, $f \in C^{2}([a,b])$, $p\in[a,b]$, $f(p) = 0$, $f'(p) \neq 0$. \\
+Sea $g(x) = x - \displaystyle\frac{f(x)}{f'(x)}$. Luego, la sucesión 
+	$\begin{array}{l}
+		x_0 \in [p-\eps, p+\eps] \\
+		x_{n+1} = g(x_n)
+	 \end{array}$
+converge cuadráticamente a $p$ para algún  $\eps > 0$.
+\label{prop_newton}
+\end{prop}
+
+Observemos, como dijimos antes, que la proposición garantiza la existencia de $\eps$ para que el método se comporte como es deseado, pero no entrega ninguna información para averiguar éste explícitamente. De la misma manera que antes, intentaremos combiar herramientas teóricas junto con datos obtenidos experimentalmente para determinar un intervalo donde el método se comporte satisfactoriamente.
+
+
+
+
+
