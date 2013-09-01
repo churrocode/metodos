@@ -67,8 +67,6 @@ void contarIteraciones(num alpha, num(*metodo)(), FILE* out, int orden){
 	#endif
 }
 
-<<<<<<< Updated upstream
-
 /* retorna "a - b" en segundos */
 double timeval_diff(struct timeval *a, struct timeval *b)
 {
@@ -115,7 +113,9 @@ void medirTiempos(){
 		fprintf(fileDesc, "# orden[i] : alpha : tiempoEjecucion\n");
 		aplicarAlRango(&medirTiempoEjecucion2, metodos[j], fileDesc);
 		fclose(fileDesc);
-=======
+	}
+}
+
 void buscarMenorCantidadIters() {
 	int i,j = 0;
 
@@ -151,20 +151,12 @@ void buscarMenorCantidadIters() {
 			aplicarAlRango(&contarIteraciones, metodos[j], fileDesc);
 			fclose(fileDesc);
 		}
->>>>>>> Stashed changes
 	}
 }
 
-
-<<<<<<< Updated upstream
 int main(){
+	//medirTiempos();
+	//buscarMenorCantidadIters();
 	//buscarErrorTolerable();
-	medirTiempos();
-=======
-
-int main(){
-	buscarMenorCantidadIters();
-	//buscarErrorTolerable();
->>>>>>> Stashed changes
 	return 0;
 }
