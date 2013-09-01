@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include "metodos.h"
 #define abs(x) (x >= 0 ? x : - x)
 #define max(x,y) (x > y ? x : y)
@@ -8,7 +9,9 @@
 num errorTolerable = epsilon;
 #ifdef MEDIR
 int itersBiseccion = 0;
+int topeItersBiseccion = 10;
 int itersNewton = 0;
+int conBiseccion = 1;
 
 void setearErrorTolerable(num error){
 	errorTolerable = error;
@@ -17,6 +20,18 @@ void setearErrorTolerable(num error){
 void resetearContadores() {
 	itersBiseccion = 0;
 	itersNewton = 0;
+}
+
+void setearTopeItersBiseccion(int tope) {
+	topeItersBiseccion = tope;
+}
+
+int getTopeItersBiseccion(){
+	return topeItersBiseccion;
+}
+
+void setBiseccion(int con_biseccion) {
+	conBiseccion = con_biseccion;
 }
 
 int getItersNewton(){
@@ -46,7 +61,7 @@ num sqrtNewton(num alpha){
 	num a = 0;
 	num b = alpha > 1 ? alpha : 1;
 	// printf("Empecé a achicar el intervalo\n");
-	while(! (a >= 0.58*b && g(a)<= b && g(b) <= b)) {
+	while(! (a >= 0.58*b && g(a)<= b && g(b) <= b) && (itersBiseccion < topeItersBiseccion)) {
 		// printf("[%.9f, %.9f]     ", a,b);
 		num medio = (a + b)/2;
 		num fDeMedio = f(medio);
@@ -66,7 +81,10 @@ num sqrtNewton(num alpha){
 
 	// num raiz = alpha > 1 ? alpha : 1;
 	num raizAnterior = inf;
-	short iters;
+	short iters = 0;
+	#ifdef MEDIR
+	setearErrorTolerable(0.000000001);
+	#endif
 	while (!parar(alpha, raiz, raizAnterior, iters)){
 		raizAnterior = raiz;
 		raiz = g(raiz);
@@ -89,31 +107,36 @@ num invSqrtENewton(num alpha){
 	#define g(x) (-alpha/2.0 * x*x*x + 1.5*x)
 	#define gPrima(x) (1.5 * (1 - alpha * x*x))
 
-	// num a = 0;
-	// num b = alpha > 1 ? alpha : 1/alpha;
+	num a = 0;
+	num b = alpha > 1 ? alpha : 1/alpha;
 	//terminar si alpha = 1 o alpha = 0
 
 	//bisección cabeza para asegurar la convergencia de newton
-	// unsigned char bisecciones = 0;
+	//unsigned char bisecciones = 0;
+	if(conBiseccion) {
+		while (!( (abs(gPrima(a)) < 1) && (abs(gPrima(b)) < 1 && a <= g(a) && g(b) <= b)) && itersBiseccion < topeItersBiseccion){
+			num medio = (a+b)/2;
+			num gPrimaDeMedio = gPrima(medio);
+			if (iguales(gPrimaDeMedio, 0))
+				return medio;
+			if (gPrimaDeMedio < 0) {
+				b = medio;
+			} else {
+				a = medio;
+			}
+			++itersBiseccion;
+		}
+	}
 
-	// while (!( (abs(gPrima(a)) < 1) && (abs(gPrima(b)) < 1 && a <= g(a) && g(b) <= b))){
-	// 	num medio = (a+b)/2;
-	// 	num gPrimaDeMedio = gPrima(medio);
-	// 	if (iguales(gPrimaDeMedio, 0))
-	// 		return medio;
-	// 	if (gPrimaDeMedio < 0) {
-	// 		b = medio;
-	// 	} else {
-	// 		a = medio;
-	// 	}
-	// 	++bisecciones;
-	// }
-	// printf("\nTerminé de achicar el intervalo: [%.9f, %.9f] en %d pasos\n", a,b, bisecciones);
-	// num raiz = (a+b)/2;
+	//printf("\nTerminé de achicar el intervalo: [%.9f, %.9f] en %d pasos\n", a,b, bisecciones);
+	num raiz = (a+b)/2;
 	// num raiz = alpha > 1 ? 1/alpha : alpha;
-	num raiz = alpha > 1 ? (1/(1.733 * alpha)) : alpha/1.733;
+	//num raiz = alpha > 1 ? (1/(1.733 * alpha)) : alpha/1.733; // cota 
 	num raizAnterior = inf;
 	unsigned short iters = 0;
+	#ifdef MEDIR
+	setearErrorTolerable(0.000000001);
+	#endif
 	while (!parar(alpha, raiz, raizAnterior, iters)){
 		raizAnterior = raiz;
 		raiz = g(raiz);
@@ -138,7 +161,7 @@ num invSqrtEFlash(num alpha) {
 	num a = 1/alpha;
 	num b = 1;
 	char sgA = sg(gPrima(a));
-	while (!( (abs(gPrima(a)) < 1) && (abs(gPrima(b)) < 1))){
+	while (!( (abs(gPrima(a)) < 1) && (abs(gPrima(b)) < 1)) && itersBiseccion < topeItersBiseccion){
 		// printf("g\'(%.15f) = %.15f, g\'(%.15f) = %.15f\n", a, gPrima(a), b, gPrima(b));
 		num medio = (a+b)/2;
 		num gPrimaDeMedio = gPrima(medio);
@@ -161,6 +184,9 @@ num invSqrtEFlash(num alpha) {
 
 	num raizAnterior = inf;
 	unsigned short iters = 0;
+	#ifdef MEDIR
+	setearErrorTolerable(0.000000001);
+	#endif
 	while (!parar(alpha, raiz, raizAnterior, iters)){
 		raizAnterior = raiz;
 		raiz = g(raiz);
@@ -184,6 +210,9 @@ num biseccion(num alpha){
 	short iters = 0;
 	//por cómo es la bisección, nos conviene mirar el tamaño del intervalo
 	//el error absoluto es <= (b-a)/2, entonces el relativo es <= (b-a/2) /((a+b)/2) = (b-a)/(a+b)
+	#ifdef MEDIR
+	setearErrorTolerable(epsilon);
+	#endif
 	while((1/a - 1/b)/(2/(a+b)) > errorTolerable && iters < 100) {
 	// while(iters < 1000) {
 		raiz = (a + b)/2;

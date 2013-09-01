@@ -1,11 +1,22 @@
 #coding: utf-8
 import matplotlib as mpl
 import re
-mpl.use('cocoaagg')		#hack para mac
+import sys
+
+if sys.platform == 'darwin': 
+	mpl.use('cocoaagg')		#hack para mac
 import matplotlib.pyplot as pplot
+
+from matplotlib.font_manager import FontProperties
+
+fontP = FontProperties()
+fontP.set_size('small')
+
 
 # ordenes = [0.000000001, 0.000001, 0.001, 0.1, 1, 10, 1000, 1000000, 1000000000]
 ordenes = {0 : 0.000000001, 1: 0.000001, 2: 0.001, 3: 0.1, 4: 1, 5: 10, 6 : 1000, 7 :1000000, 8: 1000000000};
+tolerancias = ['10^-18', '10^-15', '10^-12', '10^-9', '10^-6', '10^-3']
+
 def definirIntervalo(x):
 	for o in ordenes:
 		if x <= 5*o:
@@ -33,7 +44,6 @@ def parsearYPromediar(fileDesc):
 				m = re.search('10..(\d+)', l)
 				if m:
 					tolerancia = m.group(0)
-					print tolerancia
 					dataFinal[tolerancia] = cerrarPromedio(data)
 					data=[]
 			else:
@@ -128,6 +138,41 @@ def barrasDeVentanas(filename, extraString=''):
 	pplot.ylabel(u'Throughput percibido [B/s]')
 	pplot.show()
 
+#print data
+
+
+def plotNBars(data,labels, title = None, horizontalLine = None, verticalLine = None):
+	global ordenes
+	global tolerancias
+	global fontP
+
+	import numpy.numarray as na
+	xlocations = na.array(range(len(tolerancias)))
+	width = 0.7
+	i = 0
+	colores = ['b','g','r','c','m','y','k','w','#610b0b']
+	bar_width = float(width/len(data))
+	bars = []
+	for dataOrden in data:
+		bars.append(pplot.bar(xlocations+bar_width*i, dataOrden, bar_width, color = colores[i], log=True))
+		i += 1
+	pplot.xlabel(u'Tolerancias')
+	pplot.ylabel(u'Error promedio')
+	if title:
+		pplot.title(title)
+	if horizontalLine:
+		hline = pplot.axhline(linewidth=2, color='r', y = horizontalLine, linestyle='dashed', label = 'Epsilon para igualdad') 
+	if verticalLine:
+		pplot.axvline(linewidth=2, color='r', x = verticalLine) 
+	ordenes_legends = ['Orden de magnitud: {}'.format(ordenes[x]) for x in range(len(ordenes))]
+	bars.append(hline)
+	ordenes_legends.append('Epsilon para igualdad: {}'.format(horizontalLine))
+	pplot.legend( bars, ordenes_legends, loc='best', prop = fontP)
+	pplot.xticks(xlocations+width/2, labels, fontsize = 12) #, rotation = 30
+	pplot.savefig('{}.png'.format(title))
+	#pplot.show()
+
+
 def plot2Bars(data1, data2, data3, labels, title = None, horizontalLine = None, verticalLine = None):
 	import numpy.numarray as na
 	xlocations = na.array(range(len(data1)))
@@ -141,7 +186,7 @@ def plot2Bars(data1, data2, data3, labels, title = None, horizontalLine = None, 
 	if title:
 		pplot.title(title)
 	if horizontalLine:
-		pplot.axhline(linewidth=2, color='r', y = horizontalLine) 
+		pplot.axhline(linewidth=2, color='r', y = horizontalLine, linestyle='dashed') 
 	if verticalLine:
 		pplot.axvline(linewidth=2, color='r', x = verticalLine) 
 	pplot.gca().get_xaxis().tick_bottom()
@@ -192,6 +237,9 @@ def barrasYRedondos(filename, filenameRedondo):
 	pplot.title(u'Throughput percibido para envíos de distinto tamaño')
 	pplot.show()
 
+
+
+
 # N = len(data)
 # menMeans = (20, 35, 30, 35, 27)
 # menStd =   (2, 3, 4, 1, 2)
@@ -220,6 +268,17 @@ def barrasYRedondos(filename, filenameRedondo):
 
 # plt.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
 
-
+if __name__ == '__main__':
+	eps = 1e-15
+	for i in range(4):
+		data = parsearYPromediar(open('buscarParadaMetodo{}.dat'.format(i), 'r'))
+		dataOrdenes = []
+		for orden in range(len(ordenes)):
+			dataOrden = [data[x][orden] for x in tolerancias]
+			dataOrdenes.append(dataOrden)
+		print len(dataOrdenes)
+		plotNBars(dataOrdenes,tolerancias,horizontalLine=eps,title='metodo{}'.format(i))
+		pplot.cla()
+	
 
 

@@ -3,7 +3,7 @@
 #include <time.h>
 #include <sys/time.h>
 #ifdef MEDIR
-	extern itersBiseccion, itersNewton, errorTolerable;
+	extern itersBiseccion, itersNewton, errorTolerable, topeItersBiseccion, conBiseccion;
 #endif
 
 //no cambiar el orden de este array, nos vamos a referir a estos métodos por su número!
@@ -58,14 +58,16 @@ void buscarErrorTolerable(){
 	}
 }
 
-void contarIteraciones(num alpha, num(*metodo)(), FILE* out){
+void contarIteraciones(num alpha, num(*metodo)(), FILE* out, int orden){
 	#ifdef MEDIR
 	resetearContadores();
+	int topeItersBiseccion = getTopeItersBiseccion();
 	double laRaiz = metodo(alpha);
-	fprintf(out, "%.20f : %d : %d : %d\n", alpha, itersBiseccion, itersNewton, itersBiseccion + itersNewton);
+	fprintf(out, "%d : %.20f : %d : %d : %d : %d\n", orden, alpha, itersBiseccion, itersNewton, itersBiseccion + itersNewton, topeItersBiseccion);
 	#endif
 }
 
+<<<<<<< Updated upstream
 
 /* retorna "a - b" en segundos */
 double timeval_diff(struct timeval *a, struct timeval *b)
@@ -113,12 +115,56 @@ void medirTiempos(){
 		fprintf(fileDesc, "# orden[i] : alpha : tiempoEjecucion\n");
 		aplicarAlRango(&medirTiempoEjecucion2, metodos[j], fileDesc);
 		fclose(fileDesc);
+=======
+void buscarMenorCantidadIters() {
+	int i,j = 0;
+
+	for (j = 0; j < 4; j++) {
+		char archivo[150];
+		if(j == 1){
+			char archivoENewtonConBiseccion[150], archivoENewtonSinBiseccion[150];
+			snprintf(archivoENewtonConBiseccion, 150, "../data/buscarItersMetodo%d(ConBiseccion).dat", j);
+			snprintf(archivoENewtonSinBiseccion, 150, "../data/buscarItersMetodo%d(SinBiseccion).dat", j);
+			FILE* fileDescConBis = fopen(archivoENewtonConBiseccion, "w");
+			FILE* fileDescSinBis = fopen(archivoENewtonSinBiseccion, "w");
+			
+			fprintf(fileDescConBis, "# Cantidad de iteraciones para este método con una tolerancia fija.\n# Se miden 6 valores para el rango de siempre'\n");
+			fprintf(fileDescConBis, "# orden : alpha : itersBiseccion : itersNewton : itersBiseccion + itersNetwon : topeItersBiseccion\n");
+
+			fprintf(fileDescSinBis, "# Cantidad de iteraciones para este método con una tolerancia fija.\n# Se miden 6 valores para el rango de siempre'\n");
+			fprintf(fileDescSinBis, "# orden : alpha : itersBiseccion : itersNewton : itersBiseccion + itersNetwon : topeItersBiseccion\n");
+			
+			setBiseccion(1);
+			aplicarAlRango(&contarIteraciones, metodos[j], fileDescConBis);
+			fclose(fileDescConBis);
+
+			setBiseccion(0);
+			aplicarAlRango(&contarIteraciones, metodos[j], fileDescSinBis);
+			fclose(fileDescSinBis);
+			
+		}
+		else {
+			snprintf(archivo, 150, "../data/buscarItersMetodo%d.dat", j);
+			FILE* fileDesc = fopen(archivo, "w");
+			fprintf(fileDesc, "# Cantidad de iteraciones para este método con una tolerancia fija.\n# Se miden 6 valores para el rango de siempre'\n");
+			fprintf(fileDesc, "# orden : alpha : itersBiseccion : itersNewton : itersBiseccion + itersNetwon : topeItersBiseccion\n");
+			aplicarAlRango(&contarIteraciones, metodos[j], fileDesc);
+			fclose(fileDesc);
+		}
+>>>>>>> Stashed changes
 	}
 }
 
 
+<<<<<<< Updated upstream
 int main(){
 	//buscarErrorTolerable();
 	medirTiempos();
+=======
+
+int main(){
+	buscarMenorCantidadIters();
+	//buscarErrorTolerable();
+>>>>>>> Stashed changes
 	return 0;
 }

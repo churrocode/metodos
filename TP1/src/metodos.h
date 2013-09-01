@@ -22,6 +22,8 @@ double invSqrtHW(double alpha);
 	void resetearContadores();
 	int getItersBiseccion();
 	int getItersNewton();
+	void setBiseccion(int);
+	void setearTopeItersBiseccion(int);
 #endif
 
 #endif
