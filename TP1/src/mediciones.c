@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "metodos.h"
+#include <time.h>
+#include <sys/time.h>
 #ifdef MEDIR
 	extern itersBiseccion, itersNewton, errorTolerable;
 #endif
@@ -64,7 +66,59 @@ void contarIteraciones(num alpha, num(*metodo)(), FILE* out){
 	#endif
 }
 
+
+/* retorna "a - b" en segundos */
+double timeval_diff(struct timeval *a, struct timeval *b)
+{
+  printf("%f\n", (double)a->tv_sec + (double)a->tv_usec/1000000 );
+  return
+	(double)(a->tv_sec + (double)a->tv_usec/1000000) -
+	(double)(b->tv_sec + (double)b->tv_usec/1000000);
+}
+
+
+void medirTiempoEjecucion(num alpha, void (*metodo)(), FILE* out, int orden){
+	struct timeval t_ini, t_fin;
+
+	gettimeofday(&t_ini, NULL);
+	metodo(alpha);
+	gettimeofday(&t_fin, NULL);
+
+	num secs = timeval_diff(&t_fin, &t_ini);
+//	printf("SECS %f", secs);
+	num tiempoEjecucion = secs * 1000000.0;
+	fprintf(out, "%d : %.20f : %.16g\n", orden, alpha, tiempoEjecucion);
+}
+
+void medirTiempoEjecucion2(num alpha, void (*metodo)(), FILE* out, int orden){
+	struct timeval t, t2;
+	float microsegundos;
+	gettimeofday(&t, NULL);
+
+	metodo(alpha);
+
+	gettimeofday(&t2, NULL);
+	microsegundos = ((t2.tv_usec - t.tv_usec) * 1000000.0f);
+	printf("%f\n", microsegundos );
+	fprintf(out, "%d : %.20f : %.16g\n", orden, alpha, microsegundos);
+}
+
+void medirTiempos(){
+	int i,j = 0;
+	for (j = 0; j < 4; j++) {
+		char archivo[150];
+		snprintf(archivo, 150, "../data/medirTiemposParaMetodo%d.dat", j);
+		FILE* fileDesc = fopen(archivo, "w");
+		fprintf(fileDesc, "# Tiempos de ejecución para este método según cota para el error relativo en el criterio de parada.\n# Se miden 6 valores para el rango de siempre, se indica el final de la medición correspondiente para cada valor de error con una línea '* tolerancia: 10^-i'\n");
+		fprintf(fileDesc, "# orden[i] : alpha : tiempoEjecucion\n");
+		aplicarAlRango(&medirTiempoEjecucion2, metodos[j], fileDesc);
+		fclose(fileDesc);
+	}
+}
+
+
 int main(){
-	buscarErrorTolerable();
+	//buscarErrorTolerable();
+	medirTiempos();
 	return 0;
 }
