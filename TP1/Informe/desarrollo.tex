@@ -12,20 +12,55 @@
 lo cual realizaremos construyendo la sucesión
 	\begin{eqnarray}
 		&& x_0 \in [a,b], \sqrt{\alpha} \in [a,b] \nonumber \\
-		&& x_{n+1} = g(x_n) \nonumber
+		&& x_{n+1} = g(x_n) 
+		\label{sqrtNewt}
 	\end{eqnarray}
-cuya convergencia dependerá de los valores de $a,b$. Para poder asegurar la convergencia del método buscaremos satisfacer las hipótesis del lema para (\ref{g}). Para comenzar, podemos asegurar la continuidad y derivabilidad de la función como lo pide el lema en $(0, +\infty)$ ya que es composición de funciones derivables en ese intervalo. (Dado que $\frac{1}{\sqrt{\alpha}}$ no está definida en 0, con esto es suficiente para asegurar continuidad y derivabilidad en cualquier intervalo a considerar). Miremos ahora $ g'(x) = \frac{1}{2} - \frac{\alpha/2}{x^2}$.\\
-$\begin{array}{rl}
-	 |g'(x)| = |\frac{1}{2} - \frac{\alpha/2}{x^2}|  < 1 & \Leftrightarrow  -1 < \frac{1}{2} - \frac{\alpha/2}{x^2} < 1\nonumber \\
-	\Leftrightarrow  -\frac{3}{2} <  - \frac{\alpha/2}{x^2}  < \frac{1}{2} & \Leftrightarrow 
-		3 >  \frac{\alpha}{x^2}  \text{(la desigualdad derecha se cumple siempre por signos)} \nonumber \\
-	\Leftrightarrow  \frac{\sqrt{\alpha}}{\sqrt{3}} < x \nonumber
-\end{array}$\\
-Sabemos $1/\sqrt{3} < 0.58 + \eps$, con lo cual tomando $x > 0.58\sqrt{\alpha} > \sqrt{\alpha}/\sqrt{3} + \eps'$ se verfica lo que necesitamos. Además, nuestro intervalo debe contener a $\sqrt{\alpha}$, con lo cual siempre vale $a \leq \sqrt{\alpha} \leq b$, por lo que si tomamos $a = 0.58b$ tenemos lo siguiente:
+cuya convergencia dependerá de los valores de $a,b$. 
+
+Demostramos el siguiente resultado teórico:
+
+\begin{prop} [Convergencia del Método (Ej 3.a)]
+Sea $\{x_n\}_{n\in\N}$ definida como en \ref{sqrtNewt}. Si $x_0 > \sqrt{\alpha}$, la sucesión converge cuadráticamente a $\sqrt{\alpha}$.
+\begin{lema}
+$x_n > \sqrt{\alpha}$ para cualquier $ n \geq 0$
+\begin{proof}
+Observemos primero la siguiente equivalencia:
+$$x_{n+1} = \displaystyle \frac{1}{2} (x_{n} + \frac{\alpha}{x_{n}}) < x_n \Leftrightarrow \displaystyle \frac{1}{2} (1 + \frac{\alpha}{x^2_{n}}) < 1 \Leftrightarrow \frac{\alpha}{x_n^2} < 1 \Leftrightarrow \sqrt{\alpha} < x_n$$
+
+Veamos que efectivamente se verifica que todos los términos de la sucesión están acotados inferiormente por $\sqrt{\alpha}$. Sabemos que los términos se construyen como $x_{n+1} =  \frac{x_n + \frac{\alpha}{x_n}}{2} = g(x_n)$, con lo cual veamos que podemos acotar inferiormente a $g$.
+
+$$g(x) > \sqrt{\alpha} \Leftrightarrow \frac{1}{2}(x + \frac{\alpha}{x}) > \sqrt{\alpha} \Leftrightarrow  \alpha > -x^2 + 2x\sqrt{\alpha} \Leftrightarrow  0 > -x^2 + 2x\sqrt{\alpha} - \alpha \Leftrightarrow  0 < x^2 - 2x\sqrt{\alpha} + \alpha = (x-\sqrt{\alpha})^2$$  
+
+Observando el signo de la desigualdad, al tratarse de un cuadrado, si el binomio no se anula, podemos afirmar la cota. Es decir:
+$$g(x) > \sqrt{\alpha} \Leftrightarrow x \neq \sqrt{\alpha}$$
+
+ Veamos que efectivamente esto no sucede para la sucesión, por inducción en $n$. Para $n = 0$, por hipótesis sabemos $x_0 > \sqrt{\alpha}$, con lo cual la diferencia no es nula. Para $x_n$, con $n\geq 1$ tenemos $x_n = g(x_{n-1})$. Como $x_{n-1}\neq \sqrt{\alpha}$ por hipótesis inductiva, se sigue$  \sqrt{\alpha} < g(x_{n-1}) = x_n$, como necesitábamos ver.
+\end{proof}
+\end{lema}
+\begin{proof}
+Veamos, ahora sí, que efectivamente el método converge. Para eso, veremos que se satisfacen las hipótesis del lema \ref{lema_f}.
+\begin{description}
+	\item[Derivabilidad] La función obtenida es continua y derivable en los reales estrictamente positivos, con lo cual esto se satisface en todos los intervalos sobre los que se trabajará.
+	\item[Derivada acotada]  Necesitamos $g'(x) \leq k < 1$, con lo cual veamos $g'(x) = \frac{1}{2} (1- \frac{\alpha}{x^2})$. Sabemos ya que $x > \sqrt{\alpha}$, con lo cual, $ 0<\frac{\alpha}{x^2} < 1$, o sea $0 < g'(x) < \frac{1}{2}$.
+	\item[Preservación del intervalo] Necesitamos $g([a,b]) \inc [a,b]$. Sabemos que $g$ puede tener un extremo en $\sqrt{\alpha}$, pues se anula su derivada primera. Miremos $g''(x) = \frac{\alpha}{x^3}$ para comprobarlo. Esta función es estrictamente positiva en $\R_{>0}$, con lo cual efectivamente se trata de un extremo y un mínimo. Además, podemos ver que si $x > \sqrt{\alpha}$ la derivada es positiva, y por lo tanto, la función creciente. Con lo cual, sea $\eps$  tal que $g(\sqrt{\alpha}) \leq g(x) \forall x\in [\sqrt{\alpha}-\eps, \sqrt{\alpha}-\eps]$, condición que sabemos que sucede por tratarse de un extremo local, sea $b > \sqrt{\alpha}$. Luego, $g([a,b]) = [g(\sqrt{\alpha}), g(b)]$, ya que, como la función es estrictamente creciente a la derecha del mínimo, el valor máximo lo alcanzará en el valor máximo de $x$, y por ser continua, tomará todos los valores intermedios entre su máximo y su mínimo. Ya sabemos $a = \sqrt{\alpha} -\eps < g(\sqrt{\alpha}) = \sqrt{\alpha}$, falta ver $g(b) < b$, pero imaginando $b = x_0$, esto vale por el lema anterior.
+	
+\end{description}
+\end{proof}
+
+\end{prop}
+Además de esto, utilizamos otro argumento teórico para establecer un intervalo donde el método converja con seguridad. 
+ Miremos ahora $ g'(x) = \frac{1}{2} - \frac{\alpha/2}{x^2}$.\\
+$$ |g'(x)| = |\frac{1}{2} - \frac{\alpha/2}{x^2}|  < 1  
+\Leftrightarrow  -1 < \frac{1}{2} - \frac{\alpha/2}{x^2} < 1 
+	\Leftrightarrow  -\frac{3}{2} <  - \frac{\alpha/2}{x^2}  < \frac{1}{2}  \Leftrightarrow 3 >  \frac{\alpha}{x^2}  
+	\Leftrightarrow  \frac{\sqrt{\alpha}}{\sqrt{3}} < x $$\\
+Antes que nada, observemos que descartamos una de las desigualdades pues se cumple siempre por los signos de las expresiones. También sabemos $1/\sqrt{3} < 0.58 + \eps$, con lo cual tomando $x > 0.58\sqrt{\alpha} > \sqrt{\alpha}/\sqrt{3} + \eps'$ se verfica lo que necesitamos. Además, nuestro intervalo debe contener a $\sqrt{\alpha}$, con lo cual siempre vale $a \leq \sqrt{\alpha} \leq b$, por lo que si tomamos $a = 0.58b$ tenemos lo siguiente:
 $$x \geq a \Leftrightarrow x \geq 0.58b \geq 0.58\sqrt{\alpha} \Rightarrow x > \sqrt{\alpha}/\sqrt{3} + \eps$$ 
-como necesitábamos. La otra restricción se cumple siempre por el signo de las expresiones.
+como necesitábamos. 
 
 Veamos ahora $g([a,b]) \inc [a,b]$. Observemos que $g$ tiene un único extremo en $\sqrt{a}$ y éste es un mínimo, pues $g'(\sqrt{\alpha}) = \frac{1}{2} - \frac{1}{2}\frac{\alpha}{(\sqrt{\alpha})^2} = \frac{1}{2} - \frac{1}{2}\frac{\alpha}{\alpha} = 0$ y además $g''(x) = \frac{\alpha}{x^3} >0$ para cualquier $x>0$. Luego, como se trata de unafunción continua, $g([a,b]) = [\sqrt{\alpha}, \max(g(a), g(b))]$. Siempre suponemos que $\sqrt{\alpha}\in[a,b]$, con lo cual basta asegurar $\max(g(a), g(b))\leq b$ para conseguir lo deseado.
+
+Utilizaremos este último argumento ya que nos provee una forma explícita para los extremos, además de que se presta para ir obteniéndolos por sucesivas bisecciones desde un intervalo original, fácil de determinar. Como dijimos, de todas formas, sabemos que este proceso puede ser costoso en cuanto a tiempos, por lo que, experimentalmente, terminaremos de establecer cotas para los extremos, o limitar su cantidad de iteraciones.
 
 		\subsubsection{Cero de $e(x) = \frac{1}{x^2} - \alpha$ - M\'etodo de Newton}
 		La segunda alternativa es considerar a la función $e(x) = \frac{1}{x^2} - \alpha$ y buscar una aproximación a una de sus raíces: $\frac{1}{\sqrt{\alpha}}$, el valor que precisamente queríamos calcular en primera instancia. Para aproximar dicha raíz, planteamos dos métodos. El primero es aplicar el método de Newton para la función $e(x)$. Entonces, como vinimos explicando, buscamos hallar un punto fijo para la función
@@ -40,25 +75,23 @@ analizando la convergencia de la sucesión
 		\end{eqnarray}
 		
 Nuevamente, para asegurar la convergencia, buscamos un intervalo $[a,b]$ que satisfaga las hipótesis del Lema \ref{lema_f}.
-  En primer lugar, $g(x)$ está bien definida, es continua y derivable en el intervalo $(0, +\infty)$ por ser composición de funciones continuas y derivables en ese intervalo ($3x$ es una función lineal, $\alpha x^3$ un polinomio y $2$ una constante, todas funciones continuas y dervibables en el intervalo mencionado). Como mencionamos anteriormente, $\frac{1}{\sqrt{\alpha}}$ no está definida para $\alpha \leq 0$, con lo cual asegurar continuidad y derivabilidad en $(0,+\infty)$ es suficiente.\\
+  En primer lugar, $g(x)$ está bien definida, es continua y derivable en el intervalo $(0, +\infty)$ por ser un polinomio. Como mencionamos anteriormente, $\frac{1}{\sqrt{\alpha}}$ no está definida para $\alpha \leq 0$, con lo cual asegurar continuidad y derivabilidad en $(0,+\infty)$ es suficiente.\\
   
   Analicemos $|g'(x)| = |\frac{3}{2} - \frac{3}{2}\alpha x^2|$:\\\\
-  $\begin{array}{l}
-	 |g'(x)| < 1 \Leftrightarrow |\frac{3}{2} - \frac{3}{2}\alpha x^2| < 1 \Leftrightarrow -1 < \frac{3}{2} - \frac{3}{2}\alpha x^2 < 1
-	 \Leftrightarrow \frac{-5}{2} < \frac{-3}{2}\alpha x^2 < \frac{-1}{2} \Leftrightarrow
-	 \frac{1}{3} < \alpha x^2 < \frac{5}{3} \\
-	 \Leftrightarrow \frac{1}{3\alpha} < x^2 < \frac{5}{3\alpha} \Leftrightarrow
-	 \frac{1}{\sqrt{3}\sqrt{\alpha}} < |x| < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} \Leftrightarrow \frac{1}{\sqrt{3}\sqrt{\alpha}} < x < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} (x > 0)
-  \end{array}$\\\\
-  Ahora consideremos $0 < \alpha < 1$, esto implica que $\alpha < \sqrt{\alpha}$ y $\sqrt{\alpha} < \frac{1}{\alpha} \Leftrightarrow \alpha < \frac{1}{\sqrt{\alpha}}$.\\
-  Luego, \\\\
-	  $\begin{array}{l}
-	      \frac{1}{\sqrt{3}\sqrt{\alpha}} < x < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} \Leftrightarrow \frac{\alpha}{\sqrt{3}} < x < \sqrt{\frac{5}{3}}\frac{1}{\alpha} \\
-	  \end{array}$ \\\\
-  Por otro lado, si $\alpha >= 1$, $\alpha \geq \sqrt{\alpha} \Leftrightarrow \alpha \geq \frac{1}{\sqrt{\alpha}}$. Para este caso podemos afirmar entonces que, \\\\
-	  $\begin{array}{l}
-	      \frac{1}{\sqrt{3}\sqrt{\alpha}} < x < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} \Leftrightarrow \frac{1}{\sqrt{3}\alpha} < x < \sqrt{\frac{5}{3}}\alpha \\
-	  \end{array}$ \\\\
+  $$
+	 |g'(x)| < 1 
+	 \Leftrightarrow |\frac{3}{2} - \frac{3}{2}\alpha x^2| < 1 
+	 \Leftrightarrow -1 < \frac{3}{2} - \frac{3}{2}\alpha x^2 < 1
+	 \Leftrightarrow \frac{1}{3\alpha} < x^2 < \frac{5}{3\alpha}
+	 \Leftrightarrow \frac{1}{\sqrt{3}\sqrt{\alpha}} < x < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} \mbox{ siempre } x > 0
+$$
+  Ahora consideremos $0 < \alpha < 1$, esto implica que $\alpha < \sqrt{\alpha}$ y $\sqrt{\alpha} < \frac{1}{\alpha} \Leftrightarrow \alpha < \frac{1}{\sqrt{\alpha}}$.  Luego, 
+$$      \frac{1}{\sqrt{3}\sqrt{\alpha}} < x < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} \Leftrightarrow \frac{\alpha}{\sqrt{3}} < x < \sqrt{\frac{5}{3}}\frac{1}{\alpha} \\
+$$ 
+  Por otro lado, si $\alpha \geq 1$, $\alpha \geq \sqrt{\alpha} \Leftrightarrow \alpha \geq \frac{1}{\sqrt{\alpha}}$. Para este caso podemos afirmar entonces:
+	  $$	      \frac{1}{\sqrt{3}\sqrt{\alpha}} < x < \frac{\sqrt{5}}{\sqrt{3}\sqrt{\alpha}} \Leftrightarrow \frac{1}{\sqrt{3}\alpha} < x < \sqrt{\frac{5}{3}}\alpha $$
+	  
+Realizaremos un análisis similar al anterior para asegurar $g([a,b]) \inc [a,b]$. Sea $p = \frac{1}{\sqrt{\alpha}}$, miremos $g'(x) = \frac{3-3\alpha x^2}{2}$. Ya sabemos $g'(p) = 0$, miremos $g''(p) =  -3 \alpha x$, que es estrictamente negativa en los números positivos, y por lo tanto, el punto crítico es un máximo. Con un argumento similar al que utilizamos en métodos anteriores, sabemos $g([a,b]) \inc [min(g(a), g(b)), p]$. Podemos ver que $g(x) > x$ para cualquier $0<x<\frac{1}{\alpha}$, con lo cual ya tenemos $g(a) > a$. También se puede deducir fácilmente que $g(b) \leq b$, tanto para cualquiera de los dos casos del valor de $\alpha$.
 
 
 \subsubsection{Cero de $e(x) = \frac{1}{x^2} - \alpha$ - Punto fijo}
@@ -69,6 +102,13 @@ Finalmente, tenemos
 	h(x) = \frac{1}{\alpha} \frac{1}{x} + (\frac{1}{x^2} - \alpha)\frac{x^3}{2} =  \frac{1}{\alpha x} + \frac{x - \alpha x^3}{2}
 \end{equation}
 que, por cómo la construimos, convergerá cuadráticamente cuando le apliquemos el método de punto fijo.
+
+En este caso no demostraremos el intervalo de convergencia, simplemente procedemos a ajustar el intervalo bisectando la derivada, hasta que en ambos extremos se verifique $|g'(x)| < 1$.
+
+\subsubsection{Bisección de $x^2-\alpha$}
+Aprovechando que ya teníamos implementado el procedimiento de bisección, lo aplicamos a buscar el cero de $f(x) = x^2-\alpha$. La implementaión es tri
+
+
 
 \subsection{//UN TÍTULO PARA ESTO}
 	
