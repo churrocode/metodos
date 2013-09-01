@@ -31,3 +31,15 @@ Observemos que el gráfico es muy similar al de la figura \ref{paradaMet1}, con 
 \end{figure}
 
 Al igual que en el caso anterior, la figura \ref{paradaMet2}, al tratarse de un método cuadrático, admite un análisis análogo a los casos anteriores. En este caso también elegiremos $10^{-9}$.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.9\textwidth]{../data/metodo3.png}
+    \caption{Error relativo final para distintos valores de tolerancia en el criterio de parada obteniendo el cero de $x^2 - \alpha$ mediante bisección, para cada orden de magnitud medido.}
+    \label{paradaMet3}
+\end{figure}
+
+Como dijimos, no esperábamos grandes resultados para este método. Elegiremos para seguir $10^{-15}$, que es donde se detiene la reducción del error (nuevamente, relacionado con el criterio de igualdad establecido). Vemos que para los órdenes más pequeños el error relativo es significativo, aún para las tolerancias menores, lo que indica que el error absoluto sigue siendo importante. Sabemos que para $\sqrt{\alpha}$ éste está acotado por la mitad de la longitud del intervalo en el último paso de bisección, pero al calcularle el recíproco, tratándose de valores pequeños, éste crece considerablemente.
+
+
+
