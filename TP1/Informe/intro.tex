@@ -56,7 +56,8 @@ converge cuadráticamente a $p$ para algún  $\eps > 0$.
 
 Observemos, como dijimos antes, que la proposición garantiza la existencia de $\eps$ para que el método se comporte como es deseado, pero no entrega ninguna información para averiguar éste explícitamente. De la misma manera que antes, intentaremos combiar herramientas teóricas junto con datos obtenidos experimentalmente para determinar un intervalo donde el método se comporte satisfactoriamente.
 
-
+\subsubsection{Métodos mixtos}
+Veremos en la próxima sección que los métodos que proponemos consisten, primero, en encontrar un intervalo donde la convergencia de los métodos cuadráticos esté asegurada teóricamente por los lemas enunciados y después, aplicar alguno de éstos. Ya dijimos que esto puede ser costoso y no del todo necesario, pero nos parece provechoso, más allá de la convergencia, pues los resultados de los métodos de punto fijo (incluido el de Newton) provienen de aplicar una misma operación sucesivas veces reutilizando los resultados anteriores, con lo cual, cada uno introduce sus errores de operación y propagación, y a su vez, propaga los de las iteraciones anteriores. Buscando intervalos pequeños, reducimos la cantidad de iteraciones que estos métodos deben realizar, con lo cual, podemos reducir estos errores ya que la bisección no debería introducir otros. Esto último es discutible, pero exceptuando casos extremos, dado que la bisección opera sobre los extremos del intervalo, aún cuando éstos contengan errores sigue siendo válido que el intervalo obtenido contiene a la solución buscada, que es lo que en realidad necesitan los métodos siguientes.
 
 
 

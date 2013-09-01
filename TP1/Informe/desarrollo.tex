@@ -110,15 +110,23 @@ Aprovechando que ya teníamos implementado el procedimiento de bisección, lo ap
 
 
 
-\subsection{//UN TÍTULO PARA ESTO}
+\subsection{Experimentación}
 	
-Como expusimos anteriormente (OBVIO), en todos los casos en que aplicamos el método de Newton tenemos argumentos teóricos para asegurar su convergencia en orden cuadrático, a costo de reducir iterativamente por bisección un intervalo dentro del cual que podamos asegurar que la raíz buscada existe hasta que satisfaga las hipótesis del lema. Aprovecharemos esta garantía para fijar el criterio de parada de los métodos, una vez definido el cual y conociendo el desempeño del algoritmo en un caso teóricamente óptimo nos dedicaremos a relajar los parámetros que aseguran convergencia para determinar, experimentalmente, cotas para éste que representen mejor un compromiso entre calidad de la solución y tiempo de ejecución.
+Como expusimos anteriormente, en todos los casos en que aplicamos el método de Newton tenemos argumentos teóricos para asegurar su convergencia en orden cuadrático, a costo de reducir iterativamente por bisección un intervalo dentro del cual que podamos asegurar que la raíz buscada existe hasta que satisfaga las hipótesis del lema. Aprovecharemos esta garantía para fijar el criterio de parada de los métodos, una vez definido el cual y conociendo el desempeño del algoritmo en un caso teóricamente óptimo nos dedicaremos a relajar los parámetros que aseguran convergencia para determinar, experimentalmente, cotas para éste que representen mejor un compromiso entre calidad de la solución y tiempo de ejecución.
+
+	\subsubsection{Muestreo}
+Realizaremos cada experimento para $\alpha$ en distintos órdenes de magnitud: $10^{-9}$, $10^{-6}$, $10^{-3}$, $10^{-1}$, $10^{0}$, $10^{2}$, $10^{3}$, $10^{6}$ y $10^{9}$. En cada orden, tomamos como pivote central $p \in \{1,4,7\}$, y consideraremos 10 décimas (respecto del orden elegido) tanto a izquierda como a derecha. Es decir, mediremos para $ \alpha (o, p, k) = 10^o*p + 10^{o-1} * k \mbox{ donde } (o, p, k) \in \{-9, -6, -3, -1, 0, 2, 3, 6, 9\} \times \{1,4,7\} \times \{-10, -9, \dots , 0, 1,  \dots 10\} $.
+
+También vale mencionar que, como estamos trabajando con aproximaciones numéricas, consideraremos iguales dos valores cuya diferencia sea menor a $\eps = 10^{-15}$.
 
 	\subsubsection{Función de control}
 Para medir la calidad de la solución, implementamos la función $f(x) = \frac{1}{\sqrt{x}}$ directamente sobre el hardware, mediante una pequeña rutina de lenguaje ensamblador. Ésta utiliza únicamente las funciones cociente y raíz cuadrada del procesador, con lo cual confiamos en que, si bien también es una aproximación, es una de las mejores aproximaciones que podemos esperar dada la máquina.
 
 	\subsubsection{Criterio de parada}
-Establecimos como principal criterio de parada un umbral para el error relativo entre iteraciones sucesivas. Además, agregamos una condición de corte por cantidad de iteraciones para evitar problemas en eventuales casos patológicos que no hayamos contemplado en este análisis. Para determinar el umbral, realizaremos nuestras aproximaciones para las raíces pedidas tomando varios valores de $\alpha$ dentro de distintos órdenes de magnitud, repitiendo esto para distintos órdenes de magnitud de tolerancia. Luego, promediaremos los errores relativos de las soluciones dentro de cada orden de magnitud, a partir de lo cual compararemos los resultados obtenidos para las distintas tolerancias <redactame>, buscando, por un lado, descartar sobreexigencias, es decir, tolerancias <redactame> muy pequeñas que no aporten significativamente a la calidad de la solución, a la vez que otras que, aunque tal vez lo hagan, impliquen excesivo tiempo de cómputo. Este último caso será el más difícil de determinar, y de darse nos 
+Establecimos como principal criterio de parada un umbral para el error relativo entre iteraciones sucesivas. Además, agregamos una condición de corte por cantidad de iteraciones para evitar problemas en eventuales casos patológicos que no hayamos contemplado en este análisis.
+$$cortar(x_n, x_{n-1}, iters) = \frac{|x_n - x_{n-1}|}{x_n} < 10^{-\tau} \vee iters > I$$
+
+Realizaremos las mediciones para $\tau \in \{3,6,9,12,15, 18\}$ promediando los errores relativos de las soluciones dentro de cada orden de magnitud (comparando contra la función de control), fijando un máximo de iteraciones elevado, para no interferir. Hecho esto, buscaremos un valor de $\tau$, buscando, por un lado, descartar sobreexigencias, es decir, tolerancias muy pequeñas que no aporten significativamente a la calidad de la solución, a la vez que otras que, aunque tal vez lo hagan, impliquen excesivo tiempo de cómputo. Este último caso será el más difícil de determinar, y de darse nos 
 obligará a realizar nuevos experimentos para establecer el compromiso entre calidad y eficiencia.
 
 	\subsubsection{Performance}
