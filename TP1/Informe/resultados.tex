@@ -39,7 +39,45 @@ Al igual que en el caso anterior, la figura \ref{paradaMet2}, al tratarse de un 
     \label{paradaMet3}
 \end{figure}
 
-Como dijimos, no esperábamos grandes resultados para este método. Elegiremos para seguir $10^{-15}$, que es donde se detiene la reducción del error (nuevamente, relacionado con el criterio de igualdad establecido). Vemos que para los órdenes más pequeños el error relativo es significativo, aún para las tolerancias menores, lo que indica que el error absoluto sigue siendo importante. Sabemos que para $\sqrt{\alpha}$ éste está acotado por la mitad de la longitud del intervalo en el último paso de bisección, pero al calcularle el recíproco, tratándose de valores pequeños, éste crece considerablemente.
+Como dijimos, no esperábamos grandes resultados para este método. Elegiremos para seguir $10^{-15}$, que es donde se detiene la reducción del error (nuevamente, relacionado con el criterio de igualdad establecido). Vemos que para los órdenes más pequeños el error relativo es significativo, aún para las tolerancias menores, lo que indica que el error absoluto sigue siendo importante. Sabemos que para $\sqrt{\alpha}$ éste está acotado por la mitad de la longitud del intervalo en el último paso de bisección, que al calcularle el recíproco, tratándose de valores pequeños, éste crece considerablemente.
 
+\subsection{Tiempo de Ejecución}
 
+Para medir tiempo de ejecución, en principio, tomamos los métodos mixtos, sin restricciones sobre la cantidad de bisecciones. En general observamos que los tiempos crecen a medida que el orden de magnitud crece en módulo. Esto está relacionado con los intervalos inciales que elige cada método, que en general están en función de $\alpha$ o $\frac{1}{\alpha}$, según si se trata de valores mayores o menores a uno.
+ 
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.9\textwidth]{../data/Tiempo metodo 0.png}
+    \caption{Tiempo de ejecución para el recíproco del cero de $x^2 - \alpha$ con el método de Newton para cada orden de magnitud medido.}
+    \label{tiempoMet0}
+\end{figure}
+
+Como dijimos, el tiempo de ejecución depende del orden de magnitud. Excepto en los casos extremos, la variación entre el mejor y el peor caso es perfectamente tolerable.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.9\textwidth]{../data/Tiempo metodo 1.png}
+    \caption{Tiempo de ejecución para el cero de $\frac{1}{x^2} - \alpha$ con el método de Newton para cada orden de magnitud medido.}
+    \label{tiempoMet1}
+\end{figure}
+
+//SI SE LES OCURRE ALGO PARA DECIR PARA EL PICO ALREDEDOR DEL 0 =)
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.9\textwidth]{../data/Tiempo metodo 2.png}
+    \caption{Tiempo de ejecución para el cero de $\frac{1}{x^2} - \alpha$ con el método de punto fijo para cada orden de magnitud medido.}
+    \label{tiempoMet2}
+\end{figure}
+
+Nuevamente, el tiempo depende del orden de magnitud en el que estamos calculando. Observamos una situación similar a la de la figura \ref{tiempoMet0}, aunque éste método parece más costoso. Esto es esperable si tenemos en cuenta que la función de punto fijo que utiliza contiene más operaciones que la que utilizamos para  el caso anterior.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.9\textwidth]{../data/Tiempo metodo 3.png}
+    \caption{Tiempo de ejecución para el recíproco del cero de ${x^2} - \alpha$ con bisección para cada orden de magnitud medido.}
+    \label{tiempoMet3}
+\end{figure}
+
+Si bien observamos que la forma general del gráfico es similar a los casos anteriores, si miramos la escala vemos que se trata de un método mucho más lento. Esto es lo que esperábamos, ya que sabemos que converge linealmente, mientras que los otros métodos propuestos los elegimos por tener convergencia cuadrática.
 
