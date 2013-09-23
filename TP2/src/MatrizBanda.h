@@ -19,18 +19,18 @@ class MatrizBanda {
         void set(const int j, const num a); //a != 0, por favor!
     };
 public:
-    MatrizBanda(int n, int m, int p, int q);
+    MatrizBanda(int n, int m);
     MatrizBanda(const MatrizBanda& orig);
     virtual ~MatrizBanda();
-    num get(int i, int j);
-    void set(int i, int j, num a);
-    void sumarMultiploDeFila(int i1, int i2, num k);
+    num get(const int i, const int j);
+    num primeroDeLaFila(const int i);
+    void set(const int i, const int j, const num a);
+    void sumarMultiploDeFila(const int i1, const int i2, const num k); // Fi1 <- Fi1 + Fi2*k
+    pair<int, int> getDim();
     //operator[](int i, int j);
 private:
     int n;
     int m;
-    int p;
-    int q;
     vector<Fila> filas;
 };
 
