@@ -1,12 +1,13 @@
 #include "MatrizBanda.h"
+#include <iostream>
 
 using namespace std;
 
 MatrizBanda::MatrizBanda(int n, int m) : n(n), m(m), filas(n, MatrizBanda::Fila()) {
 }
 
-MatrizBanda::MatrizBanda(const MatrizBanda& orig) {
-}
+// MatrizBanda::MatrizBanda(const MatrizBanda& orig) {
+// }
 
 MatrizBanda::~MatrizBanda() {
 }
@@ -31,9 +32,16 @@ void MatrizBanda::sumarMultiploDeFila(const int i1, const int i2, const num k) {
 	filas[i1].sumarMultiploDeFila(filas[i2], k);
 }
 
+void MatrizBanda::intercambiarFilas(const int i1, const int i2) {
+	MatrizBanda::Fila fAux = filas[i1];
+	filas[i1] = filas[i2];
+	filas[i2] = fAux;
+}
+
 pair<int, int> MatrizBanda::getDim() {
 	return pair<int, int>(n,m);
 }
+
 void MatrizBanda::Fila::sumarMultiploDeFila(const Fila& f, num k) {
 	list< pair<int, num> >::iterator itThis = this->noNulos.begin();
 	list< pair<int, num> >::const_iterator itF = f.noNulos.begin();
@@ -60,10 +68,16 @@ void MatrizBanda::Fila::sumarMultiploDeFila(const Fila& f, num k) {
 }
 
 num MatrizBanda::Fila::get(const int j) {
-	if (noNulos.front().first < j && j < noNulos.back().second	) {
+	if (noNulos.empty()) {
+		return 0;
+	} else if (noNulos.front().first == j) {
+		return  noNulos.front().second;
+	} else if (noNulos.back().first == j) {
+		return noNulos.back().second;
+	} else if (noNulos.front().first < j && j < noNulos.back().first) {
 		list< pair<int, num> >::iterator it = noNulos.begin();
 		for (; it != noNulos.end() && it->first < j; ++it);
-		if (it != noNulos.end()) {
+		if (it->first == j) {
 			return it->second;
 		}
 	}
@@ -71,7 +85,7 @@ num MatrizBanda::Fila::get(const int j) {
 }
 
 void MatrizBanda::Fila::set(const int j, const num a) {
-	if (j < noNulos.front().first) {
+	if (noNulos.empty() || j < noNulos.front().first) {
 		pair<int, num> p(j, a);
 		noNulos.push_front(p);
 	} else if (j > noNulos.back().first) {
