@@ -32,6 +32,7 @@ public:
     pair<int, int> getDim();
     void triangularConGauss();
     void printMatriz();
+    MatrizBanda::Fila getFila(const int i) { return filas[i]; }
 private:
     int n;
     int m;

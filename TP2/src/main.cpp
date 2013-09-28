@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "MatrizBanda.h"
+#include "backwardSubstitution.h"
 
 using namespace std;
 
@@ -15,8 +16,9 @@ int main(int argc, char** argv) {
     cout << "MAIN CORRIENDO" << endl;
 
   //  probarLasFilas();
-    testGauss();
-    
+    //testGauss();
+    testBackwardSubstitution();
+    cout <<"asd"<<endl;
     return 0;
 }
 
