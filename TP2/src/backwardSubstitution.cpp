@@ -19,7 +19,7 @@ vector<num>* backwardSubstitution(MatrizBanda& mt, vector<num> b, const int p, c
 		}*/
 		num elemento_diagonal = mt.get(i,i);
 		int j = i+1;
-		for(; j < min(i+p+q,m); ++j) {
+		for(; j < min(i+p+q-1,m); ++j) {
 			num elemento = mt.get(i,j);
 			(*x)[i] -= elemento*((*x)[j]);
 		}
