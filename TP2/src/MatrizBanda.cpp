@@ -102,3 +102,37 @@ void MatrizBanda::Fila::set(const int j, const num a) {
 		}
 	}
 }
+
+
+void MatrizBanda::triangularConGauss(){
+    for(int i = 0; i < (this->m) ; i++){
+        num max = abs(this->get(i, i));
+        int fila_pivote = i;
+        for(int j = i+1; j < this->n; j++){
+            if (abs(this->get(j, i)) > max){
+                max = abs(this->get(j, i));
+                fila_pivote = j;
+            }
+        }
+        if(max == 0) return;
+        if(fila_pivote != i){
+            this->intercambiarFilas(i, fila_pivote);
+        }
+        num pivote = this->get(i, i);
+        for(int j = i+1; j < this->n; j++){
+            num multiplicador = this->get(j, i) / pivote;
+            this->sumarMultiploDeFila(j, i, -1*multiplicador);
+        }
+    }
+    
+}
+
+void MatrizBanda::printMatriz() {
+	for (int i = 0; i < this->getDim().first ; ++i) {
+		for (int j = 0; j < this->getDim().second ; ++j) {
+			cout << this->get(i,j) << " "; //get(i,j) sólo acá!
+		}
+		cout << endl;
+	}
+	cout << endl;
+}

@@ -7,6 +7,7 @@
 typedef double num;
 #define eps 10e-12
 #define iguales(x, y) ((- eps < x - y)  && (x - y < eps))
+#define abs(x) (x >= 0 ? x : - x)
 
 using namespace std;
 
@@ -29,7 +30,8 @@ public:
     void sumarMultiploDeFila(const int i1, const int i2, const num k); // Fi1 <- Fi1 + Fi2*k
     void intercambiarFilas(const int i1, const int i2);
     pair<int, int> getDim();
-    //operator[](int i, int j);
+    void triangularConGauss();
+    void printMatriz();
 private:
     int n;
     int m;

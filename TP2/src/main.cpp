@@ -5,32 +5,6 @@
 
 using namespace std;
 
-float abs(num x){
-    return x >= 0? x: -x;
-}
-
-void gauss(MatrizBanda& matriz, int n, int m){
-    for(int i = 1; i < m; i++){
-        num max = abs(matriz.get(i, i));
-        int fila_pivote = i;
-        for(int j = i+1; j < n; j++){
-            if (abs(matriz.get(j, i)) > max){
-                max = abs(matriz.get(j, i));
-                fila_pivote = j;
-            }
-        }
-        if(max == 0) return;
-        if(fila_pivote != i){
-            matriz.intercambiarFilas(i, fila_pivote);
-        }
-        num pivote = matriz.get(i, i);
-        for(int j = i+1; j < n; j++){
-            num multiplicador = matriz.get(j, i) / pivote;
-            matriz.sumarMultiploDeFila(j, i, -1*pivote);
-        }
-    }
-    
-}
 
 void printMatriz(MatrizBanda& m);
 void probarLasFilas();
@@ -48,6 +22,28 @@ int main(int argc, char** argv) {
 
 void testGauss(){
     cout << "Test Gauss" << endl;
+    MatrizBanda m(4, 4);
+    printMatriz(m);
+    
+    m.set(0,0,1);
+    m.set(0,1,2);
+    m.set(0,2,3);
+    m.set(0,3,4);
+    m.set(1,0,1);
+    m.set(1,1,4);
+    m.set(1,2,9);
+    m.set(1,3,16);
+    m.set(2,0,1);
+    m.set(2,1,8);
+    m.set(2,2,27);
+    m.set(2,3,64);
+    m.set(3,0,1);
+    m.set(3,1,16);
+    m.set(3,2,81);
+    m.set(3,3,256);
+    
+    m.triangularConGauss();
+    printMatriz(m);
 }
 
 void probarLasFilas() {
