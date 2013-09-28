@@ -42,6 +42,10 @@ pair<int, int> MatrizBanda::getDim() {
 	return pair<int, int>(n,m);
 }
 
+void MatrizBanda::reemplazarFila(const int i, list< pair<int,num> >& nuevaFila) {
+	filas[i].reemplazarFila(nuevaFila);
+}
+
 void MatrizBanda::Fila::sumarMultiploDeFila(const Fila& f, num k) {
 	list< pair<int, num> >::iterator itThis = this->noNulos.begin();
 	list< pair<int, num> >::const_iterator itF = f.noNulos.begin();
@@ -103,6 +107,10 @@ void MatrizBanda::Fila::set(const int j, const num a) {
 	}
 }
 
+void MatrizBanda::Fila::reemplazarFila(list< pair<int,num> >& otraFila) {
+	noNulos.clear();
+	noNulos = otraFila;
+}
 
 void MatrizBanda::triangularConGauss(){
     for(int i = 0; i < (this->m) ; i++){
