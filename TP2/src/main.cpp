@@ -5,29 +5,28 @@
 
 using namespace std;
 
-float abs(float x){
+float abs(num x){
     return x >= 0? x: -x;
 }
 
-void gauss(MatrizBanda m, int n, int m){
+void gauss(MatrizBanda& matriz, int n, int m){
     for(int i = 1; i < m; i++){
-
-        max = abs(m[i, i]);
+        num max = abs(matriz.get(i, i));
         int fila_pivote = i;
         for(int j = i+1; j < n; j++){
-            if (abs(m[j, i]) > max){
-                max = abs(m[j, i]);
+            if (abs(matriz.get(j, i)) > max){
+                max = abs(matriz.get(j, i));
                 fila_pivote = j;
             }
         }
-        if(max == 0) return -1;
+        if(max == 0) return;
         if(fila_pivote != i){
-        //    m.swapearFilas(i, fila_pivote)
+            matriz.intercambiarFilas(i, fila_pivote);
         }
-        float pivote = m[i, i];
+        num pivote = matriz.get(i, i);
         for(int j = i+1; j < n; j++){
-            float multiplicador = m[j, i] / pivote;
-        //    m.sumarMultiploDeFila(j, i, -1*pivote);
+            num multiplicador = matriz.get(j, i) / pivote;
+            matriz.sumarMultiploDeFila(j, i, -1*pivote);
         }
     }
     
@@ -35,16 +34,21 @@ void gauss(MatrizBanda m, int n, int m){
 
 void printMatriz(MatrizBanda& m);
 void probarLasFilas();
+void testGauss();
 
 int main(int argc, char** argv) {
     
     cout << "MAIN CORRIENDO" << endl;
 
-    probarLasFilas();
+  //  probarLasFilas();
+    testGauss();
     
     return 0;
 }
 
+void testGauss(){
+    cout << "Test Gauss" << endl;
+}
 
 void probarLasFilas() {
 	MatrizBanda m(10, 10);
@@ -66,7 +70,6 @@ void probarLasFilas() {
 	printMatriz(m);
 	// cout << m.get(0,0)<< endl;
 	// cout << m.getDim().first << " x " << m.getDim().second << ' ' << m.getN() << " x " << m.getM()<< endl;
-	
 }
 
 void printMatriz(MatrizBanda& m) {
