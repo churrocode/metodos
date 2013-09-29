@@ -40,11 +40,7 @@ int main(int argc, char** argv) {
 	p.generarMatriz();
 
     cout << "MAIN CORRIENDO" << endl;
-
-  //  probarLasFilas();
-    //testGauss();
-    // testBackwardSubstitution();
-    cout <<"asd"<<endl;
+    testGauss();
     return 0;
 }
 
@@ -70,8 +66,21 @@ void testGauss(){
     m.set(3,2,81);
     m.set(3,3,256);
     
-    m.triangularConGauss();
+    vector<num> b;
+    b.push_back(2);
+    b.push_back(10);
+    b.push_back(44);
+    b.push_back(190);
+
+    m.triangularConGauss(3, 3, b);
+    
     printMatriz(m);
+    cout << "b triangulada = " << b[0] << ' ' << b[1] << ' ' << b[2] << ' ' << b[3] << endl;
+    
+    vector<num>* x = backwardSubstitution(m, b, 1, 4);
+    
+    
+    cout << "x = " << (*x)[0] << ' ' << (*x)[1] << ' ' << (*x)[2] << ' ' << (*x)[3] << endl;
 }
 
 void probarLasFilas() {
@@ -105,4 +114,3 @@ void printMatriz(MatrizBanda& m) {
 	}
 	cout << endl;
 }
-
