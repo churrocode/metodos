@@ -28,6 +28,10 @@ void MatrizBanda::set(int i, int j, num a) {
 	filas[i].set(j, a);
 }
 
+void MatrizBanda::setLast(const int i, const int j, const num a) {
+	filas[i].setLast(j,a);
+}
+
 void MatrizBanda::sumarMultiploDeFila(const int i1, const int i2, const num k) {
 	filas[i1].sumarMultiploDeFila(filas[i2], k);
 }
@@ -42,9 +46,9 @@ pair<int, int> MatrizBanda::getDim() {
 	return pair<int, int>(n,m);
 }
 
-void MatrizBanda::reemplazarFila(const int i, list< pair<int,num> >& nuevaFila) {
-	filas[i].reemplazarFila(nuevaFila);
-}
+// void MatrizBanda::reemplazarFila(const int i, list< pair<int,num> >& nuevaFila) {
+// 	filas[i].reemplazarFila(nuevaFila);
+// }
 
 void MatrizBanda::Fila::sumarMultiploDeFila(const Fila& f, num k) {
 	list< pair<int, num> >::iterator itThis = this->noNulos.begin();
@@ -107,12 +111,18 @@ void MatrizBanda::Fila::set(const int j, const num a) {
 	}
 }
 
-void MatrizBanda::Fila::reemplazarFila(list< pair<int,num> >& otraFila) {
-	noNulos.clear();
-	noNulos = otraFila;
+void MatrizBanda::Fila::setLast(const int j, const num a) {
+	pair<int, num> p(j,a);
+	noNulos.push_back(p);
 }
 
+// void MatrizBanda::Fila::reemplazarFila(list< pair<int,num> >& otraFila) {
+// 	noNulos.clear();
+// 	noNulos = otraFila;
+// }
+
 void MatrizBanda::triangularConGauss(){
+	//todo bien con hacer get(i,j) acá, porque siempre estamos accediendo al primer elemento no nulo de la fila.
     for(int i = 0; i < (this->m) ; i++){
         num max = abs(this->get(i, i));
         int fila_pivote = i;
@@ -135,10 +145,18 @@ void MatrizBanda::triangularConGauss(){
     
 }
 
-void MatrizBanda::printMatriz() {
+void MatrizBanda::printMatriz(bool soloNoNulos) {
 	for (int i = 0; i < this->getDim().first ; ++i) {
 		for (int j = 0; j < this->getDim().second ; ++j) {
-			cout << this->get(i,j) << " "; //get(i,j) sólo acá!
+			if (soloNoNulos) {
+				if (i == j) {
+					cout << (iguales(get(i,j), 0)? "*" : "+") << " ";
+				} else {
+					cout << (iguales(get(i,j), 0)? "·" : "X") << " ";	
+				}
+			} else { 
+				cout << this->get(i,j) << " "; //get(i,j) sólo acá!
+			}
 		}
 		cout << endl;
 	}

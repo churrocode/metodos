@@ -19,6 +19,8 @@ class MatrizBanda {
         void sumarMultiploDeFila(const Fila& f1, num m);
         num get(const int j);
         void set(const int j, const num a); //a != 0, por favor!
+        // void reemplazarFila(list< pair<int,num> >& otraFila);
+        void setLast(const int j, const num a);
     };
 public:
     MatrizBanda(int n, int m);
@@ -31,8 +33,10 @@ public:
     void intercambiarFilas(const int i1, const int i2);
     pair<int, int> getDim();
     void triangularConGauss();
-    void printMatriz();
+    void printMatriz(bool soloNoNulos = false);
     MatrizBanda::Fila getFila(const int i) { return filas[i]; }
+    // void reemplazarFila(const int i, list< pair<int,num> >& nuevaFila);
+    void setLast(const int i, const int j, const num a);
 private:
     int n;
     int m;
