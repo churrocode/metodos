@@ -112,11 +112,13 @@ void MatrizBanda::Fila::reemplazarFila(list< pair<int,num> >& otraFila) {
 	noNulos = otraFila;
 }
 
-void MatrizBanda::triangularConGauss(){
+void MatrizBanda::triangularConGauss(int p, int q, vector<num>& b){
     for(int i = 0; i < (this->m) ; i++){
+        this->printMatriz();
         num max = abs(this->get(i, i));
         int fila_pivote = i;
-        for(int j = i+1; j < this->n; j++){
+        for(int j = i+1; j < this->n ; j++){
+        //for(int j = i+1; j < minimum(this->n, i+p-1) ; j++){
             if (abs(this->get(j, i)) > max){
                 max = abs(this->get(j, i));
                 fila_pivote = j;
@@ -125,11 +127,16 @@ void MatrizBanda::triangularConGauss(){
         if(max == 0) return;
         if(fila_pivote != i){
             this->intercambiarFilas(i, fila_pivote);
+            num b_temp = b[i];
+            b[i] = b[fila_pivote];
+            b[fila_pivote] = b_temp;
+
         }
         num pivote = this->get(i, i);
         for(int j = i+1; j < this->n; j++){
             num multiplicador = this->get(j, i) / pivote;
             this->sumarMultiploDeFila(j, i, -1*multiplicador);
+            b[j] -= b[i]*multiplicador;
         }
     }
     

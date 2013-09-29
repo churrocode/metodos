@@ -8,6 +8,7 @@ typedef double num;
 #define eps 10e-12
 #define iguales(x, y) ((- eps < x - y)  && (x - y < eps))
 #define abs(x) (x >= 0 ? x : - x)
+#define minimum(x,y) (x <= 0 ? x : y)
 
 using namespace std;
 
@@ -19,6 +20,7 @@ class MatrizBanda {
         void sumarMultiploDeFila(const Fila& f1, num m);
         num get(const int j);
         void set(const int j, const num a); //a != 0, por favor!
+        void reemplazarFila(list< pair<int,num> >& otraFila);
     };
 public:
     MatrizBanda(int n, int m);
@@ -30,9 +32,10 @@ public:
     void sumarMultiploDeFila(const int i1, const int i2, const num k); // Fi1 <- Fi1 + Fi2*k
     void intercambiarFilas(const int i1, const int i2);
     pair<int, int> getDim();
-    void triangularConGauss();
+    void triangularConGauss(int p, int q, vector<num>& b);
     void printMatriz();
     MatrizBanda::Fila getFila(const int i) { return filas[i]; }
+    void reemplazarFila(const int i, list< pair<int,num> >& nuevaFila);    
 private:
     int n;
     int m;
