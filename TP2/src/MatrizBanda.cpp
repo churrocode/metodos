@@ -111,8 +111,8 @@ void MatrizBanda::Fila::setLast(const int j, const num a) {
 }
 
 void MatrizBanda::triangularConGauss(int p, int q, vector<num>& b){
+    //this->printMatriz(true);
     for(int i = 0; i < (this->n) ; i++){
-        this->printMatriz();
         num max = abs(this->get(i, i)); //(i,i) es el primer elemento no nulo de la fila i :)
         int fila_pivote = i;
         for(int j = i+1; j < this->n ; j++){
@@ -138,11 +138,13 @@ void MatrizBanda::triangularConGauss(int p, int q, vector<num>& b){
 	            b[j] -= b[i]*multiplicador;
 	        }
         }
+        //this->printMatriz(true);
     }
 }
 
 void MatrizBanda::printMatriz(bool soloNoNulos) {
 	for (int i = 0; i < this->getDim().first ; ++i) {
+        cout << i << "\t";
 		for (int j = 0; j < this->getDim().second ; ++j) {
 			if (soloNoNulos) {
 				if (i == j) {
@@ -159,11 +161,13 @@ void MatrizBanda::printMatriz(bool soloNoNulos) {
 	cout << endl;
 }
 
-void MatrizBanda::Fila::reemplazarFila(list< pair<int,num> >& otraFila) {
-	noNulos.clear();
-	noNulos = otraFila;
+void MatrizBanda::Axb(vector<num>& x, vector<num>& b) {
+    for(int i = 0; i < this->getDim().first; ++i) {
+        num suma = 0;
+        for(int k = 0; k < this->getDim().second; ++k) {
+            suma += this->get(i,k) * x[k];
+        }
+        b[i] = suma;
+    }
 }
 
-void MatrizBanda::reemplazarFila(const int i, list< pair<int,num> >& nuevaFila) {
-	filas[i].reemplazarFila(nuevaFila);
-}

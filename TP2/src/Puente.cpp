@@ -1,11 +1,12 @@
 #include "Puente.h"
 #include <list>
+#include "backwardSubstitution.h"
 
+#include <iostream>
 using namespace std;
 
 void Puente::generarMatriz() {
     //HAY QUE PUSHEAR POR ÍNDICE CRECIENTE!!
-
     construirPuntas(n);
     if (n == 2) {
         //sin M de medio, compartiendo un link
@@ -20,10 +21,9 @@ void Puente::generarMatriz() {
         matriz.setLast(5, 4, 1);
     } else {
         construirCentro(n);
+        //matriz.printMatriz(true);
         construirResto(n);
     }
-    
-    //matriz.printMatriz(true);
 }
 
 void Puente::construirPuntas(const int n) {
@@ -39,39 +39,45 @@ void Puente::construirPuntas(const int n) {
     matriz.setLast(n4-1, n4-2, sen); matriz.setLast(n4-1, n4-1, -1);
 
     if (n > 2) {
+        //junta 1
         // m.agregarFila(2, (x2: cos, x5: -1, x6: -cos));
         matriz.setLast(2, 2, cos); matriz.setLast(2, 5, -1); matriz.setLast(2, 6, -cos);
         // m.agregarFila(3, (x2: -cos, x4: -1, x6: -sen));
-        matriz.setLast(3, 2, -cos); matriz.setLast(3, 4, -1); matriz.setLast(3, 6, -sen);
+        matriz.setLast(3, 2, -sen); matriz.setLast(3, 4, -1); matriz.setLast(3, 6, -sen);
 
+        //junta 2
         // m.agregarFila(4, (x3: +1, x7: -1));
         matriz.setLast(4, 3, 1); matriz.setLast(4, 7, -1);
         // m.agregarFila(5, (x4: 1));
         matriz.setLast(5, 4, 1);
 
+        //junta 2n-1
         // m.agregarFila(4*n-6, (x4n-3: -1, x4n-7: 1));
-        matriz.setLast(n4-6, n4-7, 1); matriz.setLast(n4-6, n4-3, -1);
+        matriz.setLast(n4-4, n4-7, 1); matriz.setLast(n4-4, n4-3, -1);
         // m.agregarFila(4*n-5, ((x4n-4: 1)));
-        matriz.setLast(n4-5, n4-4, 1);
+        matriz.setLast(n4-3, n4-4, 1);
 
+        //junta 2n-2 //simétrica de 2
         // m.agregarFila(4*n-4, (x4n-2: -cos, x4n-5: 1, x4n-6: cos));
-        matriz.setLast(n4-4, n4-6, cos); matriz.setLast(n4-4, n4-5, 1); matriz.setLast(n4-4, n4-2, -cos);
+        matriz.setLast(n4-6, n4-6, cos); matriz.setLast(n4-6, n4-5, 1); matriz.setLast(n4-6, n4-2, -cos);
         //simétrica de la junta 2
-        matriz.setLast(n4-3, n4-6, -sen); matriz.setLast(n4-3, n4-4, -1); matriz.setLast(n4-3, n4-2, -cos);
+        matriz.setLast(n4-5, n4-6, -sen); matriz.setLast(n4-5, n4-4, -1); matriz.setLast(n4-5, n4-2, -sen);
     }
 } 
 
 void Puente::construirCentro(const int n) {
+    //junta de arriba
     //m.agregarFila(2*n-2, (x2n-3: 1, x2n+3: -1));
     int n2 = 2*n;
-    matriz.setLast(n2-2, n2-2, 1); matriz.setLast(n2-2, n2+3, -1);
+    matriz.setLast(n2-2, n2-3, 1); matriz.setLast(n2-2, n2+3, -1);
     // m.agregarFila(2*n-1, (x2n:-1));
     matriz.setLast(n2-1, n2, -1);
 
+    // junta de abajo
     // m.agregarFila(2*n, (x2n-1: 1, x2n-2: cos, x2n+2: -cos, x2n+1: -1));
-    matriz.setLast(n2, n2-2, cos); matriz.setLast(n2, n2-1, 1); matriz.setLast(n2, n2+1, -1); matriz.setLast(n2, n2+n2, -cos);
+    matriz.setLast(n2, n2-2, cos); matriz.setLast(n2, n2-1, 1); matriz.setLast(n2, n2+1, -1); matriz.setLast(n2, n2+2, -cos);
     // m.agregarFila(2*n+1, (x2n: 1, x2n-2: sen, x2n+2: sen));
-    matriz.setLast(n2+1, n2-2, sen); matriz.setLast(n2+1, n2, 1); matriz.setLast(n2, n2+2, sen);
+    matriz.setLast(n2+1, n2-2, sen); matriz.setLast(n2+1, n2, 1); matriz.setLast(n2+1, n2+2, sen);
 }
 
 void Puente::construirResto(int n) {
@@ -81,7 +87,7 @@ void Puente::construirResto(int n) {
         // m.agregarFila(4p -2, (x4p-3: 1, x4p+1: -1, x4p+2: -cos));
         matriz.setLast(p4-2, p4-3, 1); matriz.setLast(p4-2, p4+1, -1); matriz.setLast(p4-2, p4+2, -cos);
         // m.agregarFila(4p -1, (x4p: -1, x4p+2: -sen));
-        matriz.setLast(p4-1, p4, -1); matriz.setLast(p4, p4+2, -sen);
+        matriz.setLast(p4-1, p4, -1); matriz.setLast(p4-1, p4+2, -sen);
 
         //mitad izq, abajo
         // m.agregarFila(4p, (x4p-1: 1, x4p+3: -1, x4p-2: cos));
@@ -94,7 +100,7 @@ void Puente::construirResto(int n) {
         // m.agregarFila(4nmp, x4nmp+3: -1, x4nmp-1: 1, x4nmp-2: +cos);
         matriz.setLast(nmp4, nmp4-2, cos); matriz.setLast(nmp4, nmp4-1, 1); matriz.setLast(nmp4, nmp4+3, -1);
         // m.agregarFila(4nmp-1, (x4nmp: -1, x4nmp-2: -sen));
-        matriz.setLast(nmp4-1, nmp4-2, -sen); matriz.setLast(nmp4-1, nmp4, -1);
+        matriz.setLast(nmp4+1, nmp4-2, -sen); matriz.setLast(nmp4+1, nmp4, -1);
         //mitad der, abajo
         // m.agregarFila(4nmp-2, (x4nmp+1: -1, x4nmp-3: 1, x4nmp+2: -cos));
         matriz.setLast(nmp4-2, nmp4-3, 1); matriz.setLast(nmp4-2, nmp4+1, -1); matriz.setLast(nmp4-2, nmp4+2, -cos);
@@ -109,8 +115,20 @@ vector<num>* Puente::resolverPuente() {
     (*b)[1] = 0; //vert
     for (int i = 2; i <= 2*n; ++i) {
         (*b)[2*(i-1)] = 0; //hor
-        (*b)[2*(i-1)+1] = (i % 2 == 1 ? cargas[i-2] : 0); //vert
+        cout << 2*(i-1) << " -> " << 0 << endl;
+        (*b)[2*(i-1)+1] = ((i % 2 == 1) ? (-1*cargas[i/2 -1]) : 0); //vert
+        cout << 2*(i-1)+1 << " -> " << ((i % 2 == 1) ? (-1*cargas[i/2 -1]) : 0) << endl;
     }
+    matriz.printMatriz();
     matriz.triangularConGauss(n, n, *b);
-    return b;
+    matriz.printMatriz();
+    vector<num>* sol = backwardSubstitution(matriz, *b, 4*n, 4*n); 
+    
+    vector<num> verificar(4*n);
+    matriz.Axb(*sol, verificar);
+    for (int i = 0; i < 4*n; ++i) {
+        cout << verificar[i] << " vs " << (*b)[i] << endl;
+    }
+    
+    return sol;
 }

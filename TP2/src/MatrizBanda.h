@@ -21,7 +21,6 @@ class MatrizBanda {
         num get(const int j);
         void set(const int j, const num a); //a != 0, por favor!
         void setLast(const int j, const num a);
-        void reemplazarFila(list< pair<int,num> >& otraFila);
     };
 public:
     MatrizBanda(int n, int m);
@@ -35,8 +34,9 @@ public:
     void triangularConGauss(int p, int q, vector<num>& b);
     void printMatriz(bool soloNoNulos = false);
     const list< pair<int, num> >& getFila(const int i);
+    // void reemplazarFila(const int i, list< pair<int,num> >& nuevaFila);
     void setLast(const int i, const int j, const num a);
-    void reemplazarFila(const int i, list< pair<int,num> >& nuevaFila);
+    void Axb(vector<num>& x, vector<num>& b);
 private:
     int n;
     int m;
