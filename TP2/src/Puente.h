@@ -16,12 +16,13 @@ class Puente {
 public:
     Puente(int n, double span, double h, double costoPilar, double fMax, vector<double>& cargas) 
         : n(n), span(span), h(h), costoPilar(costoPilar), fMax(fMax), cargas(cargas), matriz(4*n, 4*n) {
-        cos = (span/n)/sqrt(h*h + (span*span)/(n*n));
-        sen = h/sqrt(h*h + (span*span)/(n*n));
+        num hip = sqrt(h*h + (span*span)/(n*n));
+        cos = (span/n)/hip;
+        sen = h/hip;
     };
 
     void generarMatriz();
-    void resolverPuente();
+    vector<num>* resolverPuente();
     bool esSeguro();
     void printMatriz(bool soloNoNulos = false) {
         matriz.printMatriz(soloNoNulos);

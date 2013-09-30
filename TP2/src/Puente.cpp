@@ -23,7 +23,7 @@ void Puente::generarMatriz() {
         construirResto(n);
     }
     
-    matriz.printMatriz(true);
+    //matriz.printMatriz(true);
 }
 
 void Puente::construirPuntas(const int n) {
@@ -101,4 +101,16 @@ void Puente::construirResto(int n) {
         // m.agregarFila(4nmp-1, (x4nmp: 1, x4nmp+2: sen));
         matriz.setLast(nmp4-1, nmp4, 1); matriz.setLast(nmp4-1, nmp4+2, sen);
     }
+}
+
+vector<num>* Puente::resolverPuente() {
+    vector<num> *b = new std::vector<num>(4*n);
+    (*b)[0] = 0; //hor
+    (*b)[1] = 0; //vert
+    for (int i = 2; i <= 2*n; ++i) {
+        (*b)[2*(i-1)] = 0; //hor
+        (*b)[2*(i-1)+1] = (i % 2 == 1 ? cargas[i-2] : 0); //vert
+    }
+    matriz.triangularConGauss(n, n, *b);
+    return b;
 }

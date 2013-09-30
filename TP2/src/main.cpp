@@ -35,12 +35,13 @@ int main(int argc, char** argv) {
     file >> costoPilar;
     file >> fMax;
     file.close();
-	
+
 	Puente p(n, span, h, costoPilar, fMax, cargas);
 	p.generarMatriz();
-
+	vector<num>* sols = p.resolverPuente();
     cout << "MAIN CORRIENDO" << endl;
-    testGauss();
+    //testGauss();	
+    // testBackwardSubstitution()
     return 0;
 }
 
