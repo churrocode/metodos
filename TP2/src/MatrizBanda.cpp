@@ -158,3 +158,12 @@ void MatrizBanda::printMatriz(bool soloNoNulos) {
 	}
 	cout << endl;
 }
+
+void MatrizBanda::Fila::reemplazarFila(list< pair<int,num> >& otraFila) {
+	noNulos.clear();
+	noNulos = otraFila;
+}
+
+void MatrizBanda::reemplazarFila(const int i, list< pair<int,num> >& nuevaFila) {
+	filas[i].reemplazarFila(nuevaFila);
+}

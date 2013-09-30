@@ -12,6 +12,7 @@ using namespace std;
 
 void printMatriz(MatrizBanda& m);
 void probarLasFilas();
+void probarReemplazoFila();
 void testGauss();
 MatrizBanda generarMatriz(double span, double h, int n, vector<double>& cargas);
 
@@ -42,6 +43,10 @@ int main(int argc, char** argv) {
     cout << "MAIN CORRIENDO" << endl;
     //testGauss();	
     // testBackwardSubstitution()
+  //  probarLasFilas();
+    //testGauss();
+    //testBackwardSubstitution();
+    //probarReemplazoFila();
     return 0;
 }
 
@@ -104,6 +109,27 @@ void probarLasFilas() {
 	printMatriz(m);
 	// cout << m.get(0,0)<< endl;
 	// cout << m.getDim().first << " x " << m.getDim().second << ' ' << m.getN() << " x " << m.getM()<< endl;
+}
+
+void probarReemplazoFila() {
+	MatrizBanda m(10, 10);
+	m.set(2,3,2);
+	m.set(2,5,4);
+	m.set(2,7,6);
+	m.set(3,1,3);
+	m.set(3,2,4);
+	m.set(3,5,-6);
+	m.set(3,8,9);
+	printMatriz(m);
+
+	list< pair<int,num> > nuevaFila;
+	nuevaFila.push_back(pair<int,num>(2,1));
+	nuevaFila.push_back(pair<int,num>(4,2));
+	nuevaFila.push_back(pair<int,num>(6,3));
+	nuevaFila.push_back(pair<int,num>(8,4));
+
+	m.reemplazarFila(5,nuevaFila);
+	printMatriz(m);
 }
 
 void printMatriz(MatrizBanda& m) {
