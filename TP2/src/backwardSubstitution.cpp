@@ -1,11 +1,11 @@
-#include "backwardSubstitution.h"
+    #include "backwardSubstitution.h"
 
 vector<num>* backwardSubstitution(MatrizBanda& mt, vector<num> b, const int p, const int q) {
 	vector<num>* x = new vector<num>(mt.getDim().first);
 	pair<int,int> dim = mt.getDim();
 	int n = dim.first;
 	int m = dim.second;
-	(*x)[n-1] = b[n-1]/mt.get(n-1,n-1); 
+	(*x)[n-1] = b[n-1]/mt.get(n-1,n-1);
 	for(int i = n - 2; i >= 0; --i) {
 		(*x)[i] = b[i];
 		//MatrizBanda::Fila fila_i = mt.getFila(i);
@@ -17,12 +17,22 @@ vector<num>* backwardSubstitution(MatrizBanda& mt, vector<num> b, const int p, c
 			num elemento = it->second;
 			(*x)[i] -= it->second*((*x)[it->first]);
 		}*/
-		num elemento_diagonal = mt.get(i,i);
-		int j = i+1;
+
+
+        num elemento_diagonal = mt.get(i,i);
+        list< pair<int, num> >::const_reverse_iterator itFila = mt.getFila(i).rbegin();
+        while(itFila != mt.getFila(i).rend() && itFila->first != i) {
+            int j = itFila->first;
+            num a_ij = itFila->second;
+            (*x)[i] -= a_ij* (*x)[j];
+            ++itFila;
+        }
+
+		/*int j = i+1;
 		for(; j < min(i+p+q-1,m); ++j) {
 			num elemento = mt.get(i,j);
 			(*x)[i] -= elemento*((*x)[j]);
-		}
+		}*/
 		(*x)[i] /= elemento_diagonal;
 	}
 
@@ -86,4 +96,6 @@ void testBackwardSubstitution() {
     	else
     		cout << endl;
     }
+
+    delete x;
 }

@@ -6,9 +6,6 @@ using namespace std;
 MatrizBanda::MatrizBanda(int n, int m) : n(n), m(m), filas(n, MatrizBanda::Fila()) {
 }
 
-MatrizBanda::~MatrizBanda() {
-}
-
 num MatrizBanda::primeroDeLaFila(const int i) {
 	if (filas[i].noNulos.empty()) {
 		return 0;
@@ -38,6 +35,10 @@ void MatrizBanda::intercambiarFilas(const int i1, const int i2) {
 	filas[i1] = filas[i2];
 	filas[i2] = fAux;
 }
+
+const list< pair<int,num> >& MatrizBanda::getFila(const int i) {
+	return filas[i].noNulos;
+} 
 
 pair<int, int> MatrizBanda::getDim() {
 	return pair<int, int>(n,m);
@@ -110,9 +111,9 @@ void MatrizBanda::Fila::setLast(const int j, const num a) {
 }
 
 void MatrizBanda::triangularConGauss(int p, int q, vector<num>& b){
-    for(int i = 0; i < (this->m) ; i++){
+    for(int i = 0; i < (this->n) ; i++){
         this->printMatriz();
-        num max = abs(this->get(i, i));
+        num max = abs(this->get(i, i)); //(i,i) es el primer elemento no nulo de la fila i :)
         int fila_pivote = i;
         for(int j = i+1; j < this->n ; j++){
         //for(int j = i+1; j < minimum(this->n, i+p-1) ; j++){
@@ -121,22 +122,23 @@ void MatrizBanda::triangularConGauss(int p, int q, vector<num>& b){
                 fila_pivote = j;
             }
         }
-        if(max == 0) return;
+        if(iguales(max, 0)) {cout << "Sistema singular! Llegué hasta la fila " << i << endl; return;}
         if(fila_pivote != i){
             this->intercambiarFilas(i, fila_pivote);
             num b_temp = b[i];
             b[i] = b[fila_pivote];
             b[fila_pivote] = b_temp;
-
         }
         num pivote = this->get(i, i);
         for(int j = i+1; j < this->n; j++){
-            num multiplicador = this->get(j, i) / pivote;
-            this->sumarMultiploDeFila(j, i, -1*multiplicador);
-            b[j] -= b[i]*multiplicador;
+        	num a_ji = this->get(j,i); //(j,i) es el elemento a anular en la fila j. //es nulo, o es el primero no nulo :)
+        	if (! iguales(a_ji, 0)) {
+	            num multiplicador = this->get(j, i) / pivote;
+	            this->sumarMultiploDeFila(j, i, -1*multiplicador);
+	            b[j] -= b[i]*multiplicador;
+	        }
         }
     }
-    
 }
 
 void MatrizBanda::printMatriz(bool soloNoNulos) {

@@ -25,16 +25,15 @@ class MatrizBanda {
 public:
     MatrizBanda(int n, int m);
     // MatrizBanda(const MatrizBanda& orig);
-    virtual ~MatrizBanda();
     num get(const int i, const int j);
     num primeroDeLaFila(const int i);
     void set(const int i, const int j, const num a);
     void sumarMultiploDeFila(const int i1, const int i2, const num k); // Fi1 <- Fi1 + Fi2*k
     void intercambiarFilas(const int i1, const int i2);
     pair<int, int> getDim();
-    void triangularConGauss();
+    void triangularConGauss(int p, int q, vector<num>& b);
     void printMatriz(bool soloNoNulos = false);
-    MatrizBanda::Fila getFila(const int i) { return filas[i]; }
+    const list< pair<int, num> >& getFila(const int i);
     // void reemplazarFila(const int i, list< pair<int,num> >& nuevaFila);
     void setLast(const int i, const int j, const num a);
 private:
