@@ -115,8 +115,8 @@ void MatrizBanda::triangularConGauss(int p, int q, vector<num>& b){
     for(int i = 0; i < (this->n) ; i++){
         num max = abs(this->get(i, i)); //(i,i) es el primer elemento no nulo de la fila i :)
         int fila_pivote = i;
-        for(int j = i+1; j < this->n ; j++){
-        //for(int j = i+1; j < minimum(this->n, i+p-1) ; j++){
+        // for(int j = i+1; j < this->n ; j++){
+        for(int j = i+1; j < (this->n < (i+p) ? this->n : (i+p)); j++){
             if (abs(this->get(j, i)) > max){
                 max = abs(this->get(j, i));
                 fila_pivote = j;

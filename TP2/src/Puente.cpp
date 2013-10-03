@@ -120,7 +120,7 @@ vector<num>* Puente::resolverPuente() {
         cout << 2*(i-1)+1 << " -> " << ((i % 2 == 1) ? (-1*cargas[i/2 -1]) : 0) << endl;
     }
     matriz.printMatriz();
-    matriz.triangularConGauss(n, n, *b);
+    matriz.triangularConGauss(6, 4*n, *b);
     matriz.printMatriz();
     vector<num>* sol = backwardSubstitution(matriz, *b, 4*n, 4*n); 
     
