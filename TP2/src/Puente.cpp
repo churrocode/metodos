@@ -115,20 +115,20 @@ vector<num>* Puente::resolverPuente() {
     (*b)[1] = 0; //vert
     for (int i = 2; i <= 2*n; ++i) {
         (*b)[2*(i-1)] = 0; //hor
-        cout << 2*(i-1) << " -> " << 0 << endl;
+        //cout << 2*(i-1) << " -> " << 0 << endl;
         (*b)[2*(i-1)+1] = ((i % 2 == 1) ? (-1*cargas[i/2 -1]) : 0); //vert
-        cout << 2*(i-1)+1 << " -> " << ((i % 2 == 1) ? (-1*cargas[i/2 -1]) : 0) << endl;
+        //cout << 2*(i-1)+1 << " -> " << ((i % 2 == 1) ? (-1*cargas[i/2 -1]) : 0) << endl;
     }
-    matriz.printMatriz();
+    //matriz.printMatriz();
     matriz.triangularConGauss(4, *b);
-    matriz.printMatriz();
+    //matriz.printMatriz();
     vector<num>* sol = backwardSubstitution(matriz, *b);
     
     vector<num> verificar(4*n);
     matriz.Axb(*sol, verificar);
-    for (int i = 0; i < 4*n; ++i) {
+    /*for (int i = 0; i < 4*n; ++i) {
         cout << verificar[i] << " vs " << (*b)[i] << endl;
-    }
+    }*/
     
     return sol;
 }

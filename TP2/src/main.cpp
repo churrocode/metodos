@@ -9,7 +9,6 @@
 
 using namespace std;
 
-
 void printMatriz(MatrizBanda& m);
 void probarLasFilas();
 void testGauss();
@@ -22,31 +21,32 @@ int main(int argc, char** argv) {
     }
     ifstream file;
     file.open(argv[1], ios::in);
-    double span,h;
-    int n;
-    file >> span;
-    file >> h;
-    file >> n;
-    vector<double> cargas(n-1);
-    for (int i = 0; i < n-1; ++i) {
-    	file >> cargas[i];
-    }
-    double costoPilar, fMax;
-    file >> costoPilar;
-    file >> fMax;
-    file.close();
+    double span,h,costoPilar,fMax;
+    while(file.eof() != 1){
+        int n;
+        file >> span;
+        file >> h;
+        file >> n;
+        vector<double> cargas(n-1);
+        for (int i = 0; i < n-1; ++i) {
+            file >> cargas[i];
+        }
+        file >> costoPilar;
+        file >> fMax;
+        cout << span << ' ' << h << ' ' << n << ' ' << costoPilar << ' ' << fMax << endl;
 
-	Puente p(n, span, h, costoPilar, fMax, cargas);
-	p.generarMatriz();
-	vector<num>* sols = p.resolverPuente();
-    
-    for (int i = 0; i< 4*n; ++i) {
-        cout << (*sols)[i] << endl;
+        /*
+        Puente p(n, span, h, costoPilar, fMax, cargas);
+        p.generarMatriz();
+        vector<num>* sols = p.resolverPuente();
+
+        for (int i = 0; i< 4*n; ++i) {
+            cout << 'F' << i+1 << ' ' << (*sols)[i] << endl;
+        }
+        */ 
     }
-    cout << "MAIN CORRIENDO" << endl;
-    //testGauss();	
-    // testBackwardSubstitution()
-    return 0;
+        file.close();
+        return 0;
 }
 
 void testGauss(){
