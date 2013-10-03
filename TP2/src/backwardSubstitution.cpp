@@ -1,6 +1,6 @@
     #include "backwardSubstitution.h"
 
-vector<num>* backwardSubstitution(MatrizBanda& mt, vector<num> b, const int p, const int q) {
+vector<num>* backwardSubstitution(MatrizBanda& mt, vector<num> b) {
 	vector<num>* x = new vector<num>(mt.getDim().first);
 	pair<int,int> dim = mt.getDim();
 	int n = dim.first;
@@ -87,7 +87,7 @@ void testBackwardSubstitution() {
     		cout << endl;
     }
     vector<num>* x;
-    x = backwardSubstitution(m,b,1,3);
+    x = backwardSubstitution(m,b);
 
     for(int i=0; i < x->size(); ++i) {
     	cout << "x[" << i << "]: " << (*x)[i];

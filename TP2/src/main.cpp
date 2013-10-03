@@ -77,12 +77,12 @@ void testGauss(){
     b.push_back(44);
     b.push_back(190);
 
-    m.triangularConGauss(3, 3, b);
+    m.triangularConGauss(3, b);
     
     printMatriz(m);
     cout << "b triangulada = " << b[0] << ' ' << b[1] << ' ' << b[2] << ' ' << b[3] << endl;
     
-    vector<num>* x = backwardSubstitution(m, b, 1, 4);
+    vector<num>* x = backwardSubstitution(m, b);
     
     
     cout << "x = " << (*x)[0] << ' ' << (*x)[1] << ' ' << (*x)[2] << ' ' << (*x)[3] << endl;

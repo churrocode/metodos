@@ -3,6 +3,6 @@
 
 using namespace std;
 
-vector<num>* backwardSubstitution(MatrizBanda&,vector<num>,const int,const int);
+vector<num>* backwardSubstitution(MatrizBanda&,vector<num>);
 
 void testBackwardSubstitution();

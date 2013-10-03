@@ -31,7 +31,7 @@ public:
     void sumarMultiploDeFila(const int i1, const int i2, const num k); // Fi1 <- Fi1 + Fi2*k
     void intercambiarFilas(const int i1, const int i2);
     pair<int, int> getDim();
-    void triangularConGauss(int p, int q, vector<num>& b);
+    void triangularConGauss(const int bandaInferior, vector<num>& b);
     void printMatriz(bool soloNoNulos = false);
     const list< pair<int, num> >& getFila(const int i);
     // void reemplazarFila(const int i, list< pair<int,num> >& nuevaFila);

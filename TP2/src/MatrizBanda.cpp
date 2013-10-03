@@ -110,13 +110,14 @@ void MatrizBanda::Fila::setLast(const int j, const num a) {
 	noNulos.push_back(p);
 }
 
-void MatrizBanda::triangularConGauss(int p, int q, vector<num>& b){
+void MatrizBanda::triangularConGauss(const int bandaInferior, vector<num>& b){
     //this->printMatriz(true);
     for(int i = 0; i < (this->n) ; i++){
         num max = abs(this->get(i, i)); //(i,i) es el primer elemento no nulo de la fila i :)
         int fila_pivote = i;
         // for(int j = i+1; j < this->n ; j++){
-        for(int j = i+1; j < (this->n < (i+p) ? this->n : (i+p)); j++){
+        int ultimaFila = (this->n <= i+bandaInferior ? this->n : i+bandaInferior);
+        for(int j = i+1; j < ultimaFila; j++){
             if (abs(this->get(j, i)) > max){
                 max = abs(this->get(j, i));
                 fila_pivote = j;
@@ -130,10 +131,11 @@ void MatrizBanda::triangularConGauss(int p, int q, vector<num>& b){
             b[fila_pivote] = b_temp;
         }
         num pivote = this->get(i, i);
-        for(int j = i+1; j < this->n; j++){
+
+        for(int j = i+1; j < ultimaFila; j++){
         	num a_ji = this->get(j,i); //(j,i) es el elemento a anular en la fila j. //es nulo, o es el primero no nulo :)
         	if (! iguales(a_ji, 0)) {
-	            num multiplicador = this->get(j, i) / pivote;
+	            num multiplicador = a_ji / pivote;
 	            this->sumarMultiploDeFila(j, i, -1*multiplicador);
 	            b[j] -= b[i]*multiplicador;
 	        }
