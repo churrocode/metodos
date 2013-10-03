@@ -1,0 +1,86 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[paper=a4paper, left=1.5cm, right=1.5cm, bottom=2.0cm, top=1.6cm]{geometry}
+%\usepackage[spanish]{babel}
+\usepackage[spanish, es-noshorthands]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{amsthm}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+
+\usepackage{verbatim}
+\usepackage{caratula1}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{verbatim}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+%\usepackage{epstopdf}
+\usepackage{ifpdf}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{subfig}
+
+\renewcommand{\algorithmicwhile}{\textbf{Mientras}}
+\renewcommand{\algorithmicfor}{\textbf{Para}}
+\renewcommand{\algorithmicif}{\textbf{Si}}
+\renewcommand{\algorithmicthen}{\textbf{entonces}}
+\renewcommand{\algorithmicelse}{\textbf{Si no}}
+\renewcommand{\algorithmicdo}{}
+\renewcommand{\algorithmicend}{\textbf{Fin}}
+\renewcommand{\algorithmicreturn}{\textbf{Devolver}}
+%\renewcommand{\algorithmicendif}{\algorithmicelse\ \algorithmicif}
+\newcommand{\algorithmicendfor}{}
+\newcommand{\algorithmicendwhile}{}
+\newcommand{\algorithmicendif}{}
+%\newcommand{\algorithmicprocedure}{}
+
+%\renewcommand{\algorithmicendwhile}{\tetbf{fin mientras}}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\inc}{\subseteq}
+\newcommand{\eps}{\varepsilon}
+
+%\newcommand{\algorithmicto}{\textbf{a}}
+\newtheorem{lema}{Lema}[subsection]
+\newtheorem{prop}{Proposici\'on}[subsection]
+\newtheorem{cor}[lema]{Corolario}
+
+
+%este paquete es innecesario para el TP, acá lo uso para recuadrar
+%\usepackage{framed}
+
+
+\begin{document}
+%Datos para la caratula
+\materia{Métodos Num\'ericos}
+
+\titulo{Trabajo Pr\'actico 2}
+
+\subtitulo{}
+
+%\grupo{Grupo ??}
+
+\integrante{Dabbah, Juli\'an}{015/09}{djulius@gmail.com}
+\integrante{Dahlquist, Ariel}{383/10}{ariel.dahlquist@gmail.com}
+\integrante{Garrone, Javier}{151/10}{javier3653@gmail.com}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\input{intro.tex}
+\input{desarrollo.tex}
+%\input{resultados.tex}
+%\input{discusion.tex}
+%\input{conclusiones.tex}
+%\input{apendices.tex}
+%\input{referencias.tex}
+
+
+\end{document}

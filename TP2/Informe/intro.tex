@@ -1,0 +1,45 @@
+\section{Introducción}
+En este T.P. deberemos decidir si la estructura de un puente, con ciertas cargas dadas, es estable. En este caso, analizaremos la estructura de puentes \emph{Prat Truss}, escribiendo las ecuaciones de fuerzas que se aplican sobre ciertas partes de la estructura. Luego resolveremos este sistema lineal y verificaremos que ninguna de los valores de fuerza obtenidos superen un límite determinado por los materiales de construcción. Para resolver el sistema utilizaremos el método de Eliminación de Gauss, al que aplicaremos algunas optimizaciones que permite este problema en particular, al igual que para la representación de la matriz en memoria. 
+
+\subsection{Puentes \emph{Pratt Truss}}
+Un esquema de puente \emph{Pratt Truss} puede verse en la figura \ref{fig:puente}.
+\begin{figure}[!ht]
+\begin{center}
+\include{puente1.tik}
+\caption{Esquema de la estructura de un puente \emph{Pratt Truss}. \small{(Cortesía Enunciado TP2)}}
+\label{fig:puente}
+\end{center}
+\end{figure}
+
+Dado que realizaremos el análisis únicamente en dos dimensiones (supondremos que las cargas se distribuyen uniformemente en la profundidad), pensaremos de ahora en más en esquemas como éste. Llamaremos \emph{link} a cada uno de los miembros de los que se compone la estructura, \emph{junta} a los puntos donde éstos se unen y \emph{sección} a la porción contenida entre dos links verticales sucesivos. Para el análisis en el T.P. trabajaremos con una cantidad par de secciones y supondremos que las cargas (y las fuerzas en general) se aplican únicamente sobre las juntas. Consideraremos como variables de la estructura la cantidad de secciones ($n$), la altura del puente ($h$), y la luz que debe cubrir ($span$). Podemos ver (como se muestraen la figura \ref{fig:estructuras}) que una estructura de $n$ secciones cuenta con $2n$ juntas y $4n-3$ links.
+
+\begin{figure}[!ht]
+\begin{center}
+\include{puente2.tik}
+\caption{Variables a considerar de la estructura, $n = 6$. \small{(Cortesía Enunciado TP2)}}
+\label{fig:estructuras}
+\end{center}
+\end{figure}
+
+
+Para asegurar la estabilidad, requeriremos que la fuerza resultante sobre cada junta sea nula. Es decir, que las fuerzas horizontales y verticales (y la descomposición en estas direcciones de las fuerzas oblicuas) se anulen en cada junta. Para satisfacer esto, consideraremos, por cada junta, una ecuación en dirección horizontal y otra en vertical, cuyas incógnitas serán las fuerzas ejercidads por los links. Construyendo esto para todas las juntas, tendremos un sistema de $4n$ ecuaciones. Si consideramos una variable por la fuerza ejercida por cada link tendremos $4n-3$ variables, a las que agregaremos fuerzas verticales sobre las juntas de los extremos y una fuerza horizontal sobre uno de éstos, para modelar la interacción del terreno, tendremos un sistema cuadrado de $4n$. Observemos que la cantidad de fuerzas que se ejercen sobre cada link es una cantidad constante (y pequeña) en relación al tamaño de la estructura, con lo cual, la mayoría de los coeficientes de las incógnitas serán nulos, generando una matriz muy esparsa.
+
+\subsection{Representación Matricial}
+Dado que las variables involucradas en cada ecuación son pocas, la matriz asociada al sistema resulta con una gran cantidad de coeficientes nulos, lo que nos motivó a utilizar una estructura de datos que aproveche este hecho, antes que la implementación trivial como arreglo bidimensional. Más aún, veremos que la matriz resultante tiene estructura de bandas, y que nuestro algoritmo de eliminación la conserva, con lo cual durante toda la vida de la matriz, sigue siendo considerablemente esparsa, con lo cual las ventajas siguen siendo válidas. En esta representación, decidimos almacenar las filas como listas enlazadas ordenadas por índice creciente, conteniendo únicamente elementos no nulos. La matriz, entonces, resulta en un vector de $n$ filas, en la cual, si bien el acceso aleatorio al elemento $i,j$ es más costoso que en el caso del arreglo bidimensional, las operaciones por filas tienen el mismo costo que en aquél y evitan considerar operaciones entre valores nulos.
+
+\subsubsection{Matriz Banda}
+Formalmente, decimos que una matriz $A \in \R ^{n\times n}$ tiene estructura de bandas $p,q$ si $a_{i,j} = 0$ cuando $j \leq i-p$ ó $j\geq i+q$, $1\leq i,j \leq n$.
+
+\begin{lema}
+Sea $A \in \R^{n \times n}$, con estructura de bandas $p, q$. Luego, en el peor de los casos, en todos los pasos del algoritmo de Eliminación Gaussiana con pivoteo parcial, la matriz resultante tiene estructura de bandas $p, q+p$
+\end{lema}
+\begin{proof}
+Porque yo lo digo.
+\end{proof}
+
+\subsection{Algoritmo de Eliminación}
+Como dijimos, utilizaremos el método de Eliminación de Gauss, al que le agregaremos pivoteo parcial  ya que no podemos asegurar que éste no sea necesario en las condiciones de la matriz. Más allá de esto, no realizamos mayores modificaciones al algoritmo, únicamente aprovechar la existencia de la banda inferior para reducir el alcance de la búsqueda del pivote, ya que por debajo de ésta sólo encontraría ceros.
+
+
+
+
