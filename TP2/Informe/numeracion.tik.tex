@@ -1,0 +1,59 @@
+\begin{tikzpicture}[scale=0.8]
+
+    \tikzset{nodestyle/.style={draw,shape=circle,scale=0.5}}
+    \node[nodestyle] (p1) at ( 0, 0) {1}; 
+    \node[nodestyle] (p2) at ( 3, 0) {3};
+    \node[nodestyle] (p3) at ( 6, 0) {5};
+    \node[nodestyle] (p4) at ( 9, 0) {7};
+    \node[nodestyle] (p5) at ( 12, 0) {9};
+    \node[nodestyle] (p6) at ( 15, 0) {11};
+    \node[nodestyle] (p7) at ( 18, 0) {12};
+
+    \node[nodestyle] (p8) at ( 3, 2) {2};
+    \node[nodestyle] (p9) at ( 6, 2) {4};
+    \node[nodestyle] (p10) at ( 9, 2) {6};
+    \node[nodestyle] (p11) at ( 12, 2) {8};
+    \node[nodestyle] (p12) at ( 15, 2) {10};
+
+    \begin{scope}[every path/.style={-}]
+        \draw (p1) -- (p2) node[below,midway]{$3$};
+        \draw (p2) -- (p3) node[below,midway]{$7$}; 
+        \draw (p3) -- (p4) node[below,midway]{$11$};
+        \draw (p4) -- (p5) node[below,midway]{$13$};
+        \draw (p5) -- (p6) node[below,midway]{$17$};
+        \draw (p6) -- (p7) node[below,midway]{$21$};
+
+        \draw (p8) -- (p9) node[above,midway]{$5$};
+        \draw (p9) -- (p10) node[above,midway]{$9$};
+        \draw (p10) -- (p11) node[above,midway]{$15$};
+        \draw (p11) -- (p12) node[above,midway]{$19$};
+
+        \draw (p1) -- (p8) node[above,midway]{$2$};
+        \draw (p12) -- (p7) node[above,midway]{$22$};
+
+        \draw (p2) -- (p8) node[left,midway]{$4$};
+        \draw (p3) -- (p9) node[left,midway]{$8$};
+        \draw (p4) -- (p10) node[left,midway]{$12$};
+        \draw (p5) -- (p11) node[left,midway]{$16$};
+        \draw (p6) -- (p12)node[left,midway]{$20$};
+
+        \draw (p8) -- (p3) node[midway]{$6$};
+        \draw (p9) -- (p4)node[midway]{$10$};
+        \draw (p4) -- (p11)node[midway]{$14$};
+        \draw (p5) -- (p12)node[midway]{$18$};
+    \end{scope}  
+
+    
+    \node (v0) at ( 0, -2) {$v_0$};
+    \node (v1) at ( 18, -2) {$v_1$};
+    \node (h0) at ( -2, 0) {$h_0$};
+
+    %\begin{scope}[every path/.style={-}]
+        \draw[->] (v0) -- (p1) node[left,midway]{$1$};
+        \draw[->] (v1) -- (p7) node[left,midway]{$23$};
+        \draw[->] (h0) -- (p1)node[above,midway]{$0$};
+    %\end{scope}
+
+        % Nodos artificiales.
+         
+\end{tikzpicture}

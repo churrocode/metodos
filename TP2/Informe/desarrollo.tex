@@ -1,0 +1,140 @@
+\section{Desarrollo}
+	\subsection{Construcción del sistema lineal}
+	Dijimos que, dado un puente de $n$ secciones, consideraríamos un sistema de $4n$ ecuaciones y $4n$ variables, dónde (casi todas) éstas representan las fuerzas que ejercen los links sobre las juntas. Para esto, debimos numerar los links de alguna manera, para asociarlos con las variables del sistema. Veamos cómo construimos esto, y qué podemos deducir de ello en términos de la matriz.
+
+Veamos el ejemplo de numeración, para el caso $n = 6$, de la figura \ref{fig:numeracion}:
+\begin{figure}[!ht]
+\input{numeracion.tik}
+\caption{Numeración propuesta, en el caso $n = 6$.}
+\label{fig:numeracion}
+\end{figure}
+
+Antes que nada, observemos que dado que la cantidad de secciones es par, la estructura del puente resulta simétrica, con lo cual podemos establecer las siguientes correspondencias entre las dos mitades:
+\begin{itemize}
+	\item La fuerza $i$ a la izquierda, se corresponde con la $4n-i$ a la derecha.
+	\item La junta $j$ a la izquierda arriba, se corresponde con la $2n-i$ a la derecha arriba.
+	\item La junta $j$ a la izquierda abajo, se corresponde con la $2(n+1)-i$ a la derecha abajo.
+\end{itemize}
+
+\begin{figure}[!ht]\begin{center}
+\input{mediaNumeracion.tik}
+\caption{Numeración en el caso general, para la mitad izquierda.}
+\label{fig:mediaNumeracion}
+\end{center}
+\end{figure}
+
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.24\textwidth}
+                \input{junta2.tik}
+                \caption{Junta superior izquierda}
+                \label{fig:juntasupizq}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.24\textwidth}
+                \input{junta2Der.tik}
+                \caption{Junta superior derecha}
+                \label{fig:juntasupder}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.24\textwidth}
+                \input{junta3.tik}
+                \caption{Junta inferior izquierda}
+                \label{fig:juntainfizq}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.24\textwidth}
+                \input{junta3Der.tik}
+                \caption{Junta inferior derecha}
+                \label{fig:juntainfder}
+        \end{subfigure}
+        \caption{Juntas interiores}\label{fig:juntasInt}
+\end{figure}
+
+(más figuras ! ! ! )
+
+Sabemos que necesitamos escribir 2 ecuaciones por cada junta $1 \leq j \leq 2n$, y que cada una tiene su simétrica. Por lo tanto, proponemos utilizar las ecuaciones $2(j-1)$, $2(j-1)+1$ si la junta está a la izquierda, y $4n-2j$, $4n-2j+1$ para su simétrica a derecha, siempre comenzando por la ecuación horizontal. Luego, las figuras anteriores se traducen en:
+
+Para los extremos (juntas $1$, $2$ y $3$ y sus simétricas):
+
+\begin{center}
+¡¡¡ QUÉ PAJA LA VIDA !!!
+\end{center}
+
+
+
+	\subsection{Representación de la matriz asociada al sistema}
+Vimos, tal como lo habíamos adelantado en la introducción, que efectivamente la matriz asociada al sistema es una matriz con estructura de bandas, que el ancho de las bandas es constante con respecto al tamaño del sistema y que aún dentro de las bandas hay coeficientes nulos. En consecuencia, la matriz asociada al sistema es una matriz muy poco densa, con lo cual surge la idea de utilizar una representación que refleje esta propiedad para reducir el uso de memoria. La solución propuesta consiste en utilizar listas enlazadas para almacenar los elementos no nulos de cada fila. Dado que no almacenaremos los elementos nulos, cada elemento debe estar acompañado del índice que le corresponde dentro de la fila, y la lista ordenada por éstos de manera creciente, para que las operaciones entre filas se puedan realizar de manera eficiente. Las filas (listas) las almacenamos en un vector que se inicializa al crear la matriz, aún cuando éstas estén vacías. 
+
+\subsubsection{Complejidad Espacial}
+Por lo que dijimos, es claro que si $nZ(A)$ es la cantidad de elementos no nulos de la matriz $A \in \R^{n\times n}$, en memoria tenemos reservadas $\O(zN(A) + n)$ posiciones. En el caso particular del T.P., en el que la cantidad de elementos no nulos de cada fila están dentro de las bandas, y éstas están acotadas por $p+ (p+q) = F$, esta complejidad resulta $\O(nF)$. Teóricamente, dado que $F$ no depende de $n$, podemos decir que la complejidad espacial es lineal en la dimensión de la matriz. Además, en este caso, para puentes grandes (digamos, de más de 25 secciones), mientras la cantidad de ecuaciones es del orden de la centena, $F$ es considerablemente menor (un orden de magnitud, por lo menos), con lo cual efectivamente no es significativo en términos prácticos. En este aspecto, la estructura es notablemente mejor que la solución trivial del arreglo bidimensional, ya que, por un lado, tiene un grado de complejidad menor, y por otro, en ningún momento tiene reservada memoria que no necesite efectivamente.
+
+\subsubsection{Complejidad Temporal}  
+ En términos generales, sabemos que reemplazar un arreglo por una lista enlazada degrada automáticamente la performance del acceso aleatorio a los elementos. Esto es efectivamente así, dado que para acceder a un elemento cualquiera debemos iterar sobre los elementos de la fila hasta encontrarlo (o alcanzar un elemento con un índice mayor, lo que indica que el elemento buscado no está representado, con lo cual, el valor requerido es $0$). Sin embargo, en estas condiciones, acceder al primer elemento no nulo (o a cualquiera de sus anteriores) insume tiempo constante ya que para esto no es necesario iterar por los elementos de la lista, simplemente alcanza con acceder al primero. Veremos que éste es el único acceso ``aleatorio'' que realiza nuestro algoritmo, con lo cual, no representa un problema para nosotros.
+ 
+Veamos ahora cómo resultan las operaciones por filas, en las que se basa nuestro algoritmo. Por un lado, para intercambiar dos filas, dado que las representaciones de éstas son completamente independientes en memoria, basta con intercambiarlas en el arreglo de filas de la matriz. Si pensamos que, en general, las listas se representan como un puntero al primer elemento, basta intercambiar los correspondientes a las filas involucradas, lo que insume tiempo constante. (Más allá de que la representación efectiva de las listas utilizadas por la biblioteca estándar que estamos utilizando sea más compleja que un único puntero, en cualquier caso, es una cantidad constante de información, con lo cual  el tiempo requerido para realizar el intercambio sigue siendo una cantidad constante.) Veamos ahora la operación que a una fila le suma un múltiplo de otra. Si conseguiéramos realizar esta operación en tiempo lineal, no estaríamos degradando la performance con respecto a la representación con arreglos. Veremos que efectivamente podemos conseguir esto, utilizando una estrategia muy similar al paso \emph{merge} de \emph{Merge-Sort}. El pseudocódigo propuesto es el siguiente:
+\begin{algorithm}
+\caption{$F_i \gets k*F_t$}
+\begin{algorithmic}
+\State $itF_i := iteradorAlInicio(F_i)$
+\State $itF_t := iteradorAlInicio(F_t)$
+\While{$itF_i \neq fin(F_i)$ e $itF_t \neq fin(F_t)$}
+	\If {$itF_i\rightarrow indice  < itF_t\rightarrow indice$}  
+				\State $avanzar(itF_i)$ \Comment{El próximo elemento no nulo de $F_t$ es posterior al actual no nulo de $F_i$}
+			\Else \If {$itF_i \rightarrow indice = itF_t \rightarrow indice$}  \Comment{Ambas filas tienen un elemento no nulo en la misma posición}
+				\State $itF_i\rightarrow valor$ += $itF_t\rightarrow valor * k$
+				\If {$itF_i \rightarrow valor \approx 0$}
+					\State $eliminarActual(itF_i)$
+				\Else
+					\State $avanzar(itF_i)$
+				\EndIf
+				\State $avanzar(itF_t)$
+			\Else \Comment{$F_t$ tiene un valor no nulo donde $F_i$ tiene un 0}
+			%//itThis > itF, itThis es el primer valor que supera la posición del que estamos mirando en f.
+				\State $F_i.insertarActual(itF_i, *itF_t)$
+				\State $itF_i\rightarrow valor$ *= $k$
+				\State $avanzar(itF_t)$
+			\EndIf
+\EndIf
+\EndWhile
+\While{$itF_t \neq fin(F_t)$}
+		\State $F_i.agregarAlFinal(*itF_t)$ \Comment{Todavía quedan elementos para considerar en $F_t$}
+		\State $F_i.\acute ultimo.valor$ *= $k$%\Comment{El pseudocódigo no se debería comentar}
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+ 
+ Observemos que el primer ciclo efectivamente ``intercala'' ordenadamente los elementos de $F_t$ adecuadamente multiplicados entre los de $F_i$ en caso de que alguna de las dos filas tenga un elemento nulo en la posición considerada (con lo cual, evita realizar operaciones aritméticas que involucren ceros), y en caso de que ambas filas cuenten con un elemento en la misma posición, almacena la suma correspondiente. Realiza esto mientras existan elementos no nulos en ambas filas (pues cuando éstos se agotan en alguna, se alcanza el final de la fila invalidando la guarda del ciclo, ya que no almacenamos elementos nulos ). Si se agotaron los elementos de $F_t$, el segundo ciclo no se ejecuta, dejando inalterada la última porción de $F_i$, lo cual es correcto ya que las operaciones que realizaría sería sumar un $0$ a las posiciones no nulas del final de $F_i$. Por el contrario, si restan elementos en $F_t$ (pero no en $F_i$), simplemente hay que agregar éstos multiplicados por $k$ al final de $F_i$ (ya que correspondería con sumar éstos a ceros de $F_i$). Notemos dos cosas: por un lado, todas las operaciones que involucran elementos nulos no sólo no se computan, sino que se ignoran por completo, lo cual, para una matriz esparsa, representa una optimización no despreciable; por otro, en ningún momento el algoritmo depende de la estructura en bandas de la matriz, con lo cual funciona para matrices en general, resultando provechoso para matrices esparsas cualesquiera. Veremos que en el algoritmo de eliminación esto nos permite desentendernos de los valores de las bandas de la matriz, para los cuales, durante el transcurso del algoritmo no conocemos sus valores exactos sino cotas, nuevamente evitándonos computar operaciones triviales sin necesidad de predecir qué coeficientes son nulos.
+ 
+ Veamos, finalmente, que este algoritmo tiene la complejidad deseada. Todas las operaciones que realiza las podemos suponer de costo constante ya que involucran avanzar en un paso o desreferenciar los iteradores u operaciones aritméticas. Además, como la condición de corte de los ciclos está dada por alcanzar el final de la listas y nunca retrocedemos los iteradores, podemos afirmar que en el peor caso, entre los dos ciclos, se producen tantas iteraciones como elementos no nulos tuvieran éstas. Con lo cual, realizamos $\O(nZ(F_i) + nZ(F_t))$, que en el caso general puede ser tan malo como $2n$, lo que resulta en la complejidad lineal que buscábamos. Además, en el caso particular del T.P., como vimos en lo referente a la complejidad espacial, este valor está acotado por $F = 2p+q$, que no sólo es constante con respecto a $n$, sino significativamente menor que éste. Luego, teóricamente podemos afirmar que esta operación tiene costo constante en función de $n$, y prácticamente, que su costo es un valor menor dentro del algoritmo de eliminación. 
+
+\subsection{Algoritmo de Resolución}
+Como dijimos, utilizaremos el método de Eliminación de Gauss con pivoteo parcial para conseguir una matriz triangular superior cuyo sistema asociado sea equivalente al planteado al comienzo. En este paso aprovecharemos el hecho de contar con una matriz banda (tanto al comienzo como en cada paso del método) para acotar la búsqueda del pivote. Básicamente, si estamos en la iteración $j$ésima, necesitamos anular la $j$ésima columna de la matriz, para las filas inferiores a la $j$ésima. Recordando la definición de matriz banda, sabemos que $a_{i,j} = 0$ cuando $j \leq i-p$, o lo que es equivalente, cuando $i \geq j+p$, con lo cual sólo tiene sentido buscar el pivote en las filas $j < i < j+p$. Para el resto del algoritmo, no introdujimos modificaciones. En pseudocódigo:
+ \begin{algorithm}
+\caption{$triangular(A, b, bandaInferior)$}
+\begin{algorithmic}
+\For {$j$ desde $1$ hasta $n$}
+	\State $ultimaFila := min(n, j+bandaInferior)$
+    \State $i := buscarPivote(A, j+1, ultimaFila)$
+        \If{$i \neq j$}
+            \State $A.intercambiarFilas(i, j)$
+			\State $b.intercambiarCoords(i,j)$
+        \EndIf
+     \State $pivote := A[j, j]$
+     \For {$i$ desde $j+1$ hasta $ultimaFila$}   
+        \State $a_{i,j} := A[i,j]$ %//(j,i) es el elemento a anular en la fila j. //es nulo, o es el primero no nulo :)
+        \If {$a_{i,j} \not \approx 0$} 
+	            \State $multiplicador := a_{i,j} / pivote$
+	            \State $A.sumarMultiploDeFila(i, j, -multiplicador)$
+	            \State $b[i]$ -= $b[j]*multiplicador$
+	     \EndIf
+      \EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+El pseudocódigo expuesto corresponde a la implementación del método de Eliminación de Gauss con pivoteo sin mayores modificaciones. Como dijimos, la única diferencia está en la operación $buscarPivote$, que está restringida a las filas donde no podemos asegurar que no haya coeficientes nulos. La implementación de ésta es una búsqueda trivial de máximo módulo entre los elementos $a_{i,j}$, donde $i$ pertenece al rango explicado anteriormente y $j$ es la columna correspondiente a la iteración.
+ 
+ Analicemos su complejidad. Sabemos que en el caso general, este método tiene complejidad $\O(n^3)$, veamos cómo lo afecta las reducciones aplicadas. Observemos las cotas: por un lado, como vimos antes, $ultimaFila - (j+1) \leq 2p+q = F$, con lo cual, tanto el segundo ciclo como la búsqueda del pivote, iteran a lo sumo esta cantidad de veces; el resto de las operaciones involucradas tienen costo constante, a excepción de $sumarMultiploDeFila$, que como vimos, tiene complejidad $\O(F)$. Esto es claro, salvo para los accesos a elementos de la matriz para los que, como dijimos al comienzo, no podemos garantizar siempre su ejecución en tiempo constante. Sin embargo, por cómo funciona el algoritmo, en la iteración $j$ésima en las columnas $j' <j$ ya se ha producido la eliminación, con lo cual, el primer elemento no nulo de las filas consideradas aparece, por lo menos, en la posición $j+1$. En estas condiciones, siempre estamos preguntando por el primer elemento no nulo de la fila (tanto en el valor de $pivote$ y $a_{i,j}$, como dentro de $buscarPivote$, lo que nos permite afirmar que, efectivamente, estas operaciones tienen costo constante. Luego, cada iteración realiza las siguientes cantidades de operaciones: $\O(F)$ para buscar el pivote, $\O(F)$ veces suma de dos filas, lo que tiene costo $\O(F)$, y una cantidad constante de otras operaciones también constantes. Luego, el cuerpo del ciclo insume $\O(F^2)$ operaciones, y por lo tanto, todo el algoritmo tiene complejidad $\O(nF^2)$. Como antes, suponiendo $F$ una constante acotada, asintóticamente el algoritmo de eliminación se realiza en tiempo lineal.  En la práctica, la relación entre $F^2$ y $n$ puede resultar más significativa que en los casos anteriores, pero si comparamos $nF^2$ contra $n^3$ estaríamos comparando $F^2$ contra $n^2$, donde, si $F$ es significativamente menor que $n$, esto resulta todavía más a favor de $F$.
+ 
+ 
+ \begin{center}
+ME FALTO BACKWARD, ME VOY A DORMIR
+ \end{center}
