@@ -111,11 +111,9 @@ void MatrizBanda::Fila::setLast(const int j, const num a) {
 }
 
 void MatrizBanda::triangularConGauss(const int bandaInferior, vector<num>& b){
-    //this->printMatriz(true);
     for(int i = 0; i < (this->n) ; i++){
         num max = abs(this->get(i, i)); //(i,i) es el primer elemento no nulo de la fila i :)
         int fila_pivote = i;
-        // for(int j = i+1; j < this->n ; j++){
         int ultimaFila = (this->n <= i+bandaInferior ? this->n : i+bandaInferior);
         for(int j = i+1; j < ultimaFila; j++){
             if (abs(this->get(j, i)) > max){
@@ -140,7 +138,6 @@ void MatrizBanda::triangularConGauss(const int bandaInferior, vector<num>& b){
 	            b[j] -= b[i]*multiplicador;
 	        }
         }
-        //this->printMatriz(true);
     }
 }
 

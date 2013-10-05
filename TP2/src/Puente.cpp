@@ -6,7 +6,7 @@
 using namespace std;
 
 void Puente::generarMatriz() {
-    //HAY QUE PUSHEAR POR ÍNDICE CRECIENTE!!
+    //HAY QUE PUSHEAR POR ÍNDICE CRECIENTE SI USAMOS SETLAST!
     construirPuntas(n);
     if (n == 2) {
         //sin M de medio, compartiendo un link
@@ -21,7 +21,6 @@ void Puente::generarMatriz() {
         matriz.setLast(5, 4, 1);
     } else {
         construirCentro(n);
-        //matriz.printMatriz(true);
         construirResto(n);
     }
 }
@@ -51,16 +50,12 @@ void Puente::construirPuntas(const int n) {
         // m.agregarFila(5, (x4: 1));
         matriz.setLast(5, 4, 1);
 
-        //junta 2n-1 //fruta
-        // m.agregarFila(4*n-6, (x4n-3: -1, x4n-7: 1));
+        //simétrica de 1
         matriz.setLast(n4-4, n4-7, 1); matriz.setLast(n4-4, n4-3, -1);
-        // m.agregarFila(4*n-5, ((x4n-4: 1)));
         matriz.setLast(n4-3, n4-4, 1);
 
-        //junta 2n-2 //simétrica de 2 //fruta
-        // m.agregarFila(4*n-4, (x4n-2: -cos, x4n-5: 1, x4n-6: cos));
+        //simétrica de 2
         matriz.setLast(n4-6, n4-6, cos); matriz.setLast(n4-6, n4-5, 1); matriz.setLast(n4-6, n4-2, -cos);
-        //simétrica de la junta 2
         matriz.setLast(n4-5, n4-6, -sen); matriz.setLast(n4-5, n4-4, -1); matriz.setLast(n4-5, n4-2, -sen);
     }
 } 
@@ -119,13 +114,11 @@ vector<num>* Puente::resolverPuente() {
         (*b)[2*(i-1)+1] = ((i % 2 == 1) ? (-1*cargas[i/2 -1]) : 0); //vert
         //cout << 2*(i-1)+1 << " -> " << ((i % 2 == 1) ? (-1*cargas[i/2 -1]) : 0) << endl;
     }
-    //matriz.printMatriz();
     matriz.triangularConGauss(4, *b);
-    //matriz.printMatriz();
     vector<num>* sol = backwardSubstitution(matriz, *b);
     
     vector<num> verificar(4*n);
-    matriz.Axb(*sol, verificar);
+    //matriz.Axb(*sol, verificar);
     /*for (int i = 0; i < 4*n; ++i) {
         cout << verificar[i] << " vs " << (*b)[i] << endl;
     }*/

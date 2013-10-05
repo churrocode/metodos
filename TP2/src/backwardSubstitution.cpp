@@ -12,17 +12,6 @@ vector<num>* backwardSubstitution(MatrizBanda& mt, vector<num> b) {
 
 	for(int i = n - 2; i >= 0; --i) {
 		(*x)[i] = b[i];
-		//MatrizBanda::Fila fila_i = mt.getFila(i);
-		//list< pair<int,num> > elementos_fila_i = fila_i.noNulos;
-		//list< pair<int,num> >::iterator it = elementos_fila_i.begin();
-		//num elemento_diagonal = it->second;
-		//++it;
-		/*for(; it != elementos_fila_i.end(); ++it ) {
-			num elemento = it->second;
-			(*x)[i] -= it->second*((*x)[it->first]);
-		}*/
-
-
         num elemento_diagonal = mt.get(i,i);
         list< pair<int, num> >::const_reverse_iterator itFila = mt.getFila(i).rbegin();
         while(itFila != mt.getFila(i).rend() && itFila->first != i) {
@@ -31,12 +20,6 @@ vector<num>* backwardSubstitution(MatrizBanda& mt, vector<num> b) {
             (*x)[i] -= a_ij* (*x)[j];
             ++itFila;
         }
-
-		/*int j = i+1;
-		for(; j < min(i+p+q-1,m); ++j) {
-			num elemento = mt.get(i,j);
-			(*x)[i] -= elemento*((*x)[j]);
-		}*/
 		(*x)[i] /= elemento_diagonal;
         num x_max_aux = x_max;
         x_max = maximum(x_max,abs((*x)[i]));
