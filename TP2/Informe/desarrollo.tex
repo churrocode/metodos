@@ -23,7 +23,9 @@ Antes que nada, observemos que dado que la cantidad de secciones es par, la estr
 \end{center}
 \end{figure}
 
-\begin{figure}
+Observemos que el caso complicado para la numeración de las fuerzas está dado por la cantidad variable (según $n$) de los links verticales interiores (es decir, aquellos que no son adyacentes ni a juntas consideradas extremos ($1$, $2$ ó $3$) ni a las juntas centrales. Las numeramos como $2p$ y $2p+1$, con $2 \leq p < n/2$, lo que nos produjo los siguientes resultados, que exponemos en el caso general. Esto se puede verificar fácilmente si tomamos el primero de ellos para establecer la relación entre las fuerzas y las juntas, e incrementamos en $4$ la numeración de cada fuerza tantas veces como links nos hayamos alejado del primero. Para la mitad derecha, resolvemos las relaciones de simetría explicadas anteriormente. Los cuatro casos posibles se muestran en la figura \ref{fig:juntasInt}.
+
+\begin{figure}[!ht]
         \centering
         \begin{subfigure}[b]{0.24\textwidth}
                 \input{junta2.tik}
@@ -48,15 +50,40 @@ Antes que nada, observemos que dado que la cantidad de secciones es par, la estr
         \caption{Juntas interiores}\label{fig:juntasInt}
 \end{figure}
 
-(más figuras ! ! ! )
-
-Sabemos que necesitamos escribir 2 ecuaciones por cada junta $1 \leq j \leq 2n$, y que cada una tiene su simétrica. Por lo tanto, proponemos utilizar las ecuaciones $2(j-1)$, $2(j-1)+1$ si la junta está a la izquierda, y $4n-2j$, $4n-2j+1$ para su simétrica a derecha, siempre comenzando por la ecuación horizontal. Luego, las figuras anteriores se traducen en:
+Veamos cómo se traduce lo anterior a las ecucaciones de un sistema en general. Para el desarrollo, supondremos que contamos con por lo menos cuatro secciones (el caso para $n = 2$ es un caso particular pequeño que no requiere tanta generalidad). Sabemos que necesitamos escribir dos ecuaciones por cada junta $1 \leq j \leq 2n$, y que cada una tiene su simétrica. Por lo tanto, proponemos utilizar las ecuaciones $2(j-1)$, $2(j-1)+1$ si la junta está a la izquierda, y $4n-2j$, $4n-2j+1$ para su simétrica a derecha, siempre comenzando por la ecuación horizontal. Debimos descomponer la fuerza ejercida por los links oblicuos en las componentes verticales y horizontales, para lo que calculamos el seno y el coseno del ángulo con el que éstos inciden, simplemente como la proporción entre la longitud de la sección vertical (resp. horizontal) y la longitud del link oblicuo (lo que en las ecuaciones aparece como $\seno$ y $\cos$, respectivamente). Además, supusimos que todos los links están en tensión (es decir, las fuerzas actúan siempre en el sentido hacia las juntas), con lo cual valores negativos indicarán que en realidad, en la estructura están en compresión; también decifinimos como sentido positivo hacia la derecha y hacia abajo. Luego, las figuras anteriores se traducen en:
 
 Para los extremos (juntas $1$, $2$ y $3$ y sus simétricas):
+\begin{align*}
+	0:& & 0 &= x_0 - \cos x_2 - x_3   & 4n-2: & & 0 &=   x_{4n-3}+ \cos x_{4n-2} \\
+	1:& & 0 &= - x_1 + \seno x_2   & 4n-1: & & 0 &= \seno x_{4n-2}  + x_{4n-1} \\
+	\\
+	2: & & 0 &=  \cos x_2 - x_4 - \cos x_6  &  4n-4: & &0 &= x_{4n-7} - x_{4n-3} \\
+	3: & & 0 &= - \seno x_2 -  x_4 - \seno x_6 & 4n-3: & & 0 &= x_{4n-4}   \\
+	\\
+	4: & & 0 &=  x_3 - x_7  & 4n-6: && 0&=  \cos x_{4n-6} + x_{4n-5} - \cos x_{4n-2}\\
+	5: & & -q_1 &= x_4 &  4n-5: && -q_{n-1} &= -\seno x_{4n-6} - x_{4n-4} - \seno x_{4n-2}
+\end{align*}
 
-\begin{center}
-¡¡¡ QUÉ PAJA LA VIDA !!!
-\end{center}
+Para el tramo del medio (juntas $m$ y $m+1$):
+\begin{align*}
+2n-2:& & 0 &= x_{2n-3} - x_{2n+3}  \\
+2n-1:& & 0 &= -x_{2n}  \\
+\\
+2n: & & 0 &= x_{2n-1} + \cos x_{2n-2} - \cos x_{2n+2} - x_{2n+1}   \\
+2n+1: & & -q_{n/2 -1} &= x_{2n} + \seno x_{2n-2} + \seno x_{2n+2}   
+\end{align*}
+
+Para las juntas interiores izquierdas y sus simétricas (juntas $2p$ y $2p+1$ con $2 \leq p < n/2$):
+
+\begin{align*}
+4p-2: & & 0 &=x_{4p-3} - x_{4p+1} - \cos x_{4p+2} & 4(n-p): & & 0 &= \cos x_{4(n-p)-2} + x_{4(n-p)-1} -  x_{4(n-p)+3}\\
+4p-1: & &0 &= -x_{4p} - \seno x_{4p+2} & 4(n-p)+1: & & 0 &= -\seno x_{4(n-p)-2} - x_{4(n-p)} \\
+\\
+4p: & & 0 &= \cos x_{4p-2}  + x_{4p-1} - x_{4p+3}  & 4(n-p)-2: & & 0 &= x_{4(n-p)-3} + x_{4(n-p)+1} - \cos x_{4(n-p)+2} \\
+4p+1: & &-q_{p} &= \seno x_{4p-2} +x_{4p} & 4(n-p)-1: & & -q_{n-p} &= x_{4(n-p)} + \seno x_{4(n-p)+2} \\
+\end{align*}
+
+Ahora que tenemos las ecuaciones escritas en términos genéricos, miremos las bandas de la matriz. Podemos deducir los valores de las bandas de las cotas para las diferencias entre los índices de las variables y las ecuaciones (si no hubiera diferencia, la matriz sería puramente diagonal). La banda superior (o derecha) es $6$ y se alcanza en la ecuación $2n-2$, mientras que la inferior (o izquierda) es $4$ y se alcanza en las ecuaciones $4n-4$, $4p+1$, $4(n-p)+1$. \footnote{Observemos que si la diferencia entre el número de ecuación y el número de variable es $p$, la banda resultante es $p+1$, si pensamos que una matriz diagonal tiene bandas $1$}
 
 
 
@@ -132,9 +159,24 @@ Como dijimos, utilizaremos el método de Eliminación de Gauss con pivoteo parci
 
 El pseudocódigo expuesto corresponde a la implementación del método de Eliminación de Gauss con pivoteo sin mayores modificaciones. Como dijimos, la única diferencia está en la operación $buscarPivote$, que está restringida a las filas donde no podemos asegurar que no haya coeficientes nulos. La implementación de ésta es una búsqueda trivial de máximo módulo entre los elementos $a_{i,j}$, donde $i$ pertenece al rango explicado anteriormente y $j$ es la columna correspondiente a la iteración.
  
- Analicemos su complejidad. Sabemos que en el caso general, este método tiene complejidad $\O(n^3)$, veamos cómo lo afecta las reducciones aplicadas. Observemos las cotas: por un lado, como vimos antes, $ultimaFila - (j+1) \leq 2p+q = F$, con lo cual, tanto el segundo ciclo como la búsqueda del pivote, iteran a lo sumo esta cantidad de veces; el resto de las operaciones involucradas tienen costo constante, a excepción de $sumarMultiploDeFila$, que como vimos, tiene complejidad $\O(F)$. Esto es claro, salvo para los accesos a elementos de la matriz para los que, como dijimos al comienzo, no podemos garantizar siempre su ejecución en tiempo constante. Sin embargo, por cómo funciona el algoritmo, en la iteración $j$ésima en las columnas $j' <j$ ya se ha producido la eliminación, con lo cual, el primer elemento no nulo de las filas consideradas aparece, por lo menos, en la posición $j+1$. En estas condiciones, siempre estamos preguntando por el primer elemento no nulo de la fila (tanto en el valor de $pivote$ y $a_{i,j}$, como dentro de $buscarPivote$, lo que nos permite afirmar que, efectivamente, estas operaciones tienen costo constante. Luego, cada iteración realiza las siguientes cantidades de operaciones: $\O(F)$ para buscar el pivote, $\O(F)$ veces suma de dos filas, lo que tiene costo $\O(F)$, y una cantidad constante de otras operaciones también constantes. Luego, el cuerpo del ciclo insume $\O(F^2)$ operaciones, y por lo tanto, todo el algoritmo tiene complejidad $\O(nF^2)$. Como antes, suponiendo $F$ una constante acotada, asintóticamente el algoritmo de eliminación se realiza en tiempo lineal.  En la práctica, la relación entre $F^2$ y $n$ puede resultar más significativa que en los casos anteriores, pero si comparamos $nF^2$ contra $n^3$ estaríamos comparando $F^2$ contra $n^2$, donde, si $F$ es significativamente menor que $n$, esto resulta todavía más a favor de $F$.
+ Analicemos su complejidad. Sabemos que en el caso general, este método tiene complejidad $\O(n^3)$, veamos cómo lo afecta las reducciones aplicadas. Observemos las cotas: por un lado, como vimos antes, $ultimaFila - (j+1) \leq p < 2p+q = F$, con lo cual, tanto el segundo ciclo como la búsqueda del pivote, iteran a lo sumo esta cantidad de veces; el resto de las operaciones involucradas tienen costo constante, a excepción de $sumarMultiploDeFila$, que como vimos, tiene complejidad $\O(F)$. Esto es claro, salvo para los accesos a elementos de la matriz para los que, como dijimos al comienzo, no podemos garantizar siempre su ejecución en tiempo constante. Sin embargo, por cómo funciona el algoritmo, en la iteración $j$ésima en las columnas $j' <j$ ya se ha producido la eliminación, con lo cual, el primer elemento no nulo de las filas consideradas aparece, por lo menos, en la posición $j+1$. En estas condiciones, siempre estamos preguntando por el primer elemento no nulo de la fila (tanto en el valor de $pivote$ y $a_{i,j}$, como dentro de $buscarPivote$, lo que nos permite afirmar que, efectivamente, estas operaciones tienen costo constante. Luego, cada iteración realiza las siguientes cantidades de operaciones: $\O(F)$ para buscar el pivote, $\O(F)$ veces suma de dos filas, lo que tiene costo $\O(F)$, y una cantidad constante de otras operaciones también constantes. Luego, el cuerpo del ciclo insume $\O(F^2)$ operaciones, y por lo tanto, todo el algoritmo tiene complejidad $\O(nF^2)$. Como antes, suponiendo $F$ una constante acotada, asintóticamente el algoritmo de eliminación se realiza en tiempo lineal.  En la práctica, la relación entre $F^2$ y $n$ puede resultar más significativa que en los casos anteriores, pero si comparamos $nF^2$ contra $n^3$ estaríamos comparando $F^2$ contra $n^2$, donde, si $F$ es significativamente menor que $n$, esto resulta todavía más a favor de $F$.
  
+ Una vez triangulada la matriz despejamos los valores de las variables utilizando el clásico algoritmo de \emph{backward substitution}. Para aprovechar la representación esparasa de la matriz, utilizamos un iterador reverso en cada fila.
  
- \begin{center}
-ME FALTO BACKWARD, ME VOY A DORMIR
- \end{center}
+ \begin{algorithm}[!h]
+\caption{$despejar(A, b)$}
+\begin{algorithmic}
+\State $solucion[n] := 0 \dots 0$
+\For {$i$ desde $n$ hasta $1$}
+	\State $solucion[i] := b[i]$
+	\State $itF = iteradorReverso(A.fila(i))$
+     \While {$itF \neq principio(A.fila(i))$ e $itF \rightarrow indice > i$}   
+	        \State $solucion[i]$ -= ($itF \rightarrow valor) * solucion[itF \rightarrow indice]$
+	        \State $retroceder(itF)$
+      \EndWhile
+      		\State $solucion[i]$ /= $A[i,i]$
+\EndFor
+\end{algorithmic}
+\end{algorithm} 
+ 
+ Al igual que en el análisis de los casos anteriores, vemos que todas las operaciones involucradas en el algoritmo tienen costo constante (aún el acceso $A[i,i]$). El ciclo principal se repite $n$ veces, y el ciclo interior itera tantas veces como elementos no nulos tenga la fila luego de su diagonal. Es decir, a lo sumo el ancho de la banda superior, que es $p+q < 2p+q = F$. Luego, el costo de despejar las variables del sistema es $\O(nF)$, para el que, con los mismos argumentos que antes, podemos afirmar que es lineal y eficiente.
