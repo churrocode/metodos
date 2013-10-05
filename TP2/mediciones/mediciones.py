@@ -9,7 +9,7 @@ max_n = 50
 C = 100000
 fmax = 100000
 
-f = open('medicionesConSpanVariable.txt', 'w')
+f = open('medicionesConSpanVariable.in', 'w')
 for span in range(min_span, max_span):
 	for n in range(min_n, max_n):
 		if n % 2 == 0:
@@ -36,14 +36,14 @@ max_n = 50
 C = 100000
 fmax = 100000
 
-f = open('medicionesConCargaVariable.txt', 'w')
+f = open('medicionesConCargaVariable.in', 'w')
 for carga in range(min_carga, max_carga):
 	for n in range(min_n, max_n):
 		if n % 2 == 0:
 			f.write(str(span)+'\n')
 			f.write(str(h)+'\n')
 			f.write(str(n)+'\n')
-			for i in range(n):
+			for i in range(n-1):
                             f.write(str(carga)+'\n')
 			f.write(str(C)+'\n')
 			f.write(str(fmax)+'\n')

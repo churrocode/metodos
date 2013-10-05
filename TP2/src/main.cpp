@@ -7,6 +7,8 @@
 #include "backwardSubstitution.h"
 #include "Puente.h"
 
+#define PAP(x) (cout << "POR AQUI PASE " << x << endl)
+
 using namespace std;
 
 void printMatriz(MatrizBanda& m);
@@ -15,12 +17,14 @@ void testGauss();
 MatrizBanda generarMatriz(double span, double h, int n, vector<double>& cargas);
 
 int main(int argc, char** argv) {
-    if (argc != 2) {
-    	printf("Se espera un único parámtro con el nombre del archivo con los datos del problema en el formato definido por la Cátedra.\n");
+    if (argc != 3 or ((*argv[2] != '0' and *argv[2] != '1'))) {
+    	printf("Se espera dosparámetros, el primero con el nombre del archivo y el segundo debe ser 0 si se mide span variable, 1 si se mide carga variable\n");
     	return 0;
     }
     ifstream file;
     file.open(argv[1], ios::in);
+    ofstream file_out;
+    file_out.open("mediciones.out", ios::out);
     double span,h,costoPilar,fMax;
     while(file.eof() != 1){
         int n;
@@ -33,9 +37,8 @@ int main(int argc, char** argv) {
         }
         file >> costoPilar;
         file >> fMax;
-        cout << span << ' ' << h << ' ' << n << ' ' << costoPilar << ' ' << fMax << endl;
-
-        /*
+        cout << "span = " << span << " h = " << h << " n = " << n << " costoPilar = " << costoPilar << " fMax = " << fMax << endl;
+        
         Puente p(n, span, h, costoPilar, fMax, cargas);
         p.generarMatriz();
         vector<num>* sols = p.resolverPuente();
@@ -43,10 +46,35 @@ int main(int argc, char** argv) {
         for (int i = 0; i< 4*n; ++i) {
             cout << 'F' << i+1 << ' ' << (*sols)[i] << endl;
         }
-        */ 
-    }
-        file.close();
-        return 0;
+
+        // CALCULO LA MAXIMA FUERZA EJERCIDA SOBRE UN LINK
+        double max = abs((*sols)[0]);
+        for (int i = 1; i < 4*n; ++i){
+            if (abs((*sols)[i]) > max) max = abs((*sols)[i]); 
+        }
+        cout << "maxima = " << max << endl;
+
+        if (*argv[2] == '0'){
+            // SALIDA PARA SPAN VARIABLE
+            file_out << span << endl;
+            file_out << n << endl;
+            file_out << max << endl;
+            file_out << endl;
+        } else if (*argv[2] == '1') {
+            // SALIDA PARA CARGA VARIABLE
+            file_out << n << endl;
+            for (int i = 0; i < n-1; ++i) {
+                file_out << cargas[i] << endl;
+            }
+            file_out << max << endl;
+            file_out << endl;
+        }
+            
+
+    }   
+    file.close();
+    file_out.close();
+    return 0;
 }
 
 void testGauss(){
