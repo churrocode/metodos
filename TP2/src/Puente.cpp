@@ -42,7 +42,7 @@ void Puente::construirPuntas(const int n) {
         //junta 1
         // m.agregarFila(2, (x2: cos, x5: -1, x6: -cos));
         matriz.setLast(2, 2, cos); matriz.setLast(2, 5, -1); matriz.setLast(2, 6, -cos);
-        // m.agregarFila(3, (x2: -cos, x4: -1, x6: -sen));
+        // m.agregarFila(3, (x2: -sen, x4: -1, x6: -sen));
         matriz.setLast(3, 2, -sen); matriz.setLast(3, 4, -1); matriz.setLast(3, 6, -sen);
 
         //junta 2
@@ -51,13 +51,13 @@ void Puente::construirPuntas(const int n) {
         // m.agregarFila(5, (x4: 1));
         matriz.setLast(5, 4, 1);
 
-        //junta 2n-1
+        //junta 2n-1 //fruta
         // m.agregarFila(4*n-6, (x4n-3: -1, x4n-7: 1));
         matriz.setLast(n4-4, n4-7, 1); matriz.setLast(n4-4, n4-3, -1);
         // m.agregarFila(4*n-5, ((x4n-4: 1)));
         matriz.setLast(n4-3, n4-4, 1);
 
-        //junta 2n-2 //simétrica de 2
+        //junta 2n-2 //simétrica de 2 //fruta
         // m.agregarFila(4*n-4, (x4n-2: -cos, x4n-5: 1, x4n-6: cos));
         matriz.setLast(n4-6, n4-6, cos); matriz.setLast(n4-6, n4-5, 1); matriz.setLast(n4-6, n4-2, -cos);
         //simétrica de la junta 2

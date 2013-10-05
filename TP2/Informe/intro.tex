@@ -1,6 +1,8 @@
 \section{Introducción}
 En este T.P. deberemos decidir si la estructura de un puente, con ciertas cargas dadas, es estable. En este caso, analizaremos la estructura de puentes \emph{Prat Truss}, escribiendo las ecuaciones de fuerzas que se aplican sobre ciertas partes de la estructura. Luego resolveremos este sistema lineal y verificaremos que ninguna de los valores de fuerza obtenidos superen un límite determinado por los materiales de construcción. Para resolver el sistema utilizaremos el método de Eliminación de Gauss, al que aplicaremos algunas optimizaciones que permite este problema en particular, al igual que para la representación de la matriz en memoria. 
 
+Una vez que contemos con una manera eficiente de determinar las fuerzas que actúan sobre el puente dada una cierta configuración de cargas, consideraremos colocar pilares intermedios de concreto si alguna fuerza pusiera en peligro la seguridad del puente. Para esto, desarrollaremos una heurística que decida cuántos y dónde ubicarlos para minimizar el costo de construcción, dado que la inserción de estos pilares es altamente costosa.
+
 \subsection{Puentes \emph{Pratt Truss}}
 Un esquema de puente \emph{Pratt Truss} puede verse en la figura \ref{fig:puente}.
 \begin{figure}[!ht]
