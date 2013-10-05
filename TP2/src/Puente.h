@@ -9,7 +9,7 @@ using namespace std;
 
 class Puente {
     int n;
-    double span, h, costoPilar, fMax, cos, sen, hip;
+    double span, h, costoPilar, fMax, cos, sen, hip, length;
     vector<double> cargas;
     MatrizBanda matriz;
 
@@ -19,6 +19,7 @@ public:
         hip = sqrt(h*h + (span*span)/(n*n));
         cos = (span/n)/hip;
         sen = h/hip;
+        length = span/n;
     };
 
     void generarMatriz();
@@ -29,6 +30,13 @@ public:
     }
     MatrizBanda& getMatriz() { return matriz; }
     double getFMax() { return fMax; }
+    int getN() { return n; }
+    double getSpan() { return span; }
+    double getH() { return h; }
+    double getCostoPilar() { return costoPilar; }
+    double getLength() { return length; }
+    vector<double>& getCargas() { return cargas; }
+
 
 private:
     void construirPuntas(const int n);
