@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-
+#include <string>
 #include "MatrizBanda.h"
 #include "backwardSubstitution.h"
 #include "Puente.h"
@@ -22,8 +22,11 @@ int main(int argc, char** argv) {
     }
     ifstream file;
     file.open(argv[1], ios::in);
+    
     ofstream file_out;
-    file_out.open("mediciones.out", ios::out);
+    if (*argv[2] == '0') file_out.open("../mediciones/medicionesConSpanVariable.out", ios::out);
+    else if (*argv[2] == '1') file_out.open("../mediciones/medicionesConCargaVariable.out", ios::out);
+
     double span,h,costoPilar,fMax;
     while(file.eof() != 1){
         int n;
@@ -61,10 +64,9 @@ int main(int argc, char** argv) {
             file_out << endl;
         } else if (*argv[2] == '1') {
             // SALIDA PARA CARGA VARIABLE
+            file_out << cargas[0] << endl; //Por ahora todas las cargas son iguales, en general se
+                                            // podria poner la sumatoria de las cargas en este lugar
             file_out << n << endl;
-            for (int i = 0; i < n-1; ++i) {
-                file_out << cargas[i] << endl;
-            }
             file_out << max << endl;
             file_out << endl;
         }

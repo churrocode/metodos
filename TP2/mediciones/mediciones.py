@@ -3,9 +3,9 @@
 h = 10
 carga = 25
 min_span = 1
-max_span = 50
+max_span = 30
 min_n = 1
-max_n = 50
+max_n = 10
 C = 100000
 fmax = 100000
 
@@ -21,6 +21,7 @@ for span in range(min_span, max_span):
 			f.write(str(C)+'\n')
 			f.write(str(fmax)+'\n')
 			f.write('\n')
+f.truncate(f.tell()-2)
 f.close()
 
 
@@ -30,9 +31,9 @@ f.close()
 span = 25
 h = 10
 min_carga = 1
-max_carga = 50
+max_carga = 30
 min_n = 1
-max_n = 50
+max_n = 10
 C = 100000
 fmax = 100000
 
@@ -48,6 +49,7 @@ for carga in range(min_carga, max_carga):
 			f.write(str(C)+'\n')
 			f.write(str(fmax)+'\n')
 			f.write('\n')
+f.truncate(f.tell()-2)
 f.close()
 
 
