@@ -36,7 +36,7 @@ public:
     double getCostoPilar() { return costoPilar; }
     double getLength() { return length; }
     vector<double>& getCargas() { return cargas; }
-
+    double costo();
 
 private:
     void construirPuntas(const int n);

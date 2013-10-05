@@ -131,3 +131,11 @@ bool Puente::esSeguro() {
     cout << "EN PUENTE, " << "FMAX: " << getFMax() << " fuerza_max_absoluta: " << fuerza_max_absoluta << endl;
     return (fuerza_max_absoluta <= getFMax() || iguales(fuerza_max_absoluta,getFMax()));
 }
+
+double Puente::costo() {
+    double costo = 0;
+    costo += this->n * this->hip; //los n links oblicuos;
+    costo += (this->n + (this->n > 2 ? this->n - 2 : 0) * (this->span / this->n); //los links horizontales de abajo (n) + los de arriba (n-2, si existen)
+    costo += this->h * (n-1); 
+    return costo;
+}
