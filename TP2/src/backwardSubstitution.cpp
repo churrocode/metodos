@@ -1,11 +1,15 @@
-    #include "backwardSubstitution.h"
+#include "backwardSubstitution.h"
 
 vector<num>* backwardSubstitution(MatrizBanda& mt, vector<num> b) {
 	vector<num>* x = new vector<num>(mt.getDim().first);
 	pair<int,int> dim = mt.getDim();
 	int n = dim.first;
 	int m = dim.second;
+    num x_max;
+    int i_fuerza = n-1;
 	(*x)[n-1] = b[n-1]/mt.get(n-1,n-1);
+    x_max = abs((*x)[n-1]);
+
 	for(int i = n - 2; i >= 0; --i) {
 		(*x)[i] = b[i];
 		//MatrizBanda::Fila fila_i = mt.getFila(i);
@@ -34,7 +38,11 @@ vector<num>* backwardSubstitution(MatrizBanda& mt, vector<num> b) {
 			(*x)[i] -= elemento*((*x)[j]);
 		}*/
 		(*x)[i] /= elemento_diagonal;
-	}
+        num x_max_aux = x_max;
+        x_max = maximum(x_max,abs((*x)[i]));
+        i_fuerza = (iguales(x_max,x_max_aux)) ? i_fuerza : i;
+    }
+    mt.setearFuerzaMaxima(x_max,i_fuerza);
 
 	return x;
 }

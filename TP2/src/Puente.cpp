@@ -132,3 +132,9 @@ vector<num>* Puente::resolverPuente() {
     
     return sol;
 }
+
+bool Puente::esSeguro() {
+    double fuerza_max_absoluta = getMatriz().getFuerzaMax().first;
+    cout << "EN PUENTE, " << "FMAX: " << getFMax() << " fuerza_max_absoluta: " << fuerza_max_absoluta << endl;
+    return (fuerza_max_absoluta <= getFMax() || iguales(fuerza_max_absoluta,getFMax()));
+}

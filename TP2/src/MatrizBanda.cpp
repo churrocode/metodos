@@ -173,3 +173,8 @@ void MatrizBanda::Axb(vector<num>& x, vector<num>& b) {
     }
 }
 
+void MatrizBanda::setearFuerzaMaxima(num fuerza_absoluta, int junta) {
+	fuerzaMax.first = fuerza_absoluta;
+	fuerzaMax.second = junta;
+}
+

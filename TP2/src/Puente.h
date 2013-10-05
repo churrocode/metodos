@@ -9,14 +9,14 @@ using namespace std;
 
 class Puente {
     int n;
-    double span, h, costoPilar, fMax, cos, sen;
+    double span, h, costoPilar, fMax, cos, sen, hip;
     vector<double> cargas;
     MatrizBanda matriz;
 
 public:
     Puente(int n, double span, double h, double costoPilar, double fMax, vector<double>& cargas) 
         : n(n), span(span), h(h), costoPilar(costoPilar), fMax(fMax), cargas(cargas), matriz(4*n, 4*n) {
-        num hip = sqrt(h*h + (span*span)/(n*n));
+        hip = sqrt(h*h + (span*span)/(n*n));
         cos = (span/n)/hip;
         sen = h/hip;
     };
@@ -27,6 +27,9 @@ public:
     void printMatriz(bool soloNoNulos = false) {
         matriz.printMatriz(soloNoNulos);
     }
+    MatrizBanda& getMatriz() { return matriz; }
+    double getFMax() { return fMax; }
+
 private:
     void construirPuntas(const int n);
     void construirCentro(const int n);

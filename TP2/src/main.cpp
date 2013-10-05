@@ -19,7 +19,6 @@ MatrizBanda generarMatriz(double span, double h, int n, vector<double>& cargas);
 int main(int argc, char** argv) {
     if (argc != 3 or ((*argv[2] != '0' and *argv[2] != '1'))) {
     	printf("Se espera dosparámetros, el primero con el nombre del archivo y el segundo debe ser 0 si se mide span variable, 1 si se mide carga variable\n");
-    	return 0;
     }
     ifstream file;
     file.open(argv[1], ios::in);
