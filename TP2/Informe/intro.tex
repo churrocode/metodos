@@ -24,7 +24,8 @@ Dado que realizaremos el análisis únicamente en dos dimensiones (supondremos q
 \end{figure}
 
 
-Para asegurar la estabilidad, requeriremos que la fuerza resultante sobre cada junta sea nula. Es decir, que las fuerzas horizontales y verticales (y la descomposición en estas direcciones de las fuerzas oblicuas) se anulen en cada junta. Para satisfacer esto, consideraremos, por cada junta, una ecuación en dirección horizontal y otra en vertical, cuyas incógnitas serán las fuerzas ejercidads por los links. Construyendo esto para todas las juntas, tendremos un sistema de $4n$ ecuaciones. Si consideramos una variable por la fuerza ejercida por cada link tendremos $4n-3$ variables, a las que agregaremos fuerzas verticales sobre las juntas de los extremos y una fuerza horizontal sobre uno de éstos, para modelar la interacción del terreno, tendremos un sistema cuadrado de $4n$. Observemos que la cantidad de fuerzas que se ejercen sobre cada link es una cantidad constante (y pequeña) en relación al tamaño de la estructura, con lo cual, la mayoría de los coeficientes de las incógnitas serán nulos, generando una matriz muy esparsa.
+Para asegurar la estabilidad, requeriremos que la fuerza resultante sobre cada junta sea nula. Es decir, que las fuerzas horizontales y verticales (y la descomposición en estas direcciones de las fuerzas oblicuas) se anulen en cada junta. Para satisfacer esto, consideraremos, por cada junta, una ecuación en dirección horizontal y otra en vertical, cuyas incógnitas serán las fuerzas ejercidads por los links. Construyendo esto para todas las juntas, tendremos un sistema de $4n$ ecuaciones. Si consideramos una variable por la fuerza ejercida por cada link tendremos $4n-3$ variables, a las que agregaremos fuerzas verticales sobre las juntas de los extremos y una fuerza horizontal sobre uno de éstos, para modelar la interacción del terreno, tendremos un sistema cuadrado de $4n$. Observemos que la cantidad de fuerzas que se ejercen sobre cada link es una cantidad constante (y pequeña) en relación al tamaño de la estructura, con lo cual, la mayoría de los coeficientes de las incógnitas serán nulos, generando una 
+matriz muy esparsa.
 
 \subsection{Representación Matricial}
 Dado que las variables involucradas en cada ecuación son pocas, la matriz asociada al sistema resulta con una gran cantidad de coeficientes nulos, lo que nos motivó a utilizar una estructura de datos que aproveche este hecho, antes que la implementación trivial como arreglo bidimensional. Más aún, veremos que la matriz resultante tiene estructura de bandas, y que nuestro algoritmo de eliminación la conserva, con lo cual durante toda la vida de la matriz, sigue siendo considerablemente esparsa, con lo cual las ventajas siguen siendo válidas. En esta representación, decidimos almacenar las filas como listas enlazadas ordenadas por índice creciente, conteniendo únicamente elementos no nulos. La matriz, entonces, resulta en un vector de $n$ filas, en la cual, si bien el acceso aleatorio al elemento $i,j$ es más costoso que en el caso del arreglo bidimensional, las operaciones por filas tienen el mismo costo que en aquél y evitan considerar operaciones entre valores nulos.
@@ -36,7 +37,17 @@ Formalmente, decimos que una matriz $A \in \R ^{n\times n}$ tiene estructura de 
 Sea $A \in \R^{n \times n}$, con estructura de bandas $p, q$. Luego, en el peor de los casos, en todos los pasos del algoritmo de Eliminación Gaussiana con pivoteo parcial, la matriz resultante tiene estructura de bandas $p, q+p$
 \end{lema}
 \begin{proof}
-Porque yo lo digo.
+Demostraremos el lema por inducción en la cantidad de pasos del algoritmo de eliminación gaussiana. \\
+Sea $k$ = 1 el primer paso de la eliminación gaussiana. \\
+
+Sea $a_{ij}$ = $\smash{\displaystyle\max_{1 \leq i \leq n}} |a_{i1}|$. Como $A$ es matriz banda $p, q$, $i \leq p$. \\
+
+Por otro lado, a lo sumo el último elemento no nulo de la fila $i$ es el $a_{ii+q}$ (llamémoslo $a_{ij}$). Entonces, $j \leq q+i \leq q+p$ (pues $i \le p$). \\
+Luego, al permutar la fila $k$ con la fila $i$, tenemos que el último elemento no nulo de la fila $k$ (ya permutada) está a distancia $\leq q+p$ por encima de la diagonal. Además, tras aplicar Gauss sólo se modifican $p-1$ filas, con lo cual la matriz resultante tiene banda inferior $\leq p$ y por lo dicho anteriormente, banda superior $\leq q+p$ ya que para las $p-1$ filas modificadas el último el elemento no nulo está, a lo sumo, en la columna $q+p$ (a distancia $q+p-i$ de la diagonal siendo $i$ la fila modificada) con lo cual la banda superior está dada por la fila $k$. \\
+
+Hipótesis inductiva: Luego del paso k-ésimo del algoritmo de eliminación gaussiana (con $k < n$), la matriz resultante posee una estructura de bandas $p', q'$ ($p' \leq p, q' \leq q+p$).\\
+
+Paso inductivo: Apliquemos el paso $k+1$. Del paso anterior obtuvimos, en el peor caso, una matriz banda $p, q+p$ por hipótesis inductiva. Además, sabemos que ninguna de las filas $i \geq p+k$ fue modificada en el paso anterior, pues el elemento $a_{ik}$ es nulo. Luego, si consideramos la submatriz $A'$ de dimensión $k+1 \times k+1$, tenemos que $A'$ es una matriz banda $p, q$ y entonces, aplicando el mismo razonamiento que para $k=1$, al aplicar Gauss obtendremos en el peor caso una matriz con bandas $p, q+p$.
 \end{proof}
 
 \subsection{Algoritmo de Resolución}
