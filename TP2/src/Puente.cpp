@@ -135,7 +135,28 @@ bool Puente::esSeguro() {
 double Puente::costo() {
     double costo = 0;
     costo += this->n * this->hip; //los n links oblicuos;
-    costo += (this->n + (this->n > 2 ? this->n - 2 : 0) * (this->span / this->n); //los links horizontales de abajo (n) + los de arriba (n-2, si existen)
+    costo += this->n + ((this->n > 2 ? this->n - 2 : 0)) * (this->span / this->n); //los links horizontales de abajo (n) + los de arriba (n-2, si existen)
     costo += this->h * (n-1); 
     return costo;
+}
+
+int Puente::junta(const int fuerza) {
+    if (fuerza < 4* n) {
+        switch (fuerza % 4) {
+            case 0:
+            case 1:
+                return fuerza/2 + 1;
+            case 2:
+                if (fuerza < n/2) {
+                    return fuerza/2 + 2;
+                } else {
+                    return fuerza/2;
+                }
+            case 3:
+                return fuerza/2;
+        }
+    } else {
+        return -1;
+    }
+    return 0; //así no se queja el compilador
 }
