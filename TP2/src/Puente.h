@@ -37,6 +37,7 @@ public:
     double getLength() { return length; }
     vector<double>& getCargas() { return cargas; }
     double costo();
+    int junta(const int fuerza);
 
 private:
     void construirPuntas(const int n);
