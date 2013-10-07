@@ -104,7 +104,7 @@ pair<double, pair< vector<double>, vector<double> > > costoTotal(Puente& puente)
 	pair<double,int> costo_y_pilares = calcularCostoEstructura(puente, posiciones_pilares, costo_subestructuras);
 	double costo_estructuras = costo_y_pilares.first;
 	int cant_pilares = costo_y_pilares.second;
-        double costo_total = costo_estructuras * (cant_pilares-1) * costo_pilar;
+        double costo_total = costo_estructuras + (cant_pilares-1) * costo_pilar;
         pair<vector<double>, vector<double> > pilares_y_sub;
         pilares_y_sub.first = posiciones_pilares;
         pilares_y_sub.second = costo_subestructuras;
