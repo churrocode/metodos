@@ -46,18 +46,18 @@ int main(int argc, char** argv) {
         Puente p(n, span, h, costoPilar, fMax, cargas);
         p.generarMatriz();
         pair<double, pair< vector<double>, vector<double> > > res_costo = costoTotal(p);
-        costo_total = res_costo.first;
-        pilares = res_costo.second;
-        posiciones_pilares = pilares.first;
-        costo_subestructuras = pilares.second;
+        double costo_total = res_costo.first;
+        pair< vector<double>, vector<double> > pilares = res_costo.second;
+        vector<double> posiciones_pilares = pilares.first;
+        vector<double> costo_subestructuras = pilares.second;
         
         cout << "Costo total = " << costo_total << endl;
 
         file_out << costo_total << endl;
-        for (int i = 0; i < posiciones_pilares.long()-1; ++i) {
+        for (int i = 0; i < posiciones_pilares.size()-1; ++i) {
             file >> posiciones_pilares[i];
         }
-        for (int i = 0; i < costo_subestructuras.long()-1; ++i) {
+        for (int i = 0; i < costo_subestructuras.size()-1; ++i) {
             file >> costo_subestructuras[i];
         }
         

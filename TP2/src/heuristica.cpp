@@ -52,7 +52,7 @@ pair<double,int> calcularCostoEstructura(Puente& puente, vector<double>& posicio
 	puente.resolverPuente();
 	if(!puente.esSeguro()) {
 		cant_pilares += 1;
-		num fuerza_absoluta_max = puente.getMatriz().getFuerzaMax().second; // numeracion de la fuerza maxima en el puente
+		int fuerza_absoluta_max = puente.getMatriz().getFuerzaMax().second; // numeracion de la fuerza maxima en el puente
 		// colocar pilar debajo de la junta con la fuerza max incidiendo sobre ella
 		int junta_incidente_fmax = puente.junta(fuerza_absoluta_max);
 		int secciones_a_derecha = (junta_incidente_fmax / 2) + 1;
@@ -60,7 +60,7 @@ pair<double,int> calcularCostoEstructura(Puente& puente, vector<double>& posicio
 			junta_incidente_fmax += (secciones_a_derecha > 2) ? 1 : -1;
 			secciones_a_derecha = (junta_incidente_fmax / 2) + 1;
 		}
-                posiciones_pilares.push_back(junta_inicidemte_fmax);
+                posiciones_pilares.push_back(junta_incidente_fmax);
 		int n = puente.getN();
 		num length = puente.getLength();
 		num height = puente.getH();
@@ -83,13 +83,13 @@ pair<double,int> calcularCostoEstructura(Puente& puente, vector<double>& posicio
 		
 		Puente puente_1 = Puente(n_1,span_1,height,costo_pilar,fMax,cargas_nuevas_1);
 		Puente puente_2 = Puente(n_2,span_2,height,costo_pilar,fMax,cargas_nuevas_2);
-		pair<double,int> costo_sub_estructura_1 = calcularCostoEstructura(puente_1);
-		pair<double,int> costo_sub_estructura_2 = calcularCostoEstructura(puente_2);
+		pair<double,int> costo_sub_estructura_1 = calcularCostoEstructura(puente_1, posiciones_pilares, costo_subestructuras);
+		pair<double,int> costo_sub_estructura_2 = calcularCostoEstructura(puente_2, posiciones_pilares, costo_subestructuras);
 		cant_pilares += costo_sub_estructura_1.second + costo_sub_estructura_2.second;
 		costo_estructura += costo_sub_estructura_1.first + costo_sub_estructura_2.first;
 	} else {
 		costo_estructura += puente.costo();
-                costo_subestructuras.push_back(costo_esctructura);
+                costo_subestructuras.push_back(costo_estructura);
                 }
 	
 	pair<double,int> costo_y_pilares(costo_estructura,cant_pilares);
@@ -105,7 +105,11 @@ pair<double, pair< vector<double>, vector<double> > > costoTotal(Puente& puente)
 	double costo_estructuras = costo_y_pilares.first;
 	int cant_pilares = costo_y_pilares.second;
         double costo_total = costo_estructuras * (cant_pilares-1) * costo_pilar;
-        vector<double>, vector<double> > pilares_y_sub = posiciones_pilares, costo_subestructuras
-        pair<double, pair< vector<double>, vector<double> > > res = costo_total, pilares_y_sub;
+        pair<vector<double>, vector<double> > pilares_y_sub;
+        pilares_y_sub.first = posiciones_pilares;
+        pilares_y_sub.second = costo_subestructuras;
+        pair<double, pair< vector<double>, vector<double> > > res;
+        res.first = costo_total;
+        res.second = pilares_y_sub;
 	return res;
 }
