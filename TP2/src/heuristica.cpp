@@ -45,9 +45,10 @@
 	return costo;
 }*/
 
-pair<double,int> calcularCostoEstructura(Puente& puente) {
+pair<double,int> calcularCostoEstructura(Puente& puente, vector<double>& posiciones_pilares, vector<double>& costo_subestructuras) {
 	int cant_pilares = 0;
 	double costo_estructura = 0.0;
+        puente.generarMatriz();
 	puente.resolverPuente();
 	if(!puente.esSeguro()) {
 		cant_pilares += 1;
@@ -59,7 +60,7 @@ pair<double,int> calcularCostoEstructura(Puente& puente) {
 			junta_incidente_fmax += (secciones_a_derecha > 2) ? 1 : -1;
 			secciones_a_derecha = (junta_incidente_fmax / 2) + 1;
 		}
-
+                posiciones_pilares.push_back(junta_inicidemte_fmax);
 		int n = puente.getN();
 		num length = puente.getLength();
 		num height = puente.getH();
@@ -86,19 +87,25 @@ pair<double,int> calcularCostoEstructura(Puente& puente) {
 		pair<double,int> costo_sub_estructura_2 = calcularCostoEstructura(puente_2);
 		cant_pilares += costo_sub_estructura_1.second + costo_sub_estructura_2.second;
 		costo_estructura += costo_sub_estructura_1.first + costo_sub_estructura_2.first;
-	}
-	else
+	} else {
 		costo_estructura += puente.costo();
+                costo_subestructuras.push_back(costo_esctructura);
+                }
 	
 	pair<double,int> costo_y_pilares(costo_estructura,cant_pilares);
 
 	return costo_y_pilares;
 }
 
-double costoTotal(Puente& puente) {
+pair<double, pair< vector<double>, vector<double> > > costoTotal(Puente& puente) {
 	double costo_pilar = puente.getCostoPilar();
-	pair<double,int> costo_y_pilares = calcularCostoEstructura(puente);
+        vector<double> posiciones_pilares;
+        vector<double> costo_subestructuras;
+	pair<double,int> costo_y_pilares = calcularCostoEstructura(puente, posiciones_pilares, costo_subestructuras);
 	double costo_estructuras = costo_y_pilares.first;
 	int cant_pilares = costo_y_pilares.second;
-	return costo_estructuras * (cant_pilares-1) * costo_pilar;
+        double costo_total = costo_estructuras * (cant_pilares-1) * costo_pilar;
+        vector<double>, vector<double> > pilares_y_sub = posiciones_pilares, costo_subestructuras
+        pair<double, pair< vector<double>, vector<double> > > res = costo_total, pilares_y_sub;
+	return res;
 }
