@@ -23,4 +23,4 @@ competencia.o: competencia.cpp
 	g++ -c competencia.cpp
 
 clean:
-	rm main MatrizBanda.o main.o backwardSubstitution.o Puente.o heuristica.o
+	rm main MatrizBanda.o main.o backwardSubstitution.o Puente.o heuristica.o competencia.o
