@@ -16,6 +16,11 @@ Heuristica.o: heuristica.cpp heuristica.h
 main.o: main.cpp
 	g++ -c main.cpp	
 
+competencia: MatrizBanda.o backwardSubstitution.o Puente.o Heuristica.o competencia.o
+	g++ -o competencia MatrizBanda.o backwardSubstitution.o Puente.o heuristica.o competencia.o
+
+competencia.o: competencia.cpp
+	g++ -c competencia.cpp
 
 clean:
-	rm main MatrizBanda.o main.o backwardSubstitution.o Puente.o heuristica.o
+	rm main MatrizBanda.o main.o backwardSubstitution.o Puente.o heuristica.o competencia.o
