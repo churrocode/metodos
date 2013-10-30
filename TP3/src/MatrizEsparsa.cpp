@@ -44,6 +44,13 @@ pair<int, int> MatrizEsparsa::getDim() {
 	return pair<int, int>(n,m);
 }
 
+int MatrizEsparsa::getDimFilas() {
+	return n;
+}
+
+int MatrizEsparsa::getDimCols() {
+	return m;
+}
 void MatrizEsparsa::Fila::sumarMultiploDeFila(const Fila& f, num k) {
 	list< pair<int, num> >::iterator itThis = this->noNulos.begin();
 	list< pair<int, num> >::const_iterator itF = f.noNulos.begin();
@@ -127,4 +134,11 @@ void MatrizEsparsa::printMatriz(bool soloNoNulos) {
 		cout << endl;
 	}
 	cout << endl;
+}
+
+bool MatrizEsparsa::columnaDeCeros(int col){
+	for (int i = 0; i < this->getDimFilas(); i++){
+		if (this->get(i,col) != 0) return false;
+	}
+	return true;
 }

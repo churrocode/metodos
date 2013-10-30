@@ -32,9 +32,12 @@ public:
     void sumarMultiploDeFila(const int i1, const int i2, const num k); // Fi1 <- Fi1 + Fi2*k
     void intercambiarFilas(const int i1, const int i2);
     pair<int, int> getDim();
+    int getDimFilas();
+    int getDimCols();
     void printMatriz(bool soloNoNulos = false);
     const list< pair<int, num> >& getFila(const int i);
     void setLast(const int i, const int j, const num a);
+    bool columnaDeCeros(int col);
 private:
     int n;
     int m;
