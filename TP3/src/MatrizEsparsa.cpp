@@ -138,11 +138,21 @@ void MatrizEsparsa::printMatriz(bool soloNoNulos) {
 
 bool MatrizEsparsa::columnaDeCeros(int col){
     return this->columnas[col].noNulos.empty();
+}
+
+list<pair<int, num> >* MatrizEsparsa::sliceColumna(int col, int inicio, int fin) {
+    return this->columnas[col].sliceColumna(inicio, fin);
     
-        /*
-    for (int i = 0; i < this->getDimColumnas(); i++){
-		if (this->get(i,col) != 0) return false;
-	}
-	return true;
-        */
+}
+
+list<pair<int, num> >* MatrizEsparsa::Columna::sliceColumna(int inicio, int fin) {
+    list<pair<int, num> >* slice = new list<pair<int, num> >();
+    list< pair<int, num> >::iterator it = noNulos.begin();
+    for (; it != noNulos.end() && it->first <= fin; ++it) {
+        if (inicio <= it->first) {
+            pair<int, num> p(it->first, it->second);
+            slice->push_back(p);
+        }
+    }
+    return slice;
 }

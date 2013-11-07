@@ -68,11 +68,7 @@ int main(int argc, char** argv) {
     P.printMatriz();
     */
     
-    vector<num> autovector = metodoDeLaPotencia(P, 0.5);
-    
-    for(int j = 0; j < cantidad_paginas; j++){
-        cout << autovector[j] << endl;
-    }
+    //vector<num> autovector = metodoDeLaPotencia(P, 0.5);
     
     return 0;
 }
@@ -99,9 +95,7 @@ void restaVectores(vector<num>& v1, vector<num>& v2) {
 vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c) {
     int cantidad_paginas = P.getDimFilas(); // la matriz es cuadrada(cant_paginas * cant_paginas)
     num proba = 1.0 / cantidad_paginas;
-    cout << "probaaa: " << proba << endl;
     num epsilon = 1e-28;
-    cout << "epsilon: " << epsilon << endl;
     vector<num> autovector = vector<num>(cantidad_paginas,proba);
     vector<num> autovector_temp = vector<num>(cantidad_paginas);
     
@@ -113,9 +107,6 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c) {
             for(int i = 0; i < cantidad_paginas; i++){
                 producto_interno += P.get(i,j)*autovector[i];
             }
-
-            cout << "prod interno: " << producto_interno << endl;
-
             autovector_temp[j] = producto_interno*c;
         }
 

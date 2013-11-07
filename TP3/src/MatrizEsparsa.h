@@ -23,6 +23,7 @@ class MatrizEsparsa {
         num get(const int i);
         void set(const int i, const num a); //a != 0, por favor!
         void setLast(const int i, const num a);
+        list<pair<int, num> >* MatrizEsparsa::Columna::sliceColumna(int inicio, int fin);
     };
 public:
     MatrizEsparsa(int n, int m);
@@ -39,6 +40,7 @@ public:
     const list< pair<int, num> >& getColumna(const int j);
     void setLast(const int i, const int j, const num a);
     bool columnaDeCeros(int col);
+    list<pair<int, num> >* sliceColumna(int col, int inicio, int fin);
 private:
     int n;
     int m;
