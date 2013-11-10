@@ -7,6 +7,13 @@
 using namespace std;
 
 vector<num> metodoDeLaPotencia(MatrizEsparsa& A, num c);
+bool corresponde_usar_extrapolacion(const int iters, const int n);
+void extrapolacion_cuadratica(
+    vector<num>& autovector_nuevo,
+    const vector<num>& autovector,
+    const vector<num>& autovector_anteultimo,
+    const vector<num>& autovector_antepenultimo
+); //vector_nuevo:in = estimación de la iteración actual; vector_nuevo:out = extrapolación usando los otros tres.
 
 int main(int argc, char** argv) {
     if(argc != 2) {
@@ -88,17 +95,29 @@ void restaVectores(vector<num>& v1, vector<num>& v2) {
     }
 }
 
+num diferencia_normaUno(const vector<num>& v1, const vector<num>& v2) {
+    num acum = 0;
+    for (int i = 0; i < v1.size(); ++i){
+        acum += abs(v1[i]-v2[i]);
+    }
+    return acum;
+}
+
 /*num productoInterno(vector<num>& v1, vector<num>& v2) ^{
  
 }*/
         
-vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c) {
+vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion) {
     int cantidad_paginas = P.getDimFilas(); // la matriz es cuadrada(cant_paginas * cant_paginas)
     num proba = 1.0 / cantidad_paginas;
     num epsilon = 1e-28;
     vector<num> autovector = vector<num>(cantidad_paginas,proba);
-    vector<num> autovector_temp = vector<num>(cantidad_paginas);
+    vector<num> autovector_nuevo = vector<num>(cantidad_paginas);
     
+    vector<num> autovector_anteultimo(cantidad_paginas, 0);
+    vector<num> autovector_antepenultimo(cantidad_paginas, 0);
+
+    int iters = 0;
     bool seguir_iterando = true;
     while(seguir_iterando) {
         for(int j = 0; j < cantidad_paginas; j++){
@@ -107,24 +126,41 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c) {
             for(int i = 0; i < cantidad_paginas; i++){
                 producto_interno += P.get(i,j)*autovector[i];
             }
-            autovector_temp[j] = producto_interno*c;
+            //autovector_temp es la iteración que acabamos de calcular
+            autovector_nuevo[j] = producto_interno*c;
         }
 
-        num norma_autovector_temp = normaUno(autovector_temp);
+        num norma_autovector_nuevo = normaUno(autovector_nuevo);
         num norma_autovector = normaUno(autovector);
-        num w = norma_autovector - norma_autovector_temp;
+        num w = norma_autovector - norma_autovector_nuevo;
         num w_por_v = w*proba;
-    
+
         for(int j = 0; j < cantidad_paginas; j++) {   
-            autovector_temp[j] += w_por_v;
+            autovector_nuevo[j] += w_por_v;
         }
-        restaVectores(autovector,autovector_temp);
  
-        seguir_iterando = normaUno(autovector) >= epsilon;
-        autovector = autovector_temp;
+        seguir_iterando = diferencia_normaUno(autovector, autovector_nuevo) >= epsilon;
+        if (seguir_iterando && usar_extrapolacion && corresponde_usar_extrapolacion(iters, 10)) {
+            extrapolacion_cuadratica(autovector_nuevo, autovector, autovector_anteultimo, autovector_antepenultimo);
+        }
+
+        //reacomodamos los vectores:
+        if (usar_extrapolacion) {
+            //autovector_nuevo ya lo calculamos con la interpolación
+            autovector_antepenultimo = autovector_anteultimo;
+            autovector_anteultimo = autovector;
+
+        }
+        //el autovector es la iteración que acabamos de calcular
+        autovector = autovector_nuevo;
+        ++iters;
     }
     
     return autovector;
 }
 
-
+bool corresponde_usar_extrapolacion(const int iters, const int k) {
+     //una vez que tenemos tres iteraciones anteriores, extrapolamos cada k iteraciones
+    cout << "Voy a extrapolar" << endl;
+    return (iters > 3) && ((iters-3) % k == 0);
+}
