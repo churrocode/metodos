@@ -23,7 +23,7 @@ class MatrizEsparsa {
         num get(const int i);
         void set(const int i, const num a); //a != 0, por favor!
         void setLast(const int i, const num a);
-        list<pair<int, num> >* MatrizEsparsa::Columna::sliceColumna(int inicio, int fin);
+        list<pair<int, num> >* sliceColumna(int inicio, int fin);
     };
 public:
     MatrizEsparsa(int n, int m);
