@@ -76,6 +76,27 @@ int MatrizEsparsa::getDimColumnas() {
 	}
 }*/
 
+vector<num> MatrizEsparsa::multPorVector(vector<num>& v, bool matriz_traspuesta) {
+	/*int tope = matriz_traspuesta ? getDimColumnas() : getDimFilas();
+	int cant_columnas = matriz_traspuesta ? getDimFilas() : getDimColumnas();
+	vector<num> vector_resultante(tope);
+	for(int i = 0; i < tope; ++i) {
+		num xi;
+		for()
+	}*/
+	int tope = matriz_traspuesta ? getDimColumnas() : getDimFilas();
+	int cant_columnas = matriz_traspuesta ? getDimFilas() : getDimColumnas();
+	vector<num> vector_resultante(tope);
+	for(int i = 0; i < tope; ++i) {
+		num xi = 0.0;
+		for(int j = 0; j < cant_columnas; ++j) {
+			xi += get(i,j)*v[j];
+		}
+		vector_resultante[i] = xi;
+	}
+	return vector_resultante;
+}
+
 num MatrizEsparsa::Columna::get(const int j) {
 	if (noNulos.empty()) {
 		return 0;

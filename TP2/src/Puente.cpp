@@ -137,7 +137,7 @@ double Puente::costo() {
     costo += this->n * this->hip; //los n links oblicuos;
     costo += this->n + ((this->n > 2 ? this->n - 2 : 0)) * (this->span / this->n); //los links horizontales de abajo (n) + los de arriba (n-2, si existen)
     costo += this->h * (n-1);
-    num fuerza_max_absoluta = getMatriz().getFuerzaMax().first; 
+    num fuerza_max_absoluta = getMatriz().getFuerzaMax().first;
     return costo*fuerza_max_absoluta;
 }
 

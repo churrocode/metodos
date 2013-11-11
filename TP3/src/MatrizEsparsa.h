@@ -41,6 +41,8 @@ public:
     void setLast(const int i, const int j, const num a);
     bool columnaDeCeros(int col);
     list<pair<int, num> >* sliceColumna(int col, int inicio, int fin);
+    vector<num> multPorVector(vector<num>& v, bool matriz_traspuesta = false);
+
 private:
     int n;
     int m;
