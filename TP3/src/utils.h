@@ -9,6 +9,7 @@ using namespace std;
 vector<num> restarVectores(vector<num> &v1, vector<num> &v2);
 vector<num> sumarVectores(vector<num> &v1, vector<num> &v2);
 vector<num> multPorEscalar(vector<num> &v1, num escalar);
+void dividirPorEscalar(vector<num> &v, num escalar);
 void vectorNegado(vector<num> &v);
 num normaUno(vector<num>& el_vector);
 num diferencia_normaUno(vector<num>& v1, vector<num>& v2);

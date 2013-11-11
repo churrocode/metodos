@@ -79,3 +79,9 @@ void imprimirVector(vector<num>& v) {
 		(i + 1 >= v.size()) ? cout << " ]" : cout << " ";
 	}
 }
+
+void dividirPorEscalar(vector<num> &v, num escalar) {
+	for(int i = 0; i < v.size(); ++i) {
+		v[i] /= escalar;
+	}
+}
