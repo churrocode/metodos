@@ -52,7 +52,8 @@ vector<num> quadraticExtrapolation(vector<num>& xk3, vector<num>& xk2, vector<nu
 	v1 = sumarVectores(v1,v3);
 
 	vector<num> vector_resultante = v1;
-
+	num norma_1_vector_resultante = normaUno(vector_resultante);
+	dividirPorEscalar(vector_resultante,norma_1_vector_resultante);
 
 	return vector_resultante;
 }
