@@ -5,11 +5,16 @@
 #include <fstream>
 #include <iostream>
 #include <cassert>
+#include <ctime>
 
 
 using namespace std;
 
-vector<num> metodoDeLaPotencia(MatrizEsparsa& A, num c, bool);
+int NODOS;
+int LINKS;
+
+
+vector<num> metodoDeLaPotencia(MatrizEsparsa& , num, bool, bool);
 bool corresponde_usar_extrapolacion(const int iters, const int n);
 void extrapolacion_cuadratica(
     vector<num>& autovector_nuevo,
@@ -31,9 +36,11 @@ int main(int argc, char** argv) {
     // primer int: cantidad de paginas
     archivo_entrada >> cantidad_paginas;
     cout << "Cantidad de paginas = " << cantidad_paginas << endl;
+    NODOS = cantidad_paginas;
     // segundo int: cantidad de links
     archivo_entrada >> cantidad_links;
     cout << "Cantidad de links = " << cantidad_links << endl;
+    LINKS = cantidad_links;
     
     MatrizEsparsa P(cantidad_paginas, cantidad_paginas);
     
@@ -63,7 +70,27 @@ int main(int argc, char** argv) {
     
     P.printMatriz();
 
-    vector<num> autovector = metodoDeLaPotencia(P, 0.5, false);
+
+    /* NO HACIA FALTA, SE HACE DIRECTO EN EL METODO DE LA POTENCIA CON EL ALGORITMO 1
+    num numerito = 1.0 / cantidad_paginas;
+    num c = 0.5;
+    for (int j = 0; j < P.getDimColumnas(); j++){
+        if (P.columnaDeCeros(j)){
+            for (int i = 0; i < P.getDimFilas(); i++) {
+                P.set(i, j, numerito);
+            }
+        } else {
+            for (int i = 0; i < P.getDimFilas(); i++){
+                P.set(i, j, c*P.get(i, j) + (1 - c)*numerito);
+                }
+        }
+    }
+    
+    P.printMatriz();
+*/
+
+
+    vector<num> autovector = metodoDeLaPotencia(P, 0.5, false, true);
     
     imprimirVector(autovector);
     
@@ -99,7 +126,13 @@ int main(int argc, char** argv) {
  
 }*/
         
-vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion) {
+vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion, bool medir) {
+    ofstream archivo_mediciones;
+    if(medir) {
+        archivo_mediciones.open("mediciones.out");
+        archivo_mediciones << NODOS << endl;
+        archivo_mediciones << LINKS << endl;
+    }
     int cantidad_paginas = P.getDimFilas(); // la matriz es cuadrada(cant_paginas * cant_paginas)
     num proba = 1.0 / cantidad_paginas;
     num epsilon = 1e-28;
@@ -109,8 +142,13 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion)
     vector<num> autovector_anteultimo = vector<num>(cantidad_paginas, 0);
     vector<num> autovector_antepenultimo = vector<num>(cantidad_paginas, 0);
 
-    int iters = 0;
+    int cant_iters = 0;
+    num error = 0.0;
     bool seguir_iterando = true;
+    time_t inicio;
+    num tiempo_ex_en_milisegundos;
+    inicio = time(NULL) * 1000000.0;
+    cout << "BAAAAAAAM: " << inicio << endl;
     while(seguir_iterando) {
         for(int j = 0; j < cantidad_paginas; j++){
 
@@ -130,9 +168,15 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion)
         for(int j = 0; j < cantidad_paginas; j++) {   
             autovector_nuevo[j] += w_por_v;
         }
- 
-        seguir_iterando = diferencia_normaUno(autovector, autovector_nuevo) >= epsilon;
-        if (seguir_iterando && usar_extrapolacion && corresponde_usar_extrapolacion(iters, 10)) {
+        
+        error = diferencia_normaUno(autovector, autovector_nuevo);
+        seguir_iterando = error >= epsilon;
+        
+        if(medir) {
+            archivo_mediciones << cant_iters << " " << error << endl;
+        }
+
+        if (seguir_iterando && usar_extrapolacion && corresponde_usar_extrapolacion(cant_iters, 10)) {
             cout << "Entre a QE " << endl;
             quadraticExtrapolation(autovector_nuevo, autovector, autovector_anteultimo, autovector_antepenultimo);
         }
@@ -145,15 +189,23 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion)
         }
         //el autovector es la iteración que acabamos de calcular
         autovector = autovector_nuevo;
-        ++iters;
+        ++cant_iters;
     }
     
-    cout << "Cantidad de iteraciones: " << iters << endl;
+    cout << "SEE MY NEW RIIIIIDE: " << time(NULL) * 1000000.0 << endl;
+    tiempo_ex_en_milisegundos = time(NULL) * 1000000.0 - inicio;
+
+    cout << "TIEMPO: " << tiempo_ex_en_milisegundos << endl;
+    
+    cout << "Cantidad de iteraciones: " << cant_iters << endl;
+    if(medir) {
+        archivo_mediciones.close();
+    }
     return autovector;
 }
 
-bool corresponde_usar_extrapolacion(const int iters, const int k) {
+bool corresponde_usar_extrapolacion(const int cant_iters, const int k) {
      //una vez que tenemos tres iteraciones anteriores, extrapolamos cada k iteraciones
     cout << "Voy a extrapolar" << endl;
-    return (iters > 3) && ((iters-3) % k == 0);
+    return (cant_iters > 3) && ((cant_iters-3) % k == 0);
 }
