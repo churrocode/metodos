@@ -9,7 +9,7 @@
 
 using namespace std;
 
-vector<num> metodoDeLaPotencia(MatrizEsparsa& A, num c);
+vector<num> metodoDeLaPotencia(MatrizEsparsa& A, num c, bool);
 bool corresponde_usar_extrapolacion(const int iters, const int n);
 void extrapolacion_cuadratica(
     vector<num>& autovector_nuevo,
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
     }
     archivo_entrada.close();
 
-    P.printMatriz();
+    //P.printMatriz();
 
     // genero P estocastica
     for(int j = 0; j < P.getDimFilas(); j++){
@@ -54,8 +54,10 @@ int main(int argc, char** argv) {
         for(int i = 0; i < P.getDimColumnas(); i++){
             col_sum += P.get(i, j); 
         }
-        for(int k = 0; k < P.getDimFilas(); k++){
-            P.set(k, j, P.get(k, j)/col_sum);
+        if(col_sum != 0){
+            for(int k = 0; k < P.getDimFilas(); k++){
+                P.set(k, j, P.get(k, j)/col_sum);
+                }
         }
     }
     
@@ -78,21 +80,10 @@ int main(int argc, char** argv) {
     P.printMatriz();
     */
     
-    //vector<num> autovector = metodoDeLaPotencia(P, 0.5);
+    vector<num> autovector = metodoDeLaPotencia(P, 0.5, false);
     
-    MatrizEsparsa A(4, 2);
-    A.set(0, 0, 4);
-    A.set(0, 1, 3);
-    A.set(1, 0, 1);
-    A.set(1, 1, 6);
-    A.set(2, 0, 2);
-    A.set(2, 1, 1);
-    A.set(3, 0, 1);
-    A.set(3, 1, 4);
- 
-    A.printMatriz();
+    //imprimirVector(autovector);
     
-    MatrizEsparsa* Q = givensDosColumnas(A);
     
     
     return 0;
@@ -159,6 +150,7 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion)
  
         seguir_iterando = diferencia_normaUno(autovector, autovector_nuevo) >= epsilon;
         if (seguir_iterando && usar_extrapolacion && corresponde_usar_extrapolacion(iters, 10)) {
+            cout << "Entre a QE " << endl;
             quadraticExtrapolation(autovector_nuevo, autovector, autovector_anteultimo, autovector_antepenultimo);
         }
 
