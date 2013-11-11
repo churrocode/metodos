@@ -1,0 +1,37 @@
+\section{Introducción}
+
+El presente T.P. se preocupa por el algoritmo PageRank para medir la importancia de las páginas web resultantes de una búsqueda, en particular, en el enfoque provisto por el trabajo  
+\emph{Extrapolation methods for accelerating pagerank computations, Kamvar et al.}\footnote{Sepandar D. Kamvar, Taher H. Haveliwala, Christopher D. Manning, and Gene H. Golub. Extrapolation methods for accelerating pagerank computations. In Proceedings of the 12th international conference on World Wide Web, WWW ’03, pages 261–270, New York, NY, USA, 2003. ACM.} Implementaremos dos de los algoritmos propuestos en esta publicación, siendo el segundo una optimización del primero, que resuelve el caso más general.
+
+\subsection{Algoritmo PageRank}
+Para ponderar la importancia de una páginas web, este algoritmo propone utilizar como medida la cantidad de enlaces que apuntan a esa página. Además, para agregar significación, cada enlace entrante a la página debe reflejar la importancia de la página desde la cual sale. Formalmente, el rank  de la página $k$: $x_k$ se define como, si $L = \{1\dots n\}$ es el conjunto de páginas que apuntan a $k$ y llamando $n_j$ a la cantidad de links salientes de la página $j$:
+$$x_k = \displaystyle \sum_{j\in L_k} \frac{x_j}{n_j}$$
+
+Traduciendo esto matricialmente, podemos pensar en la matriz $A$ donde $(A)_{i,j} = \frac{1}{n_j}$ si la página $j$ apunta a $i$, $(A)_{i,j} =0$ si no. Luego, el vector de ranks $X = (x_k)$ verifica $AX = X$, con lo cual, es un autovector de autovalor $1$. Luego, en principio, para obtener los ranks bastaría con encontrar uno de éstos. Sin embargo, el modelo no representa adecuadamente el caso en que una página no apunte hacia otras: en ese caso su rank sería $0$ y quedaría excluída. Este fenómeno aparece en la bibliografía como el problema de \emph{dangling nodes}. También podemos justificar el modelo pensando en que la matriz representa una cadena de Markov, donde $(A)_{i,j}$ indica la probabilidad de, estando en la página (estado) $j$, pasar a la página (estado) $i$. Luego, podemos agregar las transiciones desde los \emph{dangling nodes} uniformes como  $\frac{1}{n}$, donde $n$ es la cantidad total de páginas consideradas (es decir, en esta situación, se abandona la página pasando a cualquier otra con igual probabilidad). Sin embargo, esta solución trae problemas algebraicos, ya que no se puede asegurar que exista un autovector de autovalor $1$ ni que el autoespacio asociado tenga dimensión $1$.  
+Si  llamamos $P$ a la matriz resultante, podemos solucionar el problema considerando una nueva matriz $M$ que se obtiene como $M = cP + (1-c)E$, para cualquier $0<c<1$, donde $E_{i,j} = \frac{1}{n}$. Así, $M$ tiene efectivamente un autovector de autovalor $1$ con multiplicidad $1$.
+
+\subsection{Búsqueda de Autovalores}
+Como vimos, para encontrar el rank de las páginas es necesario encontrar un autovector de autovalor $1$ de la matriz propuesta. Además, se puede asegurar que este autovalor siempre existe y es el autovalor principal, con lo cual desde el punto de vista numérico, cabe atacar este problema mediante el método de la potencia, es decir, calcular sucesivas iteraciones de $x^{(k+1)} = Ax^{(k)}$, a partir de algún $x_0$, en principio cualquiera.
+Sin embargo, dadas las dimensiones en las que se estaría trabajando, no cabe una implementación trivial. Para eso, se proponen las siguientes dos variantes.
+
+\subsubsection{Multiplicación Esparsa}
+Si bien la matriz original sobre la que trabajaría el algoritmo es típicamente esparsa (ya que la cantidad de enlaces entre dos páginas dadas es significativamente menor que la cantidad de páginas indexadas), las modificaciones para solucionar el problema de los \emph{dangling nodes}, anulan esta propiedad. En esta situación, las sucesivas multiplicaciones de la matriz por el vector, resultarían muy costosas, tanto en tiempo como en espacio. Para esto, los autores proponen realizar esta modificación en los siguientes pasos, que como veremos, resulta equivalente a realizar la multiplicación directamente.
+
+Por un lado, únicamente se almacena la matriz $A$ como la definimos en primer momento, es decir, la que contiene la información sobre la distribución real de las páginas en la web y es altamente esparsa (lo cual permite ahorrar espacio de almacenamiento), y se modifica el vector resultante de realizar el producto.
+En concreto, se propone:
+\begin{algorithm}
+\caption*{Algoritmo 1, \emph{Kramver et al.}}
+\begin{algorithmic}
+\State $y = cAx$
+\State $\omega = ||x||_1 - ||y||_1$\\
+\Return $y + \omega [\frac{1}{n}]_{\in \R^n}$
+
+\end{algorithmic}
+\end{algorithm}
+
+Es decir, se realiza la multiplicación aprovechando la matriz esparsa, y la corrección se agrega al final, en proporción a la diferencia de las normas entre el vector original y el resultado de la transformación. Dado que esta corrección altera a todos los coeficientes de toda la matriz original por igual, puede evitarse a la hora de realizar el primer producto y aplicarse al final, tomando como métrica la relación entre el vector original y el transformado.
+
+%Multiplico por la posta, calculo la diferencia en norma 1 antes y después de la transformación, sumo el vector de probabilidad uniforme ponderado por esta transformación.
+
+\subsubsection{Extrapolación Cuadrática}
+Tal como lo explican los autores, la velocidad de convergencia del método de la potencia depende  de la relación entre el autovalor principal  y el subsiguiente. Luego, se propone agregar una modificación al algoritmo típico del método de la potencia para aprovechar las iteraciones anteriores utilizándolas para estimar  una mejor aproximación del autovector buscado. Básicamente, se parte de la suposición de que cada iteración es combinación lineal de tres autovectores asociados a los tres únicos autovalores y se deducen relaciones entre ellos a partir de saber que $\chi_A(A) = O$ (Teorema de Hamilton-Cayley). Dado que $x^{(k+t)} = A^tx^{(k)}$, $(\chi_A(A))x^{(k)} = 0$ relaciona iteraciones sucesivas del método mediante los coeficientes del polinomio. A partir de éstos, entonces, se puede construir un sistema sobredimensionado para ajustar mediante cuadrados mínimos y apartir de los coeficientes obtenidos, construir el próximo vector para la iteración del método. Debido a que la suposición sobre la cantidad de autovectores no necesariamente es cierta, el vector obtenido no es la solución exacta (como se demuestra, en base a la suposición, en la publicación), pero de todas maneras, representa una buena aproximación, y, sobe todo, reduce notablemente los coeficientes con los que aparecen en la combinación lineal los autovectores sucesivos, acelerando la convergencia del método.
