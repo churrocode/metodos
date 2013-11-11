@@ -1,7 +1,7 @@
 #include "quadraticExtrapolation.h"
 #include "MatrizEsparsa.h"
 #include "utils.h"
-//#include "factorizacionQR.h"
+#include "factorizacionQR.h"
 
 
 void imprimirVector(const vector<num>& v) {
@@ -41,7 +41,7 @@ vector<num> quadraticExtrapolation(vector<num>& xk3, vector<num>& xk2, vector<nu
 	num gamma_0, gamma_1, gamma_2, gamma_3 = 1.0;
 	num beta_0, beta_1, beta_2;
 
-	MatrizEsparsa* Q; //= givensDosColumnas(Y);
+	MatrizEsparsa* Q = givensDosColumnas(Y);
 	vectorNegado(yk); // -yk
 	vector<num> b = Q->multPorVector(yk,true);
 	vector<num> gammas_resultantes = backwardSubstitution(Y,b);
