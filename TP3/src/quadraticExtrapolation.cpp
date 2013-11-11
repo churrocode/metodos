@@ -4,15 +4,7 @@
 #include "factorizacionQR.h"
 
 
-void imprimirVector(const vector<num>& v) {
-	cout << "[ ";
-	for(int i = 0; i < v.size(); ++i) {
-		cout << v[i];
-		(i + 1 >= v.size()) ? cout << " ]" : cout << " ";
-	}
-}
-
-void armarMatriz(MatrizEsparsa& mt, list< vector<num> >& datos) {
+void armarMatriz(MatrizEsparsa& mt, const list< vector<num> >& datos) {
 	int i = 0;
 	for(list< vector<num> >::const_iterator it = datos.begin(); it != datos.end(); ++it) {
 		auto vector<num> v = *it;
@@ -60,6 +52,7 @@ vector<num> quadraticExtrapolation(vector<num>& xk3, vector<num>& xk2, vector<nu
 	v1 = sumarVectores(v1,v3);
 
 	vector<num> vector_resultante = v1;
+
 
 	return vector_resultante;
 }

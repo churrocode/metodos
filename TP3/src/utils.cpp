@@ -2,7 +2,7 @@
 #include "MatrizEsparsa.h"
 
 vector<num> restarVectores(vector<num>& v1, vector<num>& v2) {
-	vector<num> v(v1.size());
+	vector<num> v = vector<num>(v1.size());
 	for(int i = 0; i < v1.size(); ++i) {
 		v[i] = v1[i] - v2[i];
 	}
@@ -17,7 +17,7 @@ void vectorNegado(vector<num>& v) {
 }
 
 vector<num> sumarVectores(vector<num>& v1, vector<num>& v2) {
-	vector<num> vector_resultante(v1.size());
+	vector<num> vector_resultante = vector<num>(v1.size());
 	for(int i = 0; i < v1.size(); ++i) {
 		vector_resultante[i] = v1[i] + v2[i];
 	}
@@ -26,7 +26,7 @@ vector<num> sumarVectores(vector<num>& v1, vector<num>& v2) {
 }
 
 vector<num> multPorEscalar(vector<num>& v1, num escalar) {
-	vector<num> vector_resultante(v1.size());
+	vector<num> vector_resultante = vector<num>(v1.size());
 	for(int i = 0; i < v1.size(); ++i) {
 		vector_resultante[i] = v1[i] * escalar;
 	}
@@ -37,7 +37,7 @@ vector<num> multPorEscalar(vector<num>& v1, num escalar) {
 vector<num> backwardSubstitution(MatrizEsparsa& mt, vector<num>& b) {
 	int n = mt.getDimFilas();
 	int m = mt.getDimColumnas();
-	vector<num> x(n);
+	vector<num> x = vector<num>(n);
 	for(int i = minimum(n,m); i < n; ++i) {
 		x[i] = 0;
 	}
@@ -54,4 +54,28 @@ vector<num> backwardSubstitution(MatrizEsparsa& mt, vector<num>& b) {
 		x[i] /= elemento_diagonal;	
 	}
 	return x;
+}
+
+num diferencia_normaUno(vector<num>& v1, vector<num>& v2) {
+    num acum = 0;
+    for (int i = 0; i < v1.size(); ++i){
+        acum += abs(v1[i]-v2[i]);
+    }
+    return acum;
+}
+
+num normaUno(vector<num>& el_vector) {
+    num norma = 0;
+    for(int i = 0; i < el_vector.size(); ++i) {
+        norma += abs(el_vector[i]);
+    }
+    return norma;
+}
+
+void imprimirVector(vector<num>& v) {
+	cout << "[ ";
+	for(int i = 0; i < v.size(); ++i) {
+		cout << v[i];
+		(i + 1 >= v.size()) ? cout << " ]" : cout << " ";
+	}
 }

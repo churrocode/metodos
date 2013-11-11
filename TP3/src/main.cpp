@@ -1,5 +1,7 @@
 #include "MatrizEsparsa.h"
 #include "factorizacionQR.h"
+#include "quadraticExtrapolation.h"
+#include "utils.h"
 #include <fstream>
 #include <iostream>
 #include <cassert>
@@ -97,7 +99,7 @@ int main(int argc, char** argv) {
 }
 
 
-num normaUno(vector<num>& el_vector) {
+/*num normaUno(vector<num>& el_vector) {
     num norma = 0;
     for(int i = 0; i < el_vector.size(); ++i) {
         norma += abs(el_vector[i]);
@@ -105,19 +107,19 @@ num normaUno(vector<num>& el_vector) {
     return norma;
 }
 
-void restaVectores(vector<num>& v1, vector<num>& v2) {
+*/void restaVectores(vector<num>& v1, vector<num>& v2) {
     for(int i = 0; i < v1.size(); ++i) {
         v1[i] -= v2[i];
     }
 }
 
-num diferencia_normaUno(const vector<num>& v1, const vector<num>& v2) {
+/*num diferencia_normaUno(const vector<num>& v1, const vector<num>& v2) {
     num acum = 0;
     for (int i = 0; i < v1.size(); ++i){
         acum += abs(v1[i]-v2[i]);
     }
     return acum;
-}
+}*/
 
 /*num productoInterno(vector<num>& v1, vector<num>& v2) ^{
  
@@ -130,8 +132,8 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion)
     vector<num> autovector = vector<num>(cantidad_paginas,proba);
     vector<num> autovector_nuevo = vector<num>(cantidad_paginas);
     
-    vector<num> autovector_anteultimo(cantidad_paginas, 0);
-    vector<num> autovector_antepenultimo(cantidad_paginas, 0);
+    vector<num> autovector_anteultimo = vector<num>(cantidad_paginas, 0);
+    vector<num> autovector_antepenultimo = vector<num>(cantidad_paginas, 0);
 
     int iters = 0;
     bool seguir_iterando = true;
@@ -157,7 +159,7 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion)
  
         seguir_iterando = diferencia_normaUno(autovector, autovector_nuevo) >= epsilon;
         if (seguir_iterando && usar_extrapolacion && corresponde_usar_extrapolacion(iters, 10)) {
-            //extrapolacion_cuadratica(autovector_nuevo, autovector, autovector_anteultimo, autovector_antepenultimo);
+            quadraticExtrapolation(autovector_nuevo, autovector, autovector_anteultimo, autovector_antepenultimo);
         }
 
         //reacomodamos los vectores:
@@ -165,7 +167,6 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion)
             //autovector_nuevo ya lo calculamos con la interpolación
             autovector_antepenultimo = autovector_anteultimo;
             autovector_anteultimo = autovector;
-
         }
         //el autovector es la iteración que acabamos de calcular
         autovector = autovector_nuevo;
