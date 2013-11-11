@@ -62,27 +62,10 @@ int main(int argc, char** argv) {
     }
     
     P.printMatriz();
-    /*  NO HACIA FALTA, SE HACE DIRECTO EN EL METODO DE LA POTENCIA CON EL ALGORITMO 1
-    num numerito = 1.0 / cantidad_paginas;
-    num c = 0.5;
-    for (int j = 0; j < P.getDimColumnas(); j++){
-        if (P.columnaDeCeros(j)){
-            for (int i = 0; i < P.getDimFilas(); i++) {
-                P.set(i, j, numerito);
-            }
-        } else {
-            for (int i = 0; i < P.getDimFilas(); i++){
-                P.set(i, j, c*P.get(i, j) + (1 - c)*numerito);
-            }
-        }
-    }
 
-    P.printMatriz();
-    */
-    
     vector<num> autovector = metodoDeLaPotencia(P, 0.5, false);
     
-    //imprimirVector(autovector);
+    imprimirVector(autovector);
     
     
     
@@ -165,6 +148,7 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion)
         ++iters;
     }
     
+    cout << "Cantidad de iteraciones: " << iters << endl;
     return autovector;
 }
 

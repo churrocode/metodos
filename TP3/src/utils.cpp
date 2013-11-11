@@ -59,7 +59,7 @@ vector<num> backwardSubstitution(MatrizEsparsa& mt, vector<num>& b) {
 num diferencia_normaUno(vector<num>& v1, vector<num>& v2) {
     num acum = 0;
     for (int i = 0; i < v1.size(); ++i){
-        acum += abs(v1[i]-v2[i]);
+        acum += abs((v1[i]-v2[i]));
     }
     return acum;
 }
