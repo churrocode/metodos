@@ -71,8 +71,8 @@ int main(int argc, char** argv) {
     P.printMatriz();
 
 
-    /* NO HACIA FALTA, SE HACE DIRECTO EN EL METODO DE LA POTENCIA CON EL ALGORITMO 1
-    num numerito = 1.0 / cantidad_paginas;
+    // NO HACIA FALTA, SE HACE DIRECTO EN EL METODO DE LA POTENCIA CON EL ALGORITMO 1
+    /*num numerito = 1.0 / cantidad_paginas;
     num c = 0.5;
     for (int j = 0; j < P.getDimColumnas(); j++){
         if (P.columnaDeCeros(j)){
@@ -86,11 +86,11 @@ int main(int argc, char** argv) {
         }
     }
     
-    P.printMatriz();
-*/
+    P.printMatriz();*/
 
 
-    vector<num> autovector = metodoDeLaPotencia(P, 0.5, false, true);
+
+    vector<num> autovector = metodoDeLaPotencia(P, 0.5, false, false);
     
     imprimirVector(autovector);
     
@@ -135,6 +135,7 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
     }
     int cantidad_paginas = P.getDimFilas(); // la matriz es cuadrada(cant_paginas * cant_paginas)
     num proba = 1.0 / cantidad_paginas;
+    vector<num> vector_proba_uniforme = vector<num>(cantidad_paginas,proba);
     num epsilon = 1e-28;
     vector<num> autovector = vector<num>(cantidad_paginas,proba);
     vector<num> autovector_nuevo = vector<num>(cantidad_paginas);
@@ -145,28 +146,33 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
     int cant_iters = 0;
     num error = 0.0;
     bool seguir_iterando = true;
-    time_t inicio;
+    time_t inicio, fin;
     num tiempo_ex_en_milisegundos;
-    inicio = time(NULL) * 1000000.0;
-    cout << "BAAAAAAAM: " << inicio << endl;
+    inicio = time(NULL);
     while(seguir_iterando) {
-        for(int j = 0; j < cantidad_paginas; j++){
+        for(int j = 0; j < cantidad_paginas; j++){ // multiplicamos por P'
 
             num producto_interno = 0;
             for(int i = 0; i < cantidad_paginas; i++){
                 producto_interno += P.get(i,j)*autovector[i];
+
             }
             //autovector_temp es la iteración que acabamos de calcular
             autovector_nuevo[j] = producto_interno*c;
         }
 
-        num norma_autovector_nuevo = normaUno(autovector_nuevo);
-        num norma_autovector = normaUno(autovector);
+        //cout << "xk+1: "; imprimirVector(autovector_nuevo); cout << endl;
+        //cout << "xk: "; imprimirVector(autovector); cout << endl;
+        num norma_autovector_nuevo = normaUno(autovector_nuevo); //cout << "norma xk+1: " << norma_autovector_nuevo << endl;
+        num norma_autovector = normaUno(autovector); //cout << "norma xk: " << norma_autovector << endl;
         num w = norma_autovector - norma_autovector_nuevo;
-        num w_por_v = w*proba;
+        
+        //cout << "v: "; imprimirVector(vector_proba_uniforme); cout << endl;
+        vector<num> w_por_v = multPorEscalar(vector_proba_uniforme,w);
+        //cout << "w_por_v: "; imprimirVector(w_por_v); cout << endl;
 
         for(int j = 0; j < cantidad_paginas; j++) {   
-            autovector_nuevo[j] += w_por_v;
+            autovector_nuevo[j] += w_por_v[j];
         }
         
         error = diferencia_normaUno(autovector, autovector_nuevo);
@@ -191,9 +197,8 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
         autovector = autovector_nuevo;
         ++cant_iters;
     }
-    
-    cout << "SEE MY NEW RIIIIIDE: " << time(NULL) * 1000000.0 << endl;
-    tiempo_ex_en_milisegundos = time(NULL) * 1000000.0 - inicio;
+    fin = time(NULL);
+    tiempo_ex_en_milisegundos = (fin - inicio) * 1000000.0;
 
     cout << "TIEMPO: " << tiempo_ex_en_milisegundos << endl;
     
