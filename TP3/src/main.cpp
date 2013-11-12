@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
     //P.printMatriz();
 
     // genero P estocastica
-    for(int j = 0; j < P.getDimFilas(); j++){
+    for(int j = 0; j < P.getDimFilas(); j++){   
         num col_sum = 0;
         for(int i = 0; i < P.getDimColumnas(); i++){
             col_sum += P.get(i, j); 
@@ -88,12 +88,19 @@ int main(int argc, char** argv) {
     
     P.printMatriz();*/
 
-
-
-    vector<num> autovector = metodoDeLaPotencia(P, 0.5, false, false);
-    
+                                        //                      v BOOL MEDIR      
+    vector<num> autovector = metodoDeLaPotencia(P, 0.5, false, true);
+                                        //                ^ BOOL USAR EXTRAPOLACION
+                                                                
     imprimirVector(autovector);
     
+    ofstream archivo_resultados;
+    archivo_resultados.open("resultados.out");
+    pair<num, int> p;
+    for(int i = 0; i < autovector.size(); i++) {
+        p = sacarMaximo(autovector);
+        archivo_resultados << p.second << " "  << p.first  << endl;
+    }
     
     
     return 0;

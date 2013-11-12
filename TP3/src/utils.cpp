@@ -78,10 +78,25 @@ void imprimirVector(vector<num>& v) {
 		cout << v[i];
 		(i + 1 >= v.size()) ? cout << " ]" : cout << " ";
 	}
+        cout << endl;
 }
 
 void dividirPorEscalar(vector<num> &v, num escalar) {
 	for(int i = 0; i < v.size(); ++i) {
 		v[i] /= escalar;
 	}
+}
+
+pair<num,int> sacarMaximo(vector<num> &v) {
+    num max = v[0];
+    int indice = 0;
+    for(int i = 1; i < v.size(); i++) { 
+        if(v[i] > max){
+            max = v[i];
+            indice = i;
+        }
+    }
+    v[indice] = -1;
+    pair<num,int> res(max, indice);
+    return res;
 }
