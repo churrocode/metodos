@@ -95,7 +95,7 @@ int main(int argc, char** argv) {
     imprimirVector(autovector);
     
     ofstream archivo_resultados;
-    archivo_resultados.open("resultados.out");
+    archivo_resultados.open("../parser/resultados.out");
     pair<num, int> p;
     for(int i = 0; i < autovector.size(); i++) {
         p = sacarMaximo(autovector);
@@ -136,7 +136,7 @@ int main(int argc, char** argv) {
 vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion, bool medir) {
     ofstream archivo_mediciones;
     if(medir) {
-        archivo_mediciones.open("mediciones.out");
+        archivo_mediciones.open("../parser/mediciones.out");
         archivo_mediciones << NODOS << endl;
         archivo_mediciones << LINKS << endl;
     }
