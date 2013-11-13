@@ -142,8 +142,9 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
     }
     int cantidad_paginas = P.getDimFilas(); // la matriz es cuadrada(cant_paginas * cant_paginas)
     num proba = 1.0 / cantidad_paginas;
-    vector<num> vector_proba_uniforme = vector<num>(cantidad_paginas,proba);
-    num epsilon = 1e-15;
+
+    //vector<num> vector_proba_uniforme = vector<num>(cantidad_paginas,proba);
+    num epsilon = 1e-28;
     vector<num> autovector = vector<num>(cantidad_paginas,proba);
     vector<num> autovector_nuevo = vector<num>(cantidad_paginas);
     
@@ -161,7 +162,7 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
 
             num producto_interno = 0;
             for(int i = 0; i < cantidad_paginas; i++){
-                producto_interno += P.get(i,j)*autovector[i];
+                producto_interno += P.get(j,i)*autovector[i];
 
             }
             //autovector_temp es la iteración que acabamos de calcular
@@ -175,11 +176,12 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
         num w = norma_autovector - norma_autovector_nuevo;
         
         //cout << "v: "; imprimirVector(vector_proba_uniforme); cout << endl;
-        vector<num> w_por_v = multPorEscalar(vector_proba_uniforme,w);
+        //vector<num> w_por_v = multPorEscalar(vector_proba_uniforme,w);
         //cout << "w_por_v: "; imprimirVector(w_por_v); cout << endl;
 
         for(int j = 0; j < cantidad_paginas; j++) {   
-            autovector_nuevo[j] += w_por_v[j];
+            // autovector_nuevo[j] += w_por_v[j];
+            autovector_nuevo[j] += w*proba;
         }
         
         error = diferencia_normaUno(autovector, autovector_nuevo);
