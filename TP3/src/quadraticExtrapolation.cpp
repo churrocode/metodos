@@ -5,19 +5,20 @@
 
 
 void armarMatriz(MatrizEsparsa& mt, const list< vector<num> >& datos) {
-	int i = 0;
+	int j = 0;
 	for(list< vector<num> >::const_iterator it = datos.begin(); it != datos.end(); ++it) {
-		auto vector<num> v = *it;
-		for(int j = 0; j < v.size(); ++j) {
-			if(v[j] != 0) {
-				mt.set(i,j,v[j]);
+		vector<num> v = *it;
+		//imprimirVector(v);
+		for(int i = 0; i < v.size(); ++i) {
+			if(v[i] != 0) {
+				mt.set(i,j,v[i]);
 			}
 		}
-		++i;
+		++j;
 	}
 }
 
-vector<num> quadraticExtrapolation(vector<num>& xk3, vector<num>& xk2, vector<num>& xk1, vector<num>& xk) {
+vector<num> quadraticExtrapolation(vector<num>& xk, vector<num>& xk1, vector<num>& xk2, vector<num>& xk3) {
 	//vector<num> vector_resultante(xk3.size());
 	vector<num> yk2,yk1,yk;
 	yk2 = restarVectores(xk2,xk3);
@@ -28,7 +29,7 @@ vector<num> quadraticExtrapolation(vector<num>& xk3, vector<num>& xk2, vector<nu
 	list< vector<num> > elementos_matriz;
 	elementos_matriz.push_back(yk2); elementos_matriz.push_back(yk1);
 	armarMatriz(Y,elementos_matriz);
-	Y.printMatriz();
+	//Y.printMatriz();
 
 	num gamma_0, gamma_1, gamma_2, gamma_3 = 1.0;
 	num beta_0, beta_1, beta_2;
@@ -51,9 +52,9 @@ vector<num> quadraticExtrapolation(vector<num>& xk3, vector<num>& xk2, vector<nu
 	v1 = sumarVectores(v1,v2);
 	v1 = sumarVectores(v1,v3);
 
-	vector<num> vector_resultante = v1;
-	num norma_1_vector_resultante = normaUno(vector_resultante);
-	dividirPorEscalar(vector_resultante,norma_1_vector_resultante);
-
-	return vector_resultante;
+	xk = v1;
+	num norma_1_vector_resultante = normaUno(xk);
+	dividirPorEscalar(xk,norma_1_vector_resultante);
+	cout << "beeeeem" << endl;
+	return xk;
 }
