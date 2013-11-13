@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
         }
     }
     
-    P.printMatriz();
+    //P.printMatriz();
 
 
     // NO HACIA FALTA, SE HACE DIRECTO EN EL METODO DE LA POTENCIA CON EL ALGORITMO 1
@@ -89,13 +89,13 @@ int main(int argc, char** argv) {
     P.printMatriz();*/
 
                                         //                      v BOOL MEDIR      
-    vector<num> autovector = metodoDeLaPotencia(P, 0.5, false, true);
+    vector<num> autovector = metodoDeLaPotencia(P, 0.2, false, true);
                                         //                ^ BOOL USAR EXTRAPOLACION
                                                                 
     imprimirVector(autovector);
     
     ofstream archivo_resultados;
-    archivo_resultados.open("../parser/resultados.out");
+    archivo_resultados.open("../parser/resultados2.out");
     pair<num, int> p;
     for(int i = 0; i < autovector.size(); i++) {
         p = sacarMaximo(autovector);
@@ -136,14 +136,14 @@ int main(int argc, char** argv) {
 vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion, bool medir) {
     ofstream archivo_mediciones;
     if(medir) {
-        archivo_mediciones.open("../parser/mediciones.out");
+        archivo_mediciones.open("../parser/mediciones2.out");
         archivo_mediciones << NODOS << endl;
         archivo_mediciones << LINKS << endl;
     }
     int cantidad_paginas = P.getDimFilas(); // la matriz es cuadrada(cant_paginas * cant_paginas)
     num proba = 1.0 / cantidad_paginas;
     vector<num> vector_proba_uniforme = vector<num>(cantidad_paginas,proba);
-    num epsilon = 1e-28;
+    num epsilon = 1e-15;
     vector<num> autovector = vector<num>(cantidad_paginas,proba);
     vector<num> autovector_nuevo = vector<num>(cantidad_paginas);
     
