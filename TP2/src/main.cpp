@@ -18,7 +18,7 @@ MatrizBanda generarMatriz(double span, double h, int n, vector<double>& cargas);
 
 int main(int argc, char** argv) {
     if (argc != 3 or ((*argv[2] != '0' and *argv[2] != '1'))) {
-    	printf("Se espera dosparámetros, el primero con el nombre del archivo y el segundo debe ser 0 si se mide span variable, 1 si se mide carga variable\n");
+    	printf("Se esperan dos parámetros, el primero con el nombre del archivo y el segundo debe ser 0 si se mide span variable, 1 si se mide carga variable\n");
     }
     ifstream file;
     file.open(argv[1], ios::in);
@@ -29,6 +29,7 @@ int main(int argc, char** argv) {
 
     double span,h,costoPilar,fMax;
     while(file.eof() != 1){
+        //levantar los datos de un puente
         int n;
         file >> span;
         file >> h;
@@ -41,13 +42,14 @@ int main(int argc, char** argv) {
         file >> fMax;
         cout << "span = " << span << " h = " << h << " n = " << n << " costoPilar = " << costoPilar << " fMax = " << fMax << endl;
         
+        //generar el sistema y resolverlo
         Puente p(n, span, h, costoPilar, fMax, cargas);
-        p.generarMatriz();
+        p.generarMatriz();  
         vector<num>* sols = p.resolverPuente();
 
-        for (int i = 0; i< 4*n; ++i) {
-            cout << 'F' << i+1 << ' ' << (*sols)[i] << endl;
-        }
+        // for (int i = 0; i< 4*n; ++i) {
+        //     cout << 'F' << i+1 << ' ' << (*sols)[i] << endl;
+        // }
 
         // CALCULO LA MAXIMA FUERZA EJERCIDA SOBRE UN LINK
         double max = abs((*sols)[0]);
@@ -58,17 +60,12 @@ int main(int argc, char** argv) {
 
         if (*argv[2] == '0'){
             // SALIDA PARA SPAN VARIABLE
-            file_out << span << endl;
-            file_out << n << endl;
-            file_out << max << endl;
-            file_out << endl;
+            // <span> <n> <FMax>
+            file_out << span << ' ' << n << ' ' << max << endl;
         } else if (*argv[2] == '1') {
-            // SALIDA PARA CARGA VARIABLE
-            file_out << cargas[0] << endl; //Por ahora todas las cargas son iguales, en general se
-                                            // podria poner la sumatoria de las cargas en este lugar
-            file_out << n << endl;
-            file_out << max << endl;
-            file_out << endl;
+            // SALIDA PARA CARGA VARIABLE, con carga uniforme
+            // <carga> <n> <FMax>
+            file_out << cargas[0] << ' ' << n << ' ' << max << endl;
         }
             
 

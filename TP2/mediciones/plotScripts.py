@@ -51,6 +51,78 @@ def plotBars(data, labels, title = None, horizontalLine = None, widthLevel = 1, 
 	pplot.gca().get_yaxis().tick_left()
 	return pplot
 
+def plotearDiciembre(dataGenerator, drawLine = False):
+	data = dataGenerator()
+	for n in data.iterkeys():
+		x = map(lambda t: t[0], data[n])
+		y = map(lambda t: t[1], data[n])
+		if drawLine:
+			pplot.plot(x, y, marker='.', linestyle ='-')
+			pplot.text(x[0], y[0], 'n = ' + str(n))
+		else:
+			pplot.plot(x, y, '.')
+			pplot.text(x[-5], y[-1], 'n = ' + str(n))
+	#pplot.legend()
+
+def plotearCargaDiciembre():
+	pplot.figure()
+	plotearDiciembre(parsearCargaVariableDiciembre)
+	pplot.title(u'Fuerza máxima observada para distintos valores de carga uniforme y de secciones (n), con span = 50m')
+	pplot.xlabel(u'Carga en cada junta inferior [N]')
+	pplot.ylabel(u'Fuerza máxima observada sobre algún link [N]')
+	pplot.show()
+
+def plotearSpanDiciembre():
+	pplot.figure()
+	plotearDiciembre(parsearSpanVariableDiciembre)
+	pplot.title(u'Fuerza máxima observada para distintos valores de span y de secciones (n), con carga uniforme de 250 N')
+	pplot.xlabel(u'Span [m]')
+	pplot.ylabel(u'Fuerza máxima observada sobre algún link [N]')
+	pplot.show()
+
+def plotearSpanDiciembreDetalle():
+	pplot.figure()
+	plotearDiciembre(parsearSpanVariableDiciembreDetalle, drawLine = True)
+	pplot.title(u'Fuerza máxima observada para distintos valores de span y de secciones (n), con carga uniforme de 250 N')
+	pplot.xlabel(u'Span [m]')
+	pplot.ylabel(u'Fuerza máxima observada sobre algún link [N]')
+	pplot.show()	
+
+def parsearCargaVariableDiciembre():
+	return parsearSalidaDiciembre('medicionesConCargaVariable.out')
+
+def parsearSpanVariableDiciembre():
+	return parsearSalidaDiciembre('medicionesConSpanVariable.out')
+
+def parsearSpanVariableDiciembreDetalle():
+	data = parsearSpanVariableDiciembre()
+	for n in data.iterkeys():
+		data[n] = filter(lambda t: t[0] <= 20, data[n])
+	return data
+	
+def parsearSalidaDiciembre(fileName):
+	f = open(fileName, 'r')
+	data = {}
+	map(lambda l: parsearLineaDe3(l, data), f) #te quiero, python
+	#data[n] = [(var_i, F_i)] -> para cada n medido, data[n] tiene tuplas (var, F): FMax observada para cada var medido.
+	return data
+
+def parsearLineaDe3(linea, data):
+	linea = linea.split()
+	if len(linea):
+		print linea
+		# linea = [carga/span, n, FMax]
+		var = int(linea[0]) #carga o span, segun corresponda
+		n = int(linea[1])
+		F = float(linea[2])
+		if data.has_key(n):
+			data[n].append((var, F))
+		else:
+			data[n] = [(var, F)] 
+	#data[n] = [(var_i, F_i)] -> para cada n medido, data[n] tiene tuplas (var, F): FMax observada para c/ var medido.
+
+
+
 def parsearYPromediarCargaVariable():
 	f = open('medicionesConCargaVariable.out', 'r')
 	data = {}
