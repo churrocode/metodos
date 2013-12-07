@@ -1,4 +1,5 @@
 #include "heuristica.h"
+#include <iostream>
 
 /*double calcularCosto(Puente& puente) {
 	num costo = 0;
@@ -54,6 +55,7 @@ pair<double,int> calcularCostoEstructura(Puente& puente, vector<double>& posicio
 		cant_pilares += 1;
 		int fuerza_absoluta_max = puente.getMatriz().getFuerzaMax().second; // numeracion de la fuerza maxima en el puente
 		// colocar pilar debajo de la junta con la fuerza max incidiendo sobre ella, o casi, si el resultado es impar
+		//Y SI HAY MUCHAS FUERZAS IGUALES?? POR CÓMO CALCULAMOS EL MAX NOS QUEDAMOS CON LA PRIMERA? NO NOS CONVENDRÍA LA DEL CENTRO??
 		int junta_incidente_fmax = puente.junta(fuerza_absoluta_max);
 		int secciones_a_derecha = (junta_incidente_fmax / 2) + 1;
 		if(secciones_a_derecha % 2 != 0) {
@@ -67,6 +69,13 @@ pair<double,int> calcularCostoEstructura(Puente& puente, vector<double>& posicio
 		num height = puente.getH();
 		int n_1 = secciones_a_derecha;
 		int n_2 = n - secciones_a_derecha;
+		if (n_1 == 0) {
+			n_1 = 2;
+			n_2 -= 2;
+		} else if (n_2 == 0) {
+			n_2 = 2;
+			n_1 -= 2;
+		}
 		num span_1 = n_2*length;
 		num span_2 = n_1*length;
 		num costo_pilar = puente.getCostoPilar();
@@ -81,7 +90,11 @@ pair<double,int> calcularCostoEstructura(Puente& puente, vector<double>& posicio
 				cargas_nuevas_1.push_back(cargas_puente[i]);
 			}
 		}
-		
+		if (cargas_nuevas_1.size() == 0) cout << "!!EL PUENTE 1 NO TIENE CARGA\n";
+		cout << "|cargas_1|: " << cargas_nuevas_1.size() << endl;
+		if (cargas_nuevas_2.size() == 0) cout << "!!El PUENTE 2 NO TIENE CARGA\n";
+		cout << "|cargas_2|: " << cargas_nuevas_2.size() << endl;
+		cout << "puentes con estos n: " << n_1 << ", " << n_2 << endl;
 		Puente puente_1 = Puente(n_1,span_1,height,costo_pilar,fMax,cargas_nuevas_1);
 		Puente puente_2 = Puente(n_2,span_2,height,costo_pilar,fMax,cargas_nuevas_2);
 		pair<double,int> costo_sub_estructura_2 = calcularCostoEstructura(puente_2, posiciones_pilares, costo_subestructuras); //primero la izq
