@@ -53,12 +53,13 @@ int main(int argc, char** argv) {
         vector<double> costo_subestructuras = pilares.second;
         
         cout << "Costo total = " << costo_total << endl;
-        
+        cout << "Pilares en las posiciones: ";
         file_out << costo_total << endl;
         for (int i = 0; i < posiciones_pilares.size(); ++i) {
-            cout << i;
+            cout << posiciones_pilares[i]<<", ";
             file_out << posiciones_pilares[i] << endl;
         }
+        cout << endl;
         for (int i = 0; i < costo_subestructuras.size(); ++i) {
             cout << "costo subestrs: " << costo_subestructuras[i] << endl;
             file_out << costo_subestructuras[i] << endl;

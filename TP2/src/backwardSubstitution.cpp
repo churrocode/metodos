@@ -7,7 +7,7 @@ vector<num>* backwardSubstitution(MatrizBanda& mt, vector<num> b) {
 	int m = dim.second;
     num x_max;
     int i_fuerza = n-1;
-	(*x)[n-1] = b[n-1]/mt.get(n-1,n-1);
+	(*x)[n-1] = b[n-1]/(mt.get(n-1,n-1) == 0 ? 1 : mt.get(n-1, n-1)); //permitimos tener 0*x_n = 0 en la última fila
     x_max = abs((*x)[n-1]);
 
 	for(int i = n - 2; i >= 0; --i) {

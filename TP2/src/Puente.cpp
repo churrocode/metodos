@@ -7,6 +7,9 @@ using namespace std;
 
 void Puente::generarMatriz() {
     //HAY QUE PUSHEAR POR ÍNDICE CRECIENTE SI USAMOS SETLAST!
+    if (n % 2 != 0) {
+        cout << "LA CANTIDAD DE SECCIONES NO ES PAR, TODO EL COMPORTAMIENTO DE ESTE PUENTE ESTÁ INDEFINIDO!\n";
+    }
     construirPuntas(n);
     if (n == 2) {
         //sin M de medio, compartiendo un link

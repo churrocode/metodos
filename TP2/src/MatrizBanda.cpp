@@ -23,6 +23,9 @@ void MatrizBanda::set(int i, int j, num a) {
 }
 
 void MatrizBanda::setLast(const int i, const int j, const num a) {
+	if (!(i < n && j < m)) {
+		cout << "WRONG INDEXING: " << "(" << i <<','<<	j<<")" << " para dimensiones " << n <<'x'<< m <<endl;
+	}
 	filas[i].setLast(j,a);
 }
 
@@ -121,7 +124,17 @@ void MatrizBanda::triangularConGauss(const int bandaInferior, vector<num>& b){
                 fila_pivote = j;
             }
         }
-        if(iguales(max, 0)) {cout << "Sistema singular! Llegué hasta la fila " << i << endl; return;}
+        if(iguales(max, 0)) {
+        	if ( i == this->n-1 && (iguales(b[i],0)) ) {
+        		//Si la última fila es toda nula y b[n] = 0, podemos tomar x_n = 0 y resolver el subsistema de n-1 x n-1 que no la contiene
+        		//La última incógnita es la de la fuerza vertical sobre el apoyo derecho, podemos anularla (?).
+	        	b[this->n-1] = 0;
+        	} else {
+	        	cout << "Sistema singular! Llegué hasta la fila " << i << "de" << this->n -1 << endl; 
+	        	cout << "b["<<i<<"] = "<< b[i] <<endl;
+	        	return;
+        	}
+        }
         if(fila_pivote != i){
             this->intercambiarFilas(i, fila_pivote);
             num b_temp = b[i];
