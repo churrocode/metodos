@@ -2,6 +2,7 @@
 #include <cmath>
 #include "factorizacionQR.h"
 #include <iostream>
+#include "utils.h"
 
 using namespace std;
 
@@ -9,6 +10,7 @@ MatrizEsparsa* givensDosColumnas(MatrizEsparsa& A) {
     int n = A.getDimFilas();
     MatrizEsparsa* Q = new MatrizEsparsa(n, n);  
     num x_i_0, x_j_0, x_i_1, x_j_1, norma_dos, cos, sen, aux_1, aux_2;
+    //primera columna
     for(int i = 0; i < n-1; i++) {
         x_i_0 = A.get(0, 0);
         x_j_0 = A.get(i+1, 0);
@@ -40,6 +42,7 @@ MatrizEsparsa* givensDosColumnas(MatrizEsparsa& A) {
             }
         }
     }
+    //segunda columna
     for(int i = 1; i < n-1; i++) {
        // x_i_0 = A.get(1, 0);
        // x_j_0 = A.get(i+1, 0);
@@ -65,6 +68,42 @@ MatrizEsparsa* givensDosColumnas(MatrizEsparsa& A) {
     return Q;
 }
 
+
+void householder2Cols(MatrizEsparsa& A, vector<num>& b) {
+    num primera_col_norma2 = A.norma_de_columna(0,0);
+    //Q1 = Id - 2u_1*u_1'
+    //u_1 = (a_1) - ||a_1||e_1
+    vector<num> u_1 = A.vector_columna(0);
+    int n = A.getDimFilas();
+    u_1[0] -= primera_col_norma2;
+    normalizar_vector(u_1);
+    //setear A(0, 0)  = primera_col_norma2, el resto en 0 !!!!!
+
+    //multiplicar la segunda columna de A por Q1 (a_2 = Q1*a_2)
+    // a_2 = (Id - 2u1*u1')a2 = a2 - 2(u1'*a2) u1
+    vector<num> a_2 = A.vector_columna(1);
+    num p_i = producto_interno(u_1, a_2);
+    for (int i = 0; i < n; ++i) {
+        a_2[i] -= 2*p_i*u_1[i];
+    }
+
+    //aplicar al término indepte.
+    //Q1*b = (Id - 2u_1*u_1')*b = b - 2(u_1'*b) (u_1)
+    p_i = producto_interno(u_1, b);
+    for (int i = 0; i < n; ++i) {
+        b[i] -= 2*p_i*u_1[i];
+    }
+    //lo mismo con la segunda
+    //tirar el resto de los números de la segunda columna !!
+    num segunda_columna_norma2 = A.norma_de_columna(1, 1);
+    vector<num> u_2 = A.vector_columna(1);
+    u_2[1] -= segunda_columna_norma2;
+    normalizar_vector(u_2);
+    p_i = producto_interno(u_2, b);
+    for (int i = 0; i < n; ++i) {
+        b[i] -= 2*p_i*u_2[i];
+    } 
+}
 /*
 num normaDos(list<pair<int, num> >& la_lista) {
     num norma = 0;

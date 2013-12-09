@@ -42,6 +42,9 @@ public:
     bool columnaDeCeros(int col);
     list<pair<int, num> >* sliceColumna(int col, int inicio, int fin);
     vector<num> multPorVector(vector<num>& v, bool matriz_traspuesta = false);
+    num norma_de_columna(int j, int i);
+    void restar_columna(const int j, const vector<num>& col);
+    vector<num> vector_columna(const int j);
 
 private:
     int n;

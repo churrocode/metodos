@@ -1,5 +1,6 @@
 #include "MatrizEsparsa.h"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -177,3 +178,22 @@ list<pair<int, num> >* MatrizEsparsa::Columna::sliceColumna(int inicio, int fin)
     }
     return slice;
 }
+
+num MatrizEsparsa::norma_de_columna(int j, int i) {
+	num norma = 0;
+	for (list< pair<int, num> >::iterator it = columnas[j].noNulos.begin(); it != columnas[j].noNulos.end(); ++it) {
+		if (it->first >= i)
+			norma += it->second;
+	}
+	return sqrt(norma);
+}
+
+vector<num> MatrizEsparsa::vector_columna(const int j) {
+	vector<num> columna(n, 0);
+	list<pair<int, num> > noNulos = getColumna(j);
+	for (list<pair<int, num> >::iterator it = noNulos.begin(); it != noNulos.end(); ++it) {
+		columna[it->first] = it->second;
+	}
+	return columna;
+}
+

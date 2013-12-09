@@ -16,3 +16,6 @@ num diferencia_normaUno(vector<num>& v1, vector<num>& v2);
 void imprimirVector(vector<num>& v);
 vector<num> backwardSubstitution(MatrizEsparsa &mt, vector<num> &b);
 pair<num,int> sacarMaximo(vector<num> &v);
+num norma2(const vector<num>& v);
+num producto_interno(const vector<num>& v1, const vector<num>& v2);
+num normalizar_vector(vector<num>& v);

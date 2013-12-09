@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "MatrizEsparsa.h"
+#include <cmath>
 
 vector<num> restarVectores(vector<num>& v1, vector<num>& v2) {
 	vector<num> v = vector<num>(v1.size());
@@ -87,6 +88,22 @@ void dividirPorEscalar(vector<num> &v, num escalar) {
 	}
 }
 
+num norma2(const vector<num>& v) {
+	num norma = 0;
+	for (int i = 0; i < v.size(); ++i) {
+		norma += v[i]*v[i];
+	}
+	return sqrt(norma);
+}
+
+num producto_interno(const vector<num>& v1, const vector<num>& v2) {
+	num pi = 0;
+	for (int i = 0; i < v1.size(); ++i) {
+		pi += v1[i] * v2[i];
+	}
+	return pi;
+}
+
 pair<num,int> sacarMaximo(vector<num> &v) {
     num max = v[0];
     int indice = 0;
@@ -99,4 +116,11 @@ pair<num,int> sacarMaximo(vector<num> &v) {
     v[indice] = -1;
     pair<num,int> res(max, indice);
     return res;
+}
+
+num normalizar_vector(vector<num>& v) {
+	num norma = norma2(v);
+	for(int i = 0; i <v.size(); ++i) {
+		v[i] /= norma;
+	}
 }
