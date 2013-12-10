@@ -45,6 +45,7 @@ public:
     num norma_de_columna(int j, int i);
     void restar_columna(const int j, const vector<num>& col);
     vector<num> vector_columna(const int j);
+    void truncar_columna(const int j, const int i);
 
 private:
     int n;

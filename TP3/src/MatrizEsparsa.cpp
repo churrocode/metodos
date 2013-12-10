@@ -197,3 +197,21 @@ vector<num> MatrizEsparsa::vector_columna(const int j) {
 	return columna;
 }
 
+
+void MatrizEsparsa::truncar_columna(const int j, const int i) {
+    list<pair<int, num> > noNulos = columnas[j].noNulos;
+    list<pair<int, num> >::iterator it = noNulos.begin();
+    while (it != noNulos.end()) {
+        if (it->first >= i) {
+            it = noNulos.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+
+
+
+
+
