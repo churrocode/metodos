@@ -38,6 +38,16 @@ vector<num> quadraticExtrapolation(vector<num>& xk, vector<num>& xk1, vector<num
 	vectorNegado(yk); // -yk
 	vector<num> b = Q->multPorVector(yk,true);
 	vector<num> gammas_resultantes = backwardSubstitution(Y,b);
+
+	// householder2Cols(Y, yk);
+	// vectorNegado(yk);
+	// vector<num> gammas_resultantes = backwardSubstitution(Y,yk);
+
+	// for(int i = 0; i < 3; ++i) {
+	// 	cout << "G: " << gammas_resultantes[i] << "\t HH: " << gammas_resultantes2[i] << endl;
+	// }
+
+
 	gamma_1 = gammas_resultantes[0];
 	gamma_2 = gammas_resultantes[1];
 	gamma_0 = -(gamma_1+gamma_2+gamma_3);

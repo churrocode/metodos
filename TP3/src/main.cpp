@@ -56,7 +56,8 @@ int main(int argc, char** argv) {
     //P.printMatriz();
 
     // genero P estocastica
-    for(int j = 0; j < P.getDimFilas(); j++){   
+    //HORRIBLE!!!!! HACERLO ADENTRO DE MATRIZ ESPARSA!!!!!!!! LPMQLRMP!!!!
+    /*for(int j = 0; j < P.getDimFilas(); j++){   
         num col_sum = 0;
         for(int i = 0; i < P.getDimColumnas(); i++){
             col_sum += P.get(i, j); 
@@ -66,7 +67,8 @@ int main(int argc, char** argv) {
                 P.set(k, j, P.get(k, j)/col_sum);
                 }
         }
-    }
+    }*/
+    P.estocastizar();
     
     //P.printMatriz();
 
@@ -89,7 +91,7 @@ int main(int argc, char** argv) {
     P.printMatriz();*/
 
                                         //                      v BOOL MEDIR      
-    vector<num> autovector = metodoDeLaPotencia(P, 0.2, false, true);
+    vector<num> autovector = metodoDeLaPotencia(P, 0.2, true, true);
                                         //                ^ BOOL USAR EXTRAPOLACION
                                                                 
     imprimirVector(autovector);
@@ -144,14 +146,14 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
     num proba = 1.0 / cantidad_paginas;
 
     //vector<num> vector_proba_uniforme = vector<num>(cantidad_paginas,proba);
-    num epsilon = 1e-28;
+    num epsilon = 1e-16;
     vector<num> autovector = vector<num>(cantidad_paginas,proba);
     vector<num> autovector_nuevo = vector<num>(cantidad_paginas);
     
     vector<num> autovector_anteultimo = vector<num>(cantidad_paginas, 0);
     vector<num> autovector_antepenultimo = vector<num>(cantidad_paginas, 0);
 
-    int cant_iters = 0;
+    int cant_iters = 1;
     num error = 0.0;
     bool seguir_iterando = true;
     time_t inicio, fin;
@@ -191,7 +193,7 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
             archivo_mediciones << cant_iters << " " << error << endl;
         }
 
-        if (seguir_iterando && usar_extrapolacion && corresponde_usar_extrapolacion(cant_iters, 10)) {
+        if (seguir_iterando && usar_extrapolacion && corresponde_usar_extrapolacion(cant_iters, 5)) {
             cout << "Entre a QE " << endl;
             quadraticExtrapolation(autovector_nuevo, autovector, autovector_anteultimo, autovector_antepenultimo);
         }
@@ -205,7 +207,10 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
         //el autovector es la iteración que acabamos de calcular
         autovector = autovector_nuevo;
         ++cant_iters;
+//imprimirVector(autovector);
     }
+
+
     fin = time(NULL);
     tiempo_ex_en_milisegundos = (fin - inicio) * 1000000.0;
 
@@ -220,6 +225,6 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
 
 bool corresponde_usar_extrapolacion(const int cant_iters, const int k) {
      //una vez que tenemos tres iteraciones anteriores, extrapolamos cada k iteraciones
-    cout << "Voy a extrapolar" << endl;
+    //cout << "Voy a extrapolar" << endl;
     return (cant_iters > 3) && ((cant_iters-3) % k == 0);
 }

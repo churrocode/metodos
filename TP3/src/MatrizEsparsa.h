@@ -46,6 +46,8 @@ public:
     void restar_columna(const int j, const vector<num>& col);
     vector<num> vector_columna(const int j);
     void truncar_columna(const int j, const int i);
+    void estocastizar();
+    num sumar_columna(const int j);
 
 private:
     int n;

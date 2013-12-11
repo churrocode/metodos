@@ -183,7 +183,7 @@ num MatrizEsparsa::norma_de_columna(int j, int i) {
 	num norma = 0;
 	for (list< pair<int, num> >::iterator it = columnas[j].noNulos.begin(); it != columnas[j].noNulos.end(); ++it) {
 		if (it->first >= i)
-			norma += it->second;
+			norma += it->second * it->second;
 	}
 	return sqrt(norma);
 }
@@ -199,13 +199,36 @@ vector<num> MatrizEsparsa::vector_columna(const int j) {
 
 
 void MatrizEsparsa::truncar_columna(const int j, const int i) {
-    list<pair<int, num> > noNulos = columnas[j].noNulos;
-    list<pair<int, num> >::iterator it = noNulos.begin();
-    while (it != noNulos.end()) {
+    // list<pair<int, num> > noNulos = columnas[j].noNulos;
+    list<pair<int, num> >::iterator it = columnas[j].noNulos.begin();
+    while (it != columnas[j].noNulos.end()) {
         if (it->first >= i) {
-            it = noNulos.erase(it);
+            it = columnas[j].noNulos.erase(it);
         } else {
             ++it;
+        }
+    }
+}
+
+num MatrizEsparsa::sumar_columna(const int j) {
+	num suma = 0;
+	list<pair<int, num> >::iterator it = columnas[j].noNulos.begin();
+    while (it != columnas[j].noNulos.end()) {
+    	suma += it->second;
+        ++it;	
+    }
+    return suma;
+}
+
+void MatrizEsparsa::estocastizar() {
+    for(int j = 0; j < m; j++){   
+		list<pair<int, num> >::iterator it = columnas[j].noNulos.begin();
+        num col_sum = sumar_columna(j);
+        if(col_sum != 0){
+		    while (it != columnas[j].noNulos.end()) {
+    			it->second /= col_sum;
+       		 	++it;	
+    		}
         }
     }
 }

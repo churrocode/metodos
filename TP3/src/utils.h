@@ -13,7 +13,7 @@ void dividirPorEscalar(vector<num> &v, num escalar);
 void vectorNegado(vector<num> &v);
 num normaUno(vector<num>& el_vector);
 num diferencia_normaUno(vector<num>& v1, vector<num>& v2);
-void imprimirVector(vector<num>& v);
+void imprimirVector(const vector<num>& v);
 vector<num> backwardSubstitution(MatrizEsparsa &mt, vector<num> &b);
 pair<num,int> sacarMaximo(vector<num> &v);
 num norma2(const vector<num>& v);
