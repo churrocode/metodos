@@ -1,0 +1,16 @@
+\section{Conclusiones}
+Para realizar este T.P. resolvimos los siguientes problemas:
+\begin{itemize}
+	\item Implementar una estructura de datos para representar eficientemente una matriz esparsa.\\
+	La solución propuesta, representando las filas como listas de elementos no nulos, tiene complejidad espacial $\O(nZ)$ (siendo $nZ$ la cantidad de elementos no nulos almacenados) y permite realizar operaciones de filas (intercambios, suma de un múltiplo de una a otra) en tiempo $\O(n)$, aunque degrada el acceso aleatorio a los elementos a esta misma complejidad. Sin embargo, vimos que esto no es un problema para el uso que le dimos en nuestra solución.
+	\item Construir un sistema lineal genérico para la estructura de puentes Pratt-Truss.\\
+	Numerando tanto los links del puente como las juntas de manera adecuada, en forma genérica dependiendo de $n$ (la cantidad de secciones del puente, que siempre consideramos par), pudimos construir el sistema de ecuaciones de las fuerzas sobre las juntas para cualquier puente Pratt-Truss conociendo algunos parámetros básicos (cantidad de secciones, largo y altura del puente, y cargas aplicadas). Vimos además, que esta numeración produce un sistema cuya matriz asociada tiene estructura de bandas $4$, $6$.
+	\item Resolver un sistema lineal utilizando el método de Eliminación de Gauss. \\
+	 Para esto realizamos una implementación bastante directa del método con pivoteo parcial que optimizamos aprovechando la información sobre la estructura de bandas de la matriz del sistema. Además, dada la estructura de datos que utilizamos, conseguimos un algoritmo con complejidad temporal $\O(n)$.
+	 \item Implementar un algoritmo heurístico para cubrir una determinada distancia con estructuras de puentes Pratt Truss, considerando como limitante de la estructura la fuerza máxima que se ejerce sobre algún link.\\
+	 Para esto, considerando el costo de insertar pilares de concreto bajo alguna(s) junta(s) del puente, implementamos una heurística recursiva que subdivide las estructuras y recalcula las fuerzas ejercidas hasta que ninguna sobrepase determinado límite.
+\end{itemize} 
+
+Con todo esto conseguimos, por un lado, calcular las fuerzas que soportan los links de una estructura Pratt-Truss en las condiciones dadas, y por otro, utilizar este cálculo para encontrar una serie de subestructuras de este tipo que puedan reemplazar a una más grande que no es considerada segura, intentando minimizar el costo de construcción.
+
+Además, experimentamos utilizando este modelo para observar cómo aumentaban las fuerzas que se ejercían sobre los links al modificarse ciertas variables estructurales. Vimos que, en general, la fuerza máxima es proporcional a la carga soportada (cuando ésta se aplica uniformemente sobre las juntas) y que ésta crece más rápido para puentes más subdivididos (y por ende, más cargados, si consideramos dentro de la carga el peso de la estructura propia).  Al variar la longitud del puente, observamos que para valores bajos (de hasta 15m, aproximadamente), la fuerza máxima ejercida no varía, lo que nos dio la pauta de que en esa situación la estructura trabaja sin realizar mayores esfuerzos. En cambio, para valores más grandes observamos lo mismo que en el caso anterior: crecimiento proporcional y más pronunciado para los puentes más subdivididos.

@@ -100,7 +100,7 @@ Por lo que dijimos, es claro que si $nZ(A)$ es la cantidad de elementos no nulos
 Veamos ahora cómo resultan las operaciones por filas, en las que se basa nuestro algoritmo. Por un lado, para intercambiar dos filas, dado que las representaciones de éstas son completamente independientes en memoria, basta con intercambiarlas en el arreglo de filas de la matriz. Si pensamos que, en general, las listas se representan como un puntero al primer elemento, basta intercambiar los correspondientes a las filas involucradas, lo que insume tiempo constante. (Más allá de que la representación efectiva de las listas utilizadas por la biblioteca estándar que estamos utilizando sea más compleja que un único puntero, en cualquier caso, es una cantidad constante de información, con lo cual  el tiempo requerido para realizar el intercambio sigue siendo una cantidad constante.) Veamos ahora la operación que a una fila le suma un múltiplo de otra. Si conseguiéramos realizar esta operación en tiempo lineal, no estaríamos degradando la performance con respecto a la representación con arreglos. Veremos que 
 efectivamente podemos conseguir esto, utilizando una estrategia muy similar al paso \emph{merge} de \emph{Merge-Sort}. El pseudocódigo propuesto es el siguiente:
 \begin{algorithm}
-\caption{$F_i \gets k*F_t$}
+\caption{$F_i \gets F_i + k*F_t$}
 \begin{algorithmic}
 \State $itF_i := iteradorAlInicio(F_i)$
 \State $itF_t := iteradorAlInicio(F_t)$
@@ -206,12 +206,17 @@ $pivote$ y $a_{i,j}$, como dentro de $buscarPivote$, lo que nos permite afirmar 
   \State $cant\_pilares := 0$
   \State $resolverPuente(puente)$
   \If {el puente no es seguro}
-    \State $junta := elegirJunta(puente)$
-    \State $sub\_estructura\_1, sub\_estructura\_2 := generarSubEstructuras(junta)$
-    \State $costo\_sub_estructura\_1, cant\_pilares\_1 := calcularCostoEstructura(sub\_estructura\_1)$
-    \State $costo\_sub\_estructura\_2, cant\_pilares\_2 := calcularCostoEstructura(sub\_estructura\_2)$
-    \State $costo\_estructura += costo\_sub\_estructura\_1+costo\_sub\_estructura\_2$
-    \State $cant\_pilares += cant\_pilares\_1 + cant\_pilares\_2 + 1$
+  	\If{ $n > 2$} \Comment{El puente se puede seguir subdividiendo}
+   			 \State $junta := elegirJunta(puente)$
+    		\State $sub\_estructura\_1, sub\_estructura\_2 := generarSubEstructuras(junta)$
+    		\State $costo\_sub_estructura\_1, cant\_pilares\_1 := calcularCostoEstructura(sub\_estructura\_1)$
+    		\State $costo\_sub\_estructura\_2, cant\_pilares\_2 := calcularCostoEstructura(sub\_estructura\_2)$
+    		\State $costo\_estructura += costo\_sub\_estructura\_1+costo\_sub\_estructura\_2$
+    		\State $cant\_pilares += cant\_pilares\_1 + cant\_pilares\_2 + 1$
+    \Else 
+    		\State $costo\_estructura := +\infty$ 
+    		\State $cant\_pilares := -1$ \Comment{La heurística no puede asegurar el puente.}
+    \EndIf
   \Else
     \State $costo\_estructura := puente.calcularCostoParcial()$
   \EndIf \\
