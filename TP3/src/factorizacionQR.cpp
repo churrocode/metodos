@@ -70,6 +70,7 @@ MatrizEsparsa* givensDosColumnas(MatrizEsparsa& A) {
 
 
 void householder2Cols(MatrizEsparsa& A, vector<num>& b) {
+    cout << "Entre a householder" << endl;
     num primera_col_norma2 = A.norma_de_columna(0,0);
     //Q1 = Id - 2u_1*u_1'
     //u_1 = (a_1) - ||a_1||e_1
@@ -80,23 +81,25 @@ void householder2Cols(MatrizEsparsa& A, vector<num>& b) {
     //setear A(0, 0)  = primera_col_norma2, el resto en 0.
     A.set(0,0, primera_col_norma2);
     A.truncar_columna(0, 1);
-
+    
     //multiplicar la segunda columna de A por Q1 (a_2 = Q1*a_2)
     // a_2 = (Id - 2u1*u1')a2 = a2 - 2(u1'*a2) u1
     vector<num> a_2 = A.vector_columna(1);
     num p_i = producto_interno(u_1, a_2);
     for (int i = 0; i < n; ++i) {
         a_2[i] -= 2*p_i*u_1[i];
+        A.set(i, 1, a_2[i]);
     }
-
+   
     //aplicar al término indepte.
     //Q1*b = (Id - 2u_1*u_1')*b = b - 2(u_1'*b) (u_1)
     p_i = producto_interno(u_1, b);
     for (int i = 0; i < n; ++i) {
         b[i] -= 2*p_i*u_1[i];
     }
+    
     //lo mismo con la segunda:
-    //setear A(0, 1) y A(1, 1), el resto en 0.
+    //A(1, 1), el resto en 0.
     num segunda_columna_norma2 = A.norma_de_columna(1, 1);
     A.set(1,1,segunda_columna_norma2);
     A.truncar_columna(1, 2);
@@ -104,11 +107,43 @@ void householder2Cols(MatrizEsparsa& A, vector<num>& b) {
     vector<num> u_2 = A.vector_columna(1);
     u_2[1] -= segunda_columna_norma2;
     normalizar_vector(u_2);
+   
+    
     p_i = producto_interno(u_2, b);
     for (int i = 0; i < n; ++i) {
         b[i] -= 2*p_i*u_2[i];
-    } 
+    }
+    cout << "Sali de householder" << endl;
 }
+
+void testHouseholder2Cols(){
+    
+    MatrizEsparsa A = MatrizEsparsa(3, 2);
+    
+    A.set(0, 0, -3);
+    A.set(0, 1, -7);
+    A.set(1, 0, -4);
+    A.set(1, 1, -5);
+    A.set(2, 0, -1);
+    A.set(2, 1, -8);
+    /*
+    A.set(0, 0, -0.1576);
+    A.set(0, 1, -0.4854);
+    A.set(1, 0, -0.9706);
+    A.set(1, 1, -0.8003);
+    A.set(2, 0, -0.9572);
+    A.set(2, 1, -0.1419);
+    */
+    A.printMatriz();
+    
+    vector<num> b;
+    
+    householder2Cols(A, b);
+    
+    //givensDosColumnas(A);
+    
+}
+
 /*
 num normaDos(list<pair<int, num> >& la_lista) {
     num norma = 0;
@@ -131,4 +166,4 @@ pair< MatrizEsparsa, MatrizEsparsa > houseHolder(const MatrizEsparsa& A){
         
     }
 }
-*/
+*/    

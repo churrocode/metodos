@@ -13,7 +13,6 @@ using namespace std;
 int NODOS;
 int LINKS;
 
-
 vector<num> metodoDeLaPotencia(MatrizEsparsa& , num, bool, bool);
 bool corresponde_usar_extrapolacion(const int iters, const int n);
 void extrapolacion_cuadratica(
@@ -70,31 +69,14 @@ int main(int argc, char** argv) {
     }*/
     P.estocastizar();
     
-    //P.printMatriz();
-
-
-    // NO HACIA FALTA, SE HACE DIRECTO EN EL METODO DE LA POTENCIA CON EL ALGORITMO 1
-    /*num numerito = 1.0 / cantidad_paginas;
-    num c = 0.5;
-    for (int j = 0; j < P.getDimColumnas(); j++){
-        if (P.columnaDeCeros(j)){
-            for (int i = 0; i < P.getDimFilas(); i++) {
-                P.set(i, j, numerito);
-            }
-        } else {
-            for (int i = 0; i < P.getDimFilas(); i++){
-                P.set(i, j, c*P.get(i, j) + (1 - c)*numerito);
-                }
-        }
-    }
+    //testHouseholder2Cols();
+    //return 0;
     
-    P.printMatriz();*/
-
                                         //                      v BOOL MEDIR      
-    vector<num> autovector = metodoDeLaPotencia(P, 0.2, true, true);
+    vector<num> autovector = metodoDeLaPotencia(P, 0.2, false, true);
                                         //                ^ BOOL USAR EXTRAPOLACION
                                                                 
-    imprimirVector(autovector);
+    //imprimirVector(autovector);
     
     ofstream archivo_resultados;
     archivo_resultados.open("../parser/resultados2.out");
@@ -226,5 +208,5 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
 bool corresponde_usar_extrapolacion(const int cant_iters, const int k) {
      //una vez que tenemos tres iteraciones anteriores, extrapolamos cada k iteraciones
     //cout << "Voy a extrapolar" << endl;
-    return (cant_iters > 3) && ((cant_iters-3) % k == 0);
+    return (cant_iters > 3) && (cant_iters % k == 0);
 }

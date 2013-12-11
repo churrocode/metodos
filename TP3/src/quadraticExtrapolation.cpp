@@ -34,14 +34,14 @@ vector<num> quadraticExtrapolation(vector<num>& xk, vector<num>& xk1, vector<num
 	num gamma_0, gamma_1, gamma_2, gamma_3 = 1.0;
 	num beta_0, beta_1, beta_2;
 
-	MatrizEsparsa* Q = givensDosColumnas(Y);
+	/*MatrizEsparsa* Q = givensDosColumnas(Y);
 	vectorNegado(yk); // -yk
 	vector<num> b = Q->multPorVector(yk,true);
-	vector<num> gammas_resultantes = backwardSubstitution(Y,b);
+	vector<num> gammas_resultantes = backwardSubstitution(Y,b);*/
 
-	// householder2Cols(Y, yk);
-	// vectorNegado(yk);
-	// vector<num> gammas_resultantes = backwardSubstitution(Y,yk);
+	householder2Cols(Y, yk);
+	vectorNegado(yk);
+	vector<num> gammas_resultantes = backwardSubstitution(Y,yk);
 
 	// for(int i = 0; i < 3; ++i) {
 	// 	cout << "G: " << gammas_resultantes[i] << "\t HH: " << gammas_resultantes2[i] << endl;
@@ -65,6 +65,5 @@ vector<num> quadraticExtrapolation(vector<num>& xk, vector<num>& xk1, vector<num
 	xk = v1;
 	num norma_1_vector_resultante = normaUno(xk);
 	dividirPorEscalar(xk,norma_1_vector_resultante);
-	cout << "beeeeem" << endl;
 	return xk;
 }
