@@ -77,7 +77,9 @@ void householder2Cols(MatrizEsparsa& A, vector<num>& b) {
     int n = A.getDimFilas();
     u_1[0] -= primera_col_norma2;
     normalizar_vector(u_1);
-    //setear A(0, 0)  = primera_col_norma2, el resto en 0 !!!!!
+    //setear A(0, 0)  = primera_col_norma2, el resto en 0.
+    A.set(0,0, primera_col_norma2);
+    A.truncar_columna(0, 1);
 
     //multiplicar la segunda columna de A por Q1 (a_2 = Q1*a_2)
     // a_2 = (Id - 2u1*u1')a2 = a2 - 2(u1'*a2) u1
@@ -93,9 +95,12 @@ void householder2Cols(MatrizEsparsa& A, vector<num>& b) {
     for (int i = 0; i < n; ++i) {
         b[i] -= 2*p_i*u_1[i];
     }
-    //lo mismo con la segunda
-    //tirar el resto de los números de la segunda columna !!
+    //lo mismo con la segunda:
+    //setear A(0, 1) y A(1, 1), el resto en 0.
     num segunda_columna_norma2 = A.norma_de_columna(1, 1);
+    A.set(1,1,segunda_columna_norma2);
+    A.truncar_columna(1, 2);
+    //tirar el resto de los números de la segunda columna !!
     vector<num> u_2 = A.vector_columna(1);
     u_2[1] -= segunda_columna_norma2;
     normalizar_vector(u_2);
