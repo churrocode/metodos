@@ -8,7 +8,8 @@
 #include <ctime>
 
 #define epsilonDeParada 1e-8
-#define cadaCuantoQE 10
+#define cadaCuantoQE 7
+#define ponderadorC 0.2
 
 using namespace std;
 
@@ -77,7 +78,7 @@ int main(int argc, char** argv) {
     P.estocastizar();
     vector<num> autovector;
                 //                      v BOOL MEDIR      
-    metodoDeLaPotencia(P, 0.5, usarQE, true, autovector);
+    metodoDeLaPotencia(P, ponderadorC, usarQE, true, autovector);
                 //                ^ BOOL USAR EXTRAPOLACION
                                                                 
     //imprimirVector(autovector);

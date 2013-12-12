@@ -7,13 +7,13 @@ using namespace std;
 MatrizEsparsa::MatrizEsparsa(int n, int m) : n(n), m(m), proba(1/n), columnas(m, MatrizEsparsa::Columna()) {
 }
 
-num MatrizEsparsa::primeroDeLaColumna(const int i) {
-	if (columnas[i].noNulos.empty()) {
-		return 0;
-	} else {
-		return columnas[i].noNulos.front().second;
-	}
-}
+// num MatrizEsparsa::primeroDeLaColumna(const int i) {
+// 	if (columnas[i].noNulos.empty()) {
+// 		return 0;
+// 	} else {
+// 		return columnas[i].noNulos.front().second;
+// 	}
+// }
 
 num MatrizEsparsa::get(int i, int j) {
 	return columnas[j].get(i);
@@ -23,9 +23,9 @@ void MatrizEsparsa::set(int i, int j, num a) {
 	columnas[j].set(i, a);
 }
 
-void MatrizEsparsa::setLast(const int i, const int j, const num a) {
-	columnas[j].setLast(i,a);
-}
+// void MatrizEsparsa::setLast(const int i, const int j, const num a) {
+// 	columnas[j].setLast(i,a);
+// }
 
 /*void MatrizEsparsa::sumarMultiploDeColumna(const int i1, const int i2, const num k) {
 	columnas[i1].sumarMultiploDeColumna(columnas[i2], k);
@@ -77,26 +77,26 @@ int MatrizEsparsa::getDimColumnas() {
 	}
 }*/
 
-vector<num> MatrizEsparsa::multPorVector(vector<num>& v, bool matriz_traspuesta) {
-	/*int tope = matriz_traspuesta ? getDimColumnas() : getDimFilas();
-	int cant_columnas = matriz_traspuesta ? getDimFilas() : getDimColumnas();
-	vector<num> vector_resultante(tope);
-	for(int i = 0; i < tope; ++i) {
-		num xi;
-		for()
-	}*/
-	int tope = matriz_traspuesta ? getDimColumnas() : getDimFilas();
-	int cant_columnas = matriz_traspuesta ? getDimFilas() : getDimColumnas();
-	vector<num> vector_resultante(tope);
-	for(int i = 0; i < tope; ++i) {
-		num xi = 0.0;
-		for(int j = 0; j < cant_columnas; ++j) {
-			xi += get(i,j)*v[j];
-		}
-		vector_resultante[i] = xi;
-	}
-	return vector_resultante;
-}
+// vector<num> MatrizEsparsa::multPorVector(vector<num>& v, bool matriz_traspuesta) {
+// 	/*int tope = matriz_traspuesta ? getDimColumnas() : getDimFilas();
+// 	int cant_columnas = matriz_traspuesta ? getDimFilas() : getDimColumnas();
+// 	vector<num> vector_resultante(tope);
+// 	for(int i = 0; i < tope; ++i) {
+// 		num xi;
+// 		for()
+// 	}*/
+// 	int tope = matriz_traspuesta ? getDimColumnas() : getDimFilas();
+// 	int cant_columnas = matriz_traspuesta ? getDimFilas() : getDimColumnas();
+// 	vector<num> vector_resultante(tope);
+// 	for(int i = 0; i < tope; ++i) {
+// 		num xi = 0.0;
+// 		for(int j = 0; j < cant_columnas; ++j) {
+// 			xi += get(i,j)*v[j];
+// 		}
+// 		vector_resultante[i] = xi;
+// 	}
+// 	return vector_resultante;
+// }
 
 num MatrizEsparsa::Columna::get(const int j) {
 	if (noNulos.empty()) {
@@ -158,14 +158,14 @@ void MatrizEsparsa::printMatriz(bool soloNoNulos) {
 	cout << endl;
 }
 
-bool MatrizEsparsa::columnaDeCeros(int col){
-    return this->columnas[col].noNulos.empty();
-}
+// bool MatrizEsparsa::columnaDeCeros(int col){
+//     return this->columnas[col].noNulos.empty();
+// }
 
-list<pair<int, num> >* MatrizEsparsa::sliceColumna(int col, int inicio, int fin) {
-    return this->columnas[col].sliceColumna(inicio, fin);
+// list<pair<int, num> >* MatrizEsparsa::sliceColumna(int col, int inicio, int fin) {
+//     return this->columnas[col].sliceColumna(inicio, fin);
     
-}
+// }
 
 list<pair<int, num> >* MatrizEsparsa::Columna::sliceColumna(int inicio, int fin) {
     list<pair<int, num> >* slice = new list<pair<int, num> >();

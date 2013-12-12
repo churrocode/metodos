@@ -91,7 +91,7 @@ void householder2Cols(MatrizEsparsa& A, vector<num>& b) {
         //A.set(i, 1, a_2[i]);
     }
     //El único valor que me interesa conservar en A es el primero de la 2da col
-    //el resto de las cuentas las hago sobre a_2
+    //el resto de las cuentas las hago sobre a_2 (más eficiente si no es esparso)
     A.set(0, 1, a_2[0]);
 
     //aplicar al término indepte.
@@ -101,21 +101,21 @@ void householder2Cols(MatrizEsparsa& A, vector<num>& b) {
         b[i] -= 2*p_i*u_1[i];
     }
     
-    //lo mismo con la segunda:
+    //lo mismo con la segunda, pero sin mirar la primera fila!
     //A(1, 1), el resto en 0.
     a_2[0] = 0;
     num segunda_columna_norma2 = norma2(a_2);
     A.set(1,1,segunda_columna_norma2);
-    A.truncar_columna(1, 2);
     //tirar el resto de los números de la segunda columna !!
-    vector<num> u_2 = A.vector_columna(1);
-    u_2[1] -= segunda_columna_norma2;
-    normalizar_vector(u_2);
+    A.truncar_columna(1, 2);
+    // "vector<num> u_2 = a_2;"
+    //u_2[0] = 0;
+    a_2[1] -= segunda_columna_norma2;
+    normalizar_vector(a_2);
    
-    
-    p_i = producto_interno(u_2, b);
-    for (int i = 0; i < n; ++i) {
-        b[i] -= 2*p_i*u_2[i];
+    p_i = producto_interno(a_2, b);
+    for (int i = 1; i < n; ++i) {
+        b[i] -= 2*p_i*a_2[i];
     }
     cout << "Sali de householder" << endl;
 }
