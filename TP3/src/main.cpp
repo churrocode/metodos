@@ -84,7 +84,9 @@ int main(int argc, char** argv) {
     //imprimirVector(autovector);
     
     ofstream archivo_resultados;
-    archivo_resultados.open("../parser/resultados2.out");
+    if (usarQE) archivo_resultados.open("../parser/resultadosConQE0.2.out");
+    else archivo_resultados.open("../parser/resultadosSinQE0.2.out");
+    
     //pair<num, int> p;
     vector<pair<num, int> > autovector_indexado(autovector.size());
     for (int i = 0; i < autovector.size(); ++i) {
@@ -130,8 +132,9 @@ int main(int argc, char** argv) {
         
 void metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion, bool medir, vector<num>& autovector) {
     ofstream archivo_mediciones;
-    if(medir) {
-        archivo_mediciones.open("../parser/mediciones2.out");
+    if(medir) {    
+        if (usar_extrapolacion) archivo_mediciones.open("../parser/medicionesConQE0.2.out");
+        else archivo_mediciones.open("../parser/medicionesSinQE0.2.out");
         archivo_mediciones << NODOS << endl;
         archivo_mediciones << LINKS << endl;
     }
@@ -213,6 +216,7 @@ void metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion, bool m
     
     cout << "Cantidad de iteraciones: " << cant_iters << endl;
     if(medir) {
+        archivo_mediciones << tiempo_ex_en_milisegundos << endl;
         archivo_mediciones.close();
     }
    // return autovector;
