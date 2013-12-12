@@ -41,7 +41,7 @@ vector<num> quadraticExtrapolation(vector<num>& xk, vector<num>& xk1, vector<num
 
 	householder2Cols(Y, yk);
 	vectorNegado(yk);
-	vector<num> gammas_resultantes = backwardSubstitution(Y,yk);
+	vector<num> gammas_resultantes = backwardSubstitution2Cols(Y,yk);
 
 	// for(int i = 0; i < 3; ++i) {
 	// 	cout << "G: " << gammas_resultantes[i] << "\t HH: " << gammas_resultantes2[i] << endl;

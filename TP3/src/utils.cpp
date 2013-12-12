@@ -73,7 +73,7 @@ num normaUno(vector<num>& el_vector) {
     return norma;
 }
 
-void imprimirVector(vector<num>& v) {
+void imprimirVector(const vector<num>& v) {
 	cout << "[ ";
 	for(int i = 0; i < v.size(); ++i) {
 		cout << v[i];
@@ -122,5 +122,12 @@ num normalizar_vector(vector<num>& v) {
 	num norma = norma2(v);
 	for(int i = 0; i <v.size(); ++i) {
 		v[i] /= norma;
+	}
+}
+
+
+void escalar_vector(vector<num>& v, const num a) {
+	for(vector<num>::iterator it = v.begin(); it != v.end(); ++it) {
+		*it *= a;
 	}
 }

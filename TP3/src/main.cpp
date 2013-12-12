@@ -7,13 +7,15 @@
 #include <cassert>
 #include <ctime>
 
+#define epsilonDeParada 1e-8
+#define cadaCuantoQE 10
 
 using namespace std;
 
 int NODOS;
 int LINKS;
 
-vector<num> metodoDeLaPotencia(MatrizEsparsa& , num, bool, bool);
+void metodoDeLaPotencia(MatrizEsparsa& , num, bool, bool, vector<num>&);
 bool corresponde_usar_extrapolacion(const int iters, const int n);
 void extrapolacion_cuadratica(
     vector<num>& autovector_nuevo,
@@ -23,7 +25,7 @@ void extrapolacion_cuadratica(
 ); //vector_nuevo:in = estimación de la iteración actual; vector_nuevo:out = extrapolación usando los otros tres.
 
 int main(int argc, char** argv) {
-    if(argc != 2) {
+    if(argc < 2) {
         cout << "Uso: " << "Pasar un archivo de entrada, leer README.txt para ver el formato" << endl;
         return 0;
     }
@@ -31,6 +33,11 @@ int main(int argc, char** argv) {
     cout << argv[1] << endl;
     archivo_entrada.open(argv[1]);
     
+    bool usarQE = false;
+    if (argc >= 3) {
+        usarQE = true;
+    }
+
     int cantidad_paginas, cantidad_links;
     // primer int: cantidad de paginas
     archivo_entrada >> cantidad_paginas;
@@ -68,22 +75,25 @@ int main(int argc, char** argv) {
         }
     }*/
     P.estocastizar();
-    
-    //testHouseholder2Cols();
-    //return 0;
-    
-                                        //                      v BOOL MEDIR      
-    vector<num> autovector = metodoDeLaPotencia(P, 0.2, false, true);
-                                        //                ^ BOOL USAR EXTRAPOLACION
+    vector<num> autovector;
+                //                      v BOOL MEDIR      
+    metodoDeLaPotencia(P, 0.5, usarQE, true, autovector);
+                //                ^ BOOL USAR EXTRAPOLACION
                                                                 
     //imprimirVector(autovector);
     
     ofstream archivo_resultados;
     archivo_resultados.open("../parser/resultados2.out");
-    pair<num, int> p;
-    for(int i = 0; i < autovector.size(); i++) {
-        p = sacarMaximo(autovector);
-        archivo_resultados << p.second << " "  << p.first  << endl;
+    //pair<num, int> p;
+    vector<pair<num, int> > autovector_indexado(autovector.size());
+    for (int i = 0; i < autovector.size(); ++i) {
+        autovector_indexado[i] = pair<num, int>(autovector[i], i);
+    }
+    sort(autovector_indexado.begin(), autovector_indexado.end());
+
+    for(int i = 0; i < autovector_indexado.size(); i++) {
+        //p = sacarMaximo(autovector); //esto es selection sort!!!!! O(n^2) con n arriba de 100000!!!!!
+        archivo_resultados << autovector_indexado[i].second << " "  << autovector_indexado[i].first  << endl;
     }
     
     
@@ -117,7 +127,7 @@ int main(int argc, char** argv) {
  
 }*/
         
-vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion, bool medir) {
+void metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion, bool medir, vector<num>& autovector) {
     ofstream archivo_mediciones;
     if(medir) {
         archivo_mediciones.open("../parser/mediciones2.out");
@@ -128,21 +138,20 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
     num proba = 1.0 / cantidad_paginas;
 
     //vector<num> vector_proba_uniforme = vector<num>(cantidad_paginas,proba);
-    num epsilon = 1e-16;
-    vector<num> autovector = vector<num>(cantidad_paginas,proba);
+    autovector = vector<num>(cantidad_paginas,proba);
     vector<num> autovector_nuevo = vector<num>(cantidad_paginas);
     
     vector<num> autovector_anteultimo = vector<num>(cantidad_paginas, 0);
     vector<num> autovector_antepenultimo = vector<num>(cantidad_paginas, 0);
 
     int cant_iters = 1;
-    num error = 0.0;
-    bool seguir_iterando = true;
+    num error = 1/0.0;
+    //bool seguir_iterando = true;
     time_t inicio, fin;
     num tiempo_ex_en_milisegundos;
     inicio = time(NULL);
-    while(seguir_iterando) {
-        for(int j = 0; j < cantidad_paginas; j++){ // multiplicamos por P'
+    while(error >= epsilonDeParada) {
+        /*for(int j = 0; j < cantidad_paginas; j++){ // multiplicamos: P * autovector
 
             num producto_interno = 0;
             for(int i = 0; i < cantidad_paginas; i++){
@@ -151,8 +160,9 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
             }
             //autovector_temp es la iteración que acabamos de calcular
             autovector_nuevo[j] = producto_interno*c;
-        }
-
+        }*/
+        P.multiplicar_vector(autovector, autovector_nuevo);
+        escalar_vector(autovector_nuevo, c);
         //cout << "xk+1: "; imprimirVector(autovector_nuevo); cout << endl;
         //cout << "xk: "; imprimirVector(autovector); cout << endl;
         num norma_autovector_nuevo = normaUno(autovector_nuevo); //cout << "norma xk+1: " << norma_autovector_nuevo << endl;
@@ -168,17 +178,19 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
             autovector_nuevo[j] += w*proba;
         }
         
+        if (usar_extrapolacion && corresponde_usar_extrapolacion(cant_iters, cadaCuantoQE)) {
+            cout << "Entre a QE " << endl;
+            archivo_mediciones << "QE ";
+            quadraticExtrapolation(autovector_nuevo, autovector, autovector_anteultimo, autovector_antepenultimo);
+        }
+
         error = diferencia_normaUno(autovector, autovector_nuevo);
-        seguir_iterando = error >= epsilon;
+        //seguir_iterando = error >= epsilonDeParada;
         
         if(medir) {
             archivo_mediciones << cant_iters << " " << error << endl;
         }
 
-        if (seguir_iterando && usar_extrapolacion && corresponde_usar_extrapolacion(cant_iters, 5)) {
-            cout << "Entre a QE " << endl;
-            quadraticExtrapolation(autovector_nuevo, autovector, autovector_anteultimo, autovector_antepenultimo);
-        }
 
         //reacomodamos los vectores:
         if (usar_extrapolacion) {
@@ -202,7 +214,7 @@ vector<num> metodoDeLaPotencia(MatrizEsparsa& P, num c, bool usar_extrapolacion,
     if(medir) {
         archivo_mediciones.close();
     }
-    return autovector;
+   // return autovector;
 }
 
 bool corresponde_usar_extrapolacion(const int cant_iters, const int k) {

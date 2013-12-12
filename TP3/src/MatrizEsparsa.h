@@ -47,7 +47,8 @@ public:
     vector<num> vector_columna(const int j);
     void truncar_columna(const int j, const int i);
     void estocastizar();
-    num sumar_columna(const int j);
+    num sumar_columna(const int j); 
+    void multiplicar_vector(const vector<num>& v, vector<num>& res);
 
 private:
     int n;

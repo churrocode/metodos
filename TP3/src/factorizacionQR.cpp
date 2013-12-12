@@ -88,9 +88,12 @@ void householder2Cols(MatrizEsparsa& A, vector<num>& b) {
     num p_i = producto_interno(u_1, a_2);
     for (int i = 0; i < n; ++i) {
         a_2[i] -= 2*p_i*u_1[i];
-        A.set(i, 1, a_2[i]);
+        //A.set(i, 1, a_2[i]);
     }
-   
+    //El único valor que me interesa conservar en A es el primero de la 2da col
+    //el resto de las cuentas las hago sobre a_2
+    A.set(0, 1, a_2[0]);
+
     //aplicar al término indepte.
     //Q1*b = (Id - 2u_1*u_1')*b = b - 2(u_1'*b) (u_1)
     p_i = producto_interno(u_1, b);
@@ -100,7 +103,8 @@ void householder2Cols(MatrizEsparsa& A, vector<num>& b) {
     
     //lo mismo con la segunda:
     //A(1, 1), el resto en 0.
-    num segunda_columna_norma2 = A.norma_de_columna(1, 1);
+    a_2[0] = 0;
+    num segunda_columna_norma2 = norma2(a_2);
     A.set(1,1,segunda_columna_norma2);
     A.truncar_columna(1, 2);
     //tirar el resto de los números de la segunda columna !!
@@ -142,6 +146,14 @@ void testHouseholder2Cols(){
     
     //givensDosColumnas(A);
     
+}
+
+vector<num> backwardSubstitution2Cols(MatrizEsparsa& A, vector<num>& b) {
+    //A tiene 2 columnas, por lo menos 2 filas y es triangular superior.
+    vector<num> solucion(2, 0.0);
+    solucion[1] = b[1] / A.get(1, 1); // si esto viene de una QR, A(1,1) tiene que ser != 0
+    solucion[0] = (b[0] - A.get(0, 1) * solucion[1])/A.get(0,0); // como arriba, A(0,0) tiene que ser != 0
+    return solucion;
 }
 
 /*

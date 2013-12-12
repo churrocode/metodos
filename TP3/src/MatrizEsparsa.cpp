@@ -233,6 +233,16 @@ void MatrizEsparsa::estocastizar() {
     }
 }
 
+void MatrizEsparsa::multiplicar_vector(const vector<num>& v, vector<num>& res) {
+	for (int j= 0; j < m; ++j) res[j] = 0;	
+	for (int j = 0; j < m; ++j) {
+		for (list<pair<int, num> >::iterator it = columnas[j].noNulos.begin(); it != columnas[j].noNulos.end(); ++it) {
+			//multiplicamos "por columnas"
+			res[it->first] += it->second * v[j];
+		}
+	}
+}
+
 
 
 
