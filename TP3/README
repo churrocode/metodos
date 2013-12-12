@@ -1,0 +1,12 @@
+RTP 3 - Grupo 14
+-----------------
+
+Para compilar el main en src, simplemente se ejecuta make.
+
+Para reproducir los experimentos, se debe ejecutar el script de bash sacarMediciones.sh ubicado en la carpeta src. Como requerimiento, hay que descargarse el grafo de las páginas de berkely.edu y stanford.edu del siguiente link: http://snap.stanford.edu/data/web-BerkStan.html . Luego, descomprimir en la carpeta parser. El tar.gz pesa alrededor de 19MB y descomprimido, 25MB. Este grafo es el que usamos para las mediciones.
+
+Si abren el archivo sacarMediciones.sh, verán una mini explicación de qué es lo que mide. 
+
+Los archivos generados son almacenados en la carpeta parser con nombres: 'resultados<Con|Sin>QE<valorC>.out' y 'mediciones<Con|Sin>QE<valorC>.out'. Dentro de los archivos 'resultados...' se encuentran las respectivas "relevancias" calculadas de las páginas, el formato es (índice página | relevancia). Luego, dentro de los archivos 'mediciones...' se hallan la evolución del error iteración a iteración y al final, el tiempo de ejecución.
+
+
