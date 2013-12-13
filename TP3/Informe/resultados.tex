@@ -71,8 +71,8 @@ En los gr\'aficos anteriores se nota la gran diferencia que hay cuando se aplica
 
 \subsection{Tiempo de ejecuci\'on}
 
-En cuanto a los tiempos de ejecuci\'on, notamos, que a pesar de la cantidad de iteraciones utilizando QE es menor, el m\'etodo de la potencia sin QE converge en menos tiempo de procesamiento (aunqe despreciable), pensamos que \'esto se puede deber a la falta de optimizaci\'on de c\'odigo por ejemplo, sin embargo, lo que nos interesa en mayor medida es la cantidad de iteraciones necesarias, donde como ya vimos, QE es el claro vencedor. 
-\'Estos fueron los resultados arrojados por el algoritmo: \\
+En cuanto a los tiempos de ejecuci\'on, notamos, que a pesar de la cantidad de iteraciones utilizando QE es menor, el m\'etodo de la potencia sin QE converge en menos tiempo de procesamiento (aunque despreciable), sin embargo, lo que nos interesa en mayor medida es la cantidad de iteraciones necesarias, donde como ya vimos, QE es el claro vencedor. Pensamos que \'esto se puede deber a la falta de optimizaci\'on de c\'odigo, pero de todas maneras, tomando el caso de mayor cantidad de iteraciones ($c = 0.95$), nos propucimos variar la periodicidad con la que se aplica el método de extrapolación cuadrática. El resultado de esta experimentación derivó en una reducción significativa del tiempo de ejecución. Aunque sin gráficos, a continuación mostramos una tabla de valores (la segunda) que ilustra esta última experimentación mencionada que puede ser reproducida (las instrucciones se encuentran en el README).
+\'Estos fueron los resultados arrojados por el algoritmo, primero con periodicidad de QE cada 7 iteraciones, y luego para el caso particular de c = 0.95. Como aclaración de la segunda tabla, $pQE$ hace referencia a la periodicidad con la que aplicamos QE en cantidad de iteraciones: \\
 
 \begin{tabular}{ l | c | r}
   & Sin QE & Con QE\\
@@ -86,6 +86,36 @@ En cuanto a los tiempos de ejecuci\'on, notamos, que a pesar de la cantidad de i
   c = 0.95 & 65 segs. & 69 segs. \\
   \hline
 \end{tabular}
+
+\begin{tabular}{ l | c | r}
+  & Tiempo ejecución & Cantidad iteraciones\\
+  \hline
+  pQE = 5 & 78 segs. & 229 iters.\\
+  \hline
+  pQE = 20 & 59 segs. & 225 iters.\\
+  \hline
+  pQE = 35 & 54 segs. & 218 iters. \\
+  \hline
+  pQE = 50 & 52 segs. & 213 iters. \\
+  \hline
+  pQE = 65 & 52 segs. & 218 iters. \\
+  \hline
+  pQE = 70 & 53 segs. & 219 iters. \\
+  \hline
+  pQE = 90 & 52 segs. & 222 iters. \\
+  \hline
+  pQE = 105 & 52 segs. & 221 iters. \\
+  \hline
+  pQE = 120 & 57 segs. & 240 iters. \\
+  \hline
+  pQE = 135 & 57 segs. & 241 iters. \\
+  \hline
+\end{tabular}
+\\\\
+
+Como podemos observar en la última tabla de valores, lo que suponíamos es un hecho, variar el momento en que se aplica el método de extrapolación cuadrática así como también la cantidad de veces que se aplica, ayuda a acelerar aún más la velocidad de convergencia del método de la potencia estándar. Es interesante apreciar asimismo, que aún teniendo el mismo tiempo de ejecución para algunos valores de $pQE$, la cantidad de iteraciones es distinta y esto se debe a que variar el momento en que se aplica QE, no sólo la cantidad de veces que se aplica es un factor a tener en cuenta. Queda pendiente esta experimentación, la cual es determinar la estrategia más conveniente a la hora de distribuir la aplicación de QE, es decir, aplicamos el método cada cierta cantidad de iteraciones fija, o de manera uniforme, dependiendo de otros factores?
+
+Como última observación, el mejor resultado se obtuvo con una periodicidad de 40 iteraciones, donde QE fue aplicado 4 veces logrando cantidad de iteraciones mínima al igual que tiempo de ejecución mínimo, contrastando contra los otros resultados obtenidos.
 
 \begin{comment}
 \subsection{Relevancia de las p\'aginas}
