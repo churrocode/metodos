@@ -1,32 +1,90 @@
 \section{Resultados}
 
-El primer experimento se realiz\'o utilizando una lista de 27 p\'aginas web, las cuales devolvieron un
-total de 26 links (tan solo 12 de ellas dieron una cantidad positiva de links entrantes).
+El primer experimento se realiz\'o utilizando el \href{http://snap.stanford.edu/data/web-BerkStan.html}{Berkeley-Stanford web graph}. La cantidad de nodos/p\'aginas web es de 685230 y la cantidad de ejes/links es de 7600595.
+Las pruebas se corrieron en una Intel Core i5-3550 CPU @ 3.30GHz x 4 con 8 GB de ram. 
 
 \subsection{Propagaci\'on del error}
 
 El experimento fue realizado variando la constante c, la cual determina la importancia proporcional que se quiere
 entre la probabilidad de pasar a una p\'agina desde un link (c mas alto) contra la de escribir la url a mano (c mas bajo).
 
-El criterio de parada es la diferencia de norma uno entre el autovector que se obtiene
-en cada iteraci\'on y el de la iteraci\'on anterior, el cual no debe ser menor que un
-epsilon de orden -15.
+Como criterio de parada, comparamos la diferencia en norma uno del autovector que se obtiene
+en cada iteraci\'on, contra el de la iteraci\'on anterior, la cual no debe ser menor que un
+epsilon de orden -8.
+
+A continuación mostramos, para distintos c, la cantidad de iteraciones que necesita el método de la potencia para alcanzar dicho epsilon, sin utilizar extrapolaci\'on cuadr\'atica primero, e incluy\'endola despu\'es:
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.9\textwidth]{../parser/graficoError1.png}
-    \caption{}
+    \includegraphics[width=0.9\textwidth]{errorSinQE.png}
+    \caption{Error sin QE}
     \label{}
 \end{figure}
 
-Se puede obvservar en la figura que cuanto menor es el c, m\'as r\'apido converge
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.9\textwidth]{errorConQE.png}
+    \caption{Error con QE}
+    \label{}
+\end{figure}
+
+El m\'etodo de extrapolaci\'on se aplica cada 7 iteraciones, en el gr\'afico anterior se puede ver que se presentan picos m\'inimos y m\'aximos, \'esto se debe a que el m\'etodo previamente nombrado cambia la diferencia entre los autovectores que se van calculando, pero luego ayuda a disminuir el error considerablemente.
+
+Se puede obvservar en las figuras que cuanto menor es el c, m\'as r\'apido converge
 el m\'etodo. Creemos que dicho resultado se debe a que al darle menor importancia
 a los links directos, la matriz de probabilidades se encuentra mejor balanceada, 
 por lo tanto los primeros autovalores de ella son mas parecidos y por ello se necesitan
-m\'as iteraciones para lograr la convergencia. De hecho, se prob\'o bajar mas el epsilon,
-el resultado fue que el m\'etodo se estabiliza en pocos pasos m\'as de los que muestra el gr\'afico,
-para cada l\'inea, dejando un error igual a 0.
+m\'as iteraciones para lograr la convergencia.\\
 
+La diferencia que se da al utilizar extrapolaci\'on no se ve f\'acilmente en los gr\'aficos anteriores, por lo que vamos a mostrarlo con mas detalle:
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.8\textwidth]{comparando2.png}
+    \caption{Comparaci\'on uso de QE con c = 0.2}
+    \label{}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.8\textwidth]{comparando5.png}
+    \caption{Comparaci\'on uso de QE con c = 0.5}
+    \label{}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.8\textwidth]{comparando8.png}
+    \caption{Comparaci\'on uso de QE con c = 0.8}
+    \label{}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.8\textwidth]{comparando95.png}
+    \caption{Comparaci\'on uso de QE con c = 0.95}
+    \label{}
+\end{figure}
+
+En los gr\'aficos anteriores se nota la gran diferencia que hay cuando se aplica el m\'etodo de extrapolaci\'on cuadr\'atica, el cu\'al parece aumentar el error al principio, pero luego converge m\'as r\'apidamente. La diferencia tal vez no se aprecia tanto si la convergencia es muy r\'apida, como en el primer gr\'afico donde c es igual a 0.2, pero a medida que aumenta la cantidad de iteraciones, mas conveniente es utilizarlo.\\
+
+En cuanto a los tiempos de ejecuci\'on, notamos, que a pesar de la cantidad de iteraciones utilizando QE es menor, el m\'etodo de la potencia sin QE converge en menos tiempo de procesamiento (aunqe despreciable), pensamos que \'esto se puede deber a la falta de optimizaci\'on de c\'odigo por ejemplo, sin embargo, lo que nos interesa en mayor medida es la cantidad de iteraciones necesarias, donde como ya vimos, QE es el claro vencedor. 
+\'Estos fueron los resultados arrojados por el algoritmo: \\
+
+\begin{tabular}{ l | c | r}
+  & Sin QE & Con QE\\
+  \hline
+  c = 0.2 & 2 segs. & 3 segs.\\
+  \hline
+  c = 0.5 & 6 segs. & 5 segs.\\
+  \hline
+  c = 0.8 & 15 segs. & 16 segs. \\
+  \hline
+  c = 0.95 & 65 segs. & 69 segs. \\
+  \hline
+\end{tabular}
+
+\begin{comment}
 \subsection{Relevancia de las p\'aginas}
 
 La relevancia siguiente fue la dada por c = 0.5 (con los otros c cambiaban un poco el orden de las p\'aginas del medio, pero 
@@ -71,4 +129,4 @@ en la tabla, y no casualmente, tienen todas la misma relevancia.
 Otra cosa que notamos al ir aumentando el c es que, dejando de lados los cambios en el orden de la tabla (que eran menores),
 los n\'umeros cada vez se parec\'ian m\'as, ya que al darle mas importancia a las url que a los links, la cantidad
 de links de entrada que posee una p\'agina no entra tanto en juego y todas se consideran iguales en t\'erminos de relevancia.
-
+\end{comment}
