@@ -89,6 +89,7 @@ int main(int argc, char** argv) {
         autovector_indexado[i] = pair<num, int>(autovector[i], i);
     }
     sort(autovector_indexado.begin(), autovector_indexado.end());
+    reverse(autovector_indexado.begin(), autovector_indexado.end());
 
     for(int i = 0; i < autovector_indexado.size(); i++) {
         archivo_resultados << autovector_indexado[i].second << " "  << autovector_indexado[i].first  << endl;
