@@ -9,8 +9,6 @@
 #include <ctime>
 
 #define epsilonDeParada 1e-8
-//#define cadaCuantoQE 12
-//#define ponderadorC 0.95
 
 using namespace std;
 
@@ -27,8 +25,8 @@ void extrapolacion_cuadratica(
 ); //vector_nuevo:in = estimación de la iteración actual; vector_nuevo:out = extrapolación usando los otros tres.
 
 int main(int argc, char** argv) {
-    if(argc < 3) {
-        cout << "Uso: " << "Pasar un archivo de entrada, leer README.txt para ver el formato" << endl;
+    if(argc < 5) {
+        cout << "Uso: " << "leer README para ver los parametros." << endl;
         return 0;
     }
 
@@ -47,6 +45,10 @@ int main(int argc, char** argv) {
 
     int cada_cuanto_qe = -1;
     if(usarQE) {
+        if(argc < 6) {
+            cout << "Se esta usando extrapolacion cuadratica, hay que pasar un parametro adicional para indicar la periodicidad con la que se aplica. Ver README." << endl; 
+            return 0;
+        }
         cada_cuanto_qe; // el cuarto argumento de la consola indica cada cuanto aplicamos qe
         sscanf(argv[5],"%d",&cada_cuanto_qe);
     }
@@ -120,7 +122,7 @@ void restaVectores(vector<num>& v1, vector<num>& v2) {
     }
 }
 
-// el c y la periodicida de la aplicacion de qe son parametros por defecto, ver el prototipo de la funcion mas arriba
+// el c y la periodicidad de la aplicacion de qe son parametros por defecto, ver el prototipo de la funcion mas arriba
 void metodoDeLaPotencia(MatrizEsparsa& P, bool usar_extrapolacion, bool medir, vector<num>& autovector, num c, int cada_cuanto_qe) {
     cout << "pQE: " << cada_cuanto_qe << endl;
     ofstream archivo_mediciones;
