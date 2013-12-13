@@ -3,10 +3,21 @@ RTP 3 - Grupo 14
 
 Para compilar el main en src, simplemente se ejecuta make.
 
+Los parámetros que recibe el main son: <archivoEntrada> <c> <usarQE> <medir> <pQE(opcional)>.
+
+<archivoEntrada>: archivo conteniendo el grafo de páginas y links con el formato indicado en el enunciado.
+<c>:              float indicando que "c" se utiliza para ponderar al navegante aleatorio.
+<usarQE>:         int, 1 si se quiere aplicar extrapolación cuadrática, != 1 si no.
+<medir>:          int, 1 si se quieren realizar mediciones de tiempos y cantidad de iteraciones, != 1 si no.
+<pQE>: 	          int (opcional) : parámetro que indica cada cuántas iteraciones se aplica extrapolación cuadrática. Si se pasa un valor menor a 4, de todas maneras, la 
+				  extrapolación se empieza a aplicar a partir de la 4 iteración.
+
 Para reproducir los experimentos, se debe ejecutar el script de bash sacarMediciones.sh ubicado en la carpeta src. Como requerimiento, hay que descargarse el grafo de las páginas de berkely.edu y stanford.edu del siguiente link: http://snap.stanford.edu/data/web-BerkStan.html . Luego, descomprimir en la carpeta parser. El tar.gz pesa alrededor de 19MB y descomprimido, 25MB. Este grafo es el que usamos para las mediciones.
+
+Para reproducir la segunda tabla de valores que se encuentra en la sección Resultados del informe, se debe correr el scrìpt variarPeriodicidadQE.sh con el mismo requerimiento mencionada en el párrafo anterior.
 
 Si abren el archivo sacarMediciones.sh, verán una mini explicación de qué es lo que mide. 
 
-Los archivos generados son almacenados en la carpeta parser con nombres: 'resultados<Con|Sin>QE<valorC>.out' y 'mediciones<Con|Sin>QE<valorC>.out'. Dentro de los archivos 'resultados...' se encuentran las respectivas "relevancias" calculadas de las páginas, el formato es (índice página | relevancia). Luego, dentro de los archivos 'mediciones...' se hallan la evolución del error iteración a iteración y al final, el tiempo de ejecución.
+Los archivos generados son almacenados en la carpeta parser con nombres: 'resultados<Con|Sin>QE<valorC>.out' y 'mediciones<Con|Sin>QE<valorC>.out'. Si se mide aplicando QE, los archivos terminan con "conpQE<valor>" donde "pQE" indica cada cuanto aplicamos extrapolación cuadrática. Dentro de los archivos 'resultados...' se encuentran las respectivas "relevancias" calculadas de las páginas, el formato es (índice página | relevancia). Luego, dentro de los archivos 'mediciones...' se hallan la evolución del error iteración a iteración y al final, el tiempo de ejecución.
 
 

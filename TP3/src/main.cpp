@@ -9,7 +9,7 @@
 #include <ctime>
 
 #define epsilonDeParada 1e-8
-#define cadaCuantoQE 7
+//#define cadaCuantoQE 12
 //#define ponderadorC 0.95
 
 using namespace std;
@@ -17,7 +17,7 @@ using namespace std;
 int NODOS;
 int LINKS;
 
-void metodoDeLaPotencia(MatrizEsparsa& , bool, bool, vector<num>&,num,int=cadaCuantoQE);
+void metodoDeLaPotencia(MatrizEsparsa& , bool, bool, vector<num>&,num,int);
 bool corresponde_usar_extrapolacion(const int iters, const int n);
 void extrapolacion_cuadratica(
     vector<num>& autovector_nuevo,
@@ -45,6 +45,12 @@ int main(int argc, char** argv) {
     bool usarQE = arg4 == 1; // el cuarto argumento determina si se usa qe, igual a 1 <-> se usa, != 1 <-> no se usa. Tiene que ser un numero
     bool medir = arg5 == 1;  // el quinto argumento determina si se miden resultados, idem que usarQE.
 
+    int cada_cuanto_qe = -1;
+    if(usarQE) {
+        cada_cuanto_qe; // el cuarto argumento de la consola indica cada cuanto aplicamos qe
+        sscanf(argv[5],"%d",&cada_cuanto_qe);
+    }
+
     int cantidad_paginas, cantidad_links;
     // primer int: cantidad de paginas
     archivo_entrada >> cantidad_paginas;
@@ -69,16 +75,24 @@ int main(int argc, char** argv) {
     P.estocastizar();
     vector<num> autovector;
                 //                   v BOOL MEDIR      
-    metodoDeLaPotencia(P, usarQE, medir, autovector, ponderadorC);
+    metodoDeLaPotencia(P, usarQE, medir, autovector, ponderadorC, cada_cuanto_qe);
                 //            ^ BOOL USAR EXTRAPOLACION
                                                                 
     ofstream archivo_resultados;
     string nombre_archivo_resultado_conQE = "../parser/resultadosConQE";
     string nombre_archivo_resultado_sinQE = "../parser/resultadosSinQE";
+    string pqe_variable;
     string extension = ".out";
     char ponderadorC_str[21];
     sprintf(ponderadorC_str,"%g",ponderadorC);
-    nombre_archivo_resultado_conQE += ponderadorC_str + extension;
+    if(cada_cuanto_qe != -1) {
+        pqe_variable = "conpQE";
+        char cada_cuanto_qe_str[21];
+        sprintf(cada_cuanto_qe_str,"%d",cada_cuanto_qe);
+        pqe_variable += cada_cuanto_qe_str;
+    }
+
+    nombre_archivo_resultado_conQE += ponderadorC_str + ( (cada_cuanto_qe == -1) ? extension: pqe_variable + extension);
     nombre_archivo_resultado_sinQE += ponderadorC_str + extension; 
 
     if (usarQE) archivo_resultados.open(nombre_archivo_resultado_conQE.c_str());//archivo_resultados.open("../parser/resultadosConQE0.2.out");
@@ -108,14 +122,22 @@ void restaVectores(vector<num>& v1, vector<num>& v2) {
 
 // el c y la periodicida de la aplicacion de qe son parametros por defecto, ver el prototipo de la funcion mas arriba
 void metodoDeLaPotencia(MatrizEsparsa& P, bool usar_extrapolacion, bool medir, vector<num>& autovector, num c, int cada_cuanto_qe) {
+    cout << "pQE: " << cada_cuanto_qe << endl;
     ofstream archivo_mediciones;
     if(medir) {    
         string nombre_archivo_mediciones_conQE = "../parser/medicionesConQE";
         string nombre_archivo_mediciones_sinQE = "../parser/medicionesSinQE";
+        string pqe_variable;
         string extension = ".out";
+        if(cada_cuanto_qe != -1) {
+            pqe_variable = "conpQE";
+            char cada_cuanto_qe_str[21];
+            sprintf(cada_cuanto_qe_str,"%d",cada_cuanto_qe);
+            pqe_variable += cada_cuanto_qe_str;
+        }
         char ponderadorC_str[21];
         sprintf(ponderadorC_str,"%g",c);
-        nombre_archivo_mediciones_conQE += ponderadorC_str + extension;
+        nombre_archivo_mediciones_conQE += ponderadorC_str + ( (cada_cuanto_qe == -1) ? extension: pqe_variable + extension);
         nombre_archivo_mediciones_sinQE += ponderadorC_str + extension; 
         if (usar_extrapolacion) archivo_mediciones.open(nombre_archivo_mediciones_conQE.c_str());
         else archivo_mediciones.open(nombre_archivo_mediciones_sinQE.c_str());
