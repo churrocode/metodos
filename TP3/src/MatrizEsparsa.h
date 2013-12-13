@@ -19,7 +19,6 @@ class MatrizEsparsa {
     public:
         list<pair<int, num> > noNulos;
         Columna() : noNulos() {};
-        //void sumarMultiploDeColumna(const Columna& f1, num m);
         num get(const int i);
         void set(const int i, const num a); //a != 0, por favor!
         void setLast(const int i, const num a);
@@ -27,23 +26,14 @@ class MatrizEsparsa {
     };
 public:
     MatrizEsparsa(int n, int m);
-    // MatrizEsparsa(const MatrizBanda& orig);
     num get(const int i, const int j);
-    //num primeroDeLaColumna(const int j);
     void set(const int i, const int j, const num a);
-    //void sumarMultiploDeColumna(const int j1, const int j2, const num k); // Fi1 <- Fi1 + Fi2*k
-    //void intercambiarColumnas(const int j1, const int j2);
     pair<int, int> getDim();
     int getDimColumnas();
     int getDimFilas();
     void printMatriz(bool soloNoNulos = false);
     const list< pair<int, num> >& getColumna(const int j);
-    //void setLast(const int i, const int j, const num a);
-    //bool columnaDeCeros(int col);
-    //list<pair<int, num> >* sliceColumna(int col, int inicio, int fin);
-    //vector<num> multPorVector(vector<num>& v, bool matriz_traspuesta = false);
     num norma_de_columna(int j, int i);
-    //void restar_columna(const int j, const vector<num>& col);
     vector<num> vector_columna(const int j);
     void truncar_columna(const int j, const int i);
     void estocastizar();

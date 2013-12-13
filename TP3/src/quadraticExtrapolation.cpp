@@ -8,7 +8,6 @@ void armarMatriz(MatrizEsparsa& mt, const list< vector<num> >& datos) {
 	int j = 0;
 	for(list< vector<num> >::const_iterator it = datos.begin(); it != datos.end(); ++it) {
 		vector<num> v = *it;
-		//imprimirVector(v);
 		for(int i = 0; i < v.size(); ++i) {
 			if(v[i] != 0) {
 				mt.set(i,j,v[i]);
@@ -19,7 +18,6 @@ void armarMatriz(MatrizEsparsa& mt, const list< vector<num> >& datos) {
 }
 
 vector<num> quadraticExtrapolation(vector<num>& xk, vector<num>& xk1, vector<num>& xk2, vector<num>& xk3) {
-	//vector<num> vector_resultante(xk3.size());
 	vector<num> yk2,yk1,yk;
 	yk2 = restarVectores(xk2,xk3);
 	yk1 = restarVectores(xk1,xk3);
@@ -29,24 +27,13 @@ vector<num> quadraticExtrapolation(vector<num>& xk, vector<num>& xk1, vector<num
 	list< vector<num> > elementos_matriz;
 	elementos_matriz.push_back(yk2); elementos_matriz.push_back(yk1);
 	armarMatriz(Y,elementos_matriz);
-	//Y.printMatriz();
 
 	num gamma_0, gamma_1, gamma_2, gamma_3 = 1.0;
 	num beta_0, beta_1, beta_2;
 
-	/*MatrizEsparsa* Q = givensDosColumnas(Y);
-	vectorNegado(yk); // -yk
-	vector<num> b = Q->multPorVector(yk,true);
-	vector<num> gammas_resultantes = backwardSubstitution(Y,b);*/
-
 	householder2Cols(Y, yk);
 	vectorNegado(yk);
 	vector<num> gammas_resultantes = backwardSubstitution2Cols(Y,yk);
-
-	// for(int i = 0; i < 3; ++i) {
-	// 	cout << "G: " << gammas_resultantes[i] << "\t HH: " << gammas_resultantes2[i] << endl;
-	// }
-
 
 	gamma_1 = gammas_resultantes[0];
 	gamma_2 = gammas_resultantes[1];
