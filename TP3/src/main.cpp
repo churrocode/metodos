@@ -179,7 +179,7 @@ void metodoDeLaPotencia(MatrizEsparsa& P, bool usar_extrapolacion, bool medir, v
     
     cout << "Cantidad de iteraciones: " << cant_iters << endl;
     if(medir) {
-        archivo_mediciones << tiempo_ex_en_segundos << endl;
+        archivo_mediciones << "secs: " << tiempo_ex_en_segundos << endl;
         archivo_mediciones.close();
     }
 }
